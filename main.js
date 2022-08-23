@@ -184,7 +184,7 @@ window.addEventListener('resize', ev => {
 
 document.addEventListener('pointerdown', (event) => {
   if (click.length) {
-    console.log("clicked on " + click)
+    alert("clicked on " + click)
   }
 });
 
