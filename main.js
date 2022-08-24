@@ -91,6 +91,19 @@ const pointer = new THREE.Vector2();
 
 let click = ""
 
+var hasClicked = 0
+
+document.addEventListener('pointerdown', (event) => {
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+  hasClicked = 1
+  setTimeout(() => {
+    hasClicked = 0
+  }, 100)
+  if (click.length) {
+    //alert("qqqq qsdqd on " + click)
+  }
+});
 
 function animate() {
   requestAnimationFrame(animate)
@@ -122,13 +135,23 @@ function animate() {
   if (intersects.length === 0)
     click = ""
 
-  for (let i = 0; i < intersects.length; i++) {
-
-    //intersects[i].object.material.color.set(0xff0000);
-    if (intersects[i].object.name.length) {
-      click = intersects[i].object.name
+  for (var i of scene.children) {
+    if (i.material && i.name) {
+      i.material.color.g = 0
+      i.material.color.set(0xffffff)
     }
   }
+
+  for (let i = 0; i < intersects.length; i++) {
+
+    if (intersects[i].object.name.length && hasClicked) {
+      hasClicked = 0
+
+      click = intersects[i].object.name
+      alert('CLICKED')
+    }
+  }
+
 
   renderer.render(scene, camera);
 }
@@ -182,12 +205,6 @@ window.addEventListener('resize', ev => {
 });
 
 
-
-document.addEventListener('pointerdown', (event) => {
-  if (click.length) {
-    alert("qqqq qsdqd on " + click)
-  }
-});
 
 
 function onPointerMove(event) {
