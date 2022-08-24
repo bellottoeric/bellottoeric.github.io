@@ -89,21 +89,9 @@ scene.add(moon)
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-let click = ""
+let hasClicked = 0
 
-var hasClicked = 0
 
-document.addEventListener('pointerdown', (event) => {
-  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
-  pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
-  hasClicked = 1
-  setTimeout(() => {
-    hasClicked = 0
-  }, 100)
-  if (click.length) {
-    //alert("qqqq qsdqd on " + click)
-  }
-});
 
 function animate() {
   requestAnimationFrame(animate)
@@ -115,9 +103,9 @@ function animate() {
 
   moon.position.z = torus.position.z
 
-  moon.position.x = torus.position.x
-  moon.position.y = torus.position.y - 3
-  moon.lookAt(camera.position)
+  //moon.position.x = torus.position.x
+  //moon.position.y = torus.position.y - 3
+  //moon.lookAt(camera.position)
   //torus.rotation.x = torus.rotation.x + 0.01
   //torus.rotation.y += 0.005
   //torus.rotation.z += 0.11
@@ -130,24 +118,12 @@ function animate() {
 
   raycaster.setFromCamera(pointer, camera);
 
-  // calculate objects intersecting the picking ray
   const intersects = raycaster.intersectObjects(scene.children);
-  if (intersects.length === 0)
-    click = ""
-
-  for (var i of scene.children) {
-    if (i.material && i.name) {
-      i.material.color.g = 0
-      i.material.color.set(0xffffff)
-    }
-  }
 
   for (let i = 0; i < intersects.length; i++) {
 
     if (intersects[i].object.name.length && hasClicked) {
       hasClicked = 0
-
-      click = intersects[i].object.name
       alert('CLICKED')
     }
   }
@@ -155,6 +131,14 @@ function animate() {
 
   renderer.render(scene, camera);
 }
+
+gsap.to(camera.position, {
+  duration: 3,
+  z: 750,
+  onComplete: function () {
+    camera.lookAt(1000, 1000, 1000)
+  }
+});
 
 animate()
 
@@ -204,7 +188,14 @@ window.addEventListener('resize', ev => {
 
 });
 
-
+window.addEventListener('pointerdown', (event) => {
+  pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+  hasClicked = 1
+  setTimeout(() => {
+    hasClicked = 0
+  }, 100)
+});
 
 
 function onPointerMove(event) {
