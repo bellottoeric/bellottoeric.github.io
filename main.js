@@ -119,14 +119,15 @@ function animate() {
 
   // calculate objects intersecting the picking ray
   const intersects = raycaster.intersectObjects(scene.children);
+  if (intersects.length === 0)
+    click = ""
 
   for (let i = 0; i < intersects.length; i++) {
 
     //intersects[i].object.material.color.set(0xff0000);
     if (intersects[i].object.name.length) {
       click = intersects[i].object.name
-    } else
-      click = ""
+    }
   }
 
   renderer.render(scene, camera);
@@ -184,7 +185,7 @@ window.addEventListener('resize', ev => {
 
 document.addEventListener('pointerdown', (event) => {
   if (click.length) {
-    alert("clicked on " + click)
+    alert("qqqq qsdqd on " + click)
   }
 });
 
