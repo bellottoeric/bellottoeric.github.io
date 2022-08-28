@@ -4,12 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Portfolio in 3D - Bellottoeric.fr</title>
-    <script type="module" crossorigin src="/main.js"></script>
+    <script type="module" crossorigin src="/src/main.js"></script>
     <link rel="stylesheet" href="/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   </head>
   <body>
-    <canvas id="bg"></canvas>
-    
+    <main>
+      <canvas id="bg"></canvas>
+      <iframe id="twitchIframe" class="hidden" src="https://player.twitch.tv/?channel=pomatobot&parent=pomatobot.com&muted=false" allowfullscreen></iframe>
+      <img id="goHome" class="hidden" src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Moon_rotating_full_160px.gif?20160323000922">
+    </main>
   </body>
 </html>

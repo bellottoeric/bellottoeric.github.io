@@ -1,41 +1,18 @@
-import './style.css'
+import '../style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-
-const scene = new THREE.Scene()
-function setBackground(scene, backgroundImageWidth, backgroundImageHeight) {
-  var windowSize = function (withScrollBar) {
-    var wid = 0;
-    var hei = 0;
-    if (typeof window.innerWidth != "undefined") {
-      wid = window.innerWidth;
-      hei = window.innerHeight;
-    }
-    else {
-      if (document.documentElement.clientWidth == 0) {
-        wid = document.body.clientWidth;
-        hei = document.body.clientHeight;
-      }
-      else {
-        wid = document.documentElement.clientWidth;
-        hei = document.documentElement.clientHeight;
-      }
-    }
-    return { width: wid - (withScrollBar ? (wid - document.body.offsetWidth + 1) : 0), height: hei };
-  };
-
-  if (scene.background) {
-
-    var size = windowSize(true);
-    var factor = (backgroundImageWidth / backgroundImageHeight) / (size.width / size.height);
-
-    scene.background.offset.x = factor > 1 ? (1 - 1 / factor) / 2 : 0;
-    scene.background.offset.y = factor > 1 ? 0 : (1 - factor) / 2;
-
-    scene.background.repeat.x = factor > 1 ? 1 / factor : 1;
-    scene.background.repeat.y = factor > 1 ? 1 : factor;
+import { setBackground } from './background'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+const fontLoader = new FontLoader()
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+fontLoader.load(
+  'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json',
+  (font) => {
+    console.log('loaded')
   }
-}
+)
+const scene = new THREE.Scene()
+
 var img = new Image();
 img.onload = function () {
   scene.background = new THREE.TextureLoader().load(img.src);
@@ -51,34 +28,65 @@ const renderer = new THREE.WebGL1Renderer({
 
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerHeight, window.innerHeight)
-camera.position.setZ(50)
+gsap.to(camera.position, {
+  duration: 1.5,
+  z: 75,
+  onComplete: function () {
+    camera.lookAt(0, 0, 0)
+  }
+});
 
 renderer.render(scene, camera)
 
 const geometry = new THREE.TorusGeometry(2, 2, 200, 100)
 const material = new THREE.MeshStandardMaterial({ color: 0xFF6347 })
 const torus = new THREE.Mesh(geometry, material)
-scene.add(torus)
+//scene.add(torus)
 
 const pointLight = new THREE.PointLight(0xffffff)
 pointLight.position.set(20, 20, 20)
 const ambientLight = new THREE.AmbientLight(0xffffff)
+var text;
+fontLoader.load('a.json', function (font) {
 
-const lightHelper = new THREE.PointLightHelper(pointLight)
-const gridHelper = new THREE.GridHelper(200, 50)
+  const matLite = new THREE.MeshBasicMaterial(
+    {
+      color: "#ffffff",
+      transparent: true,
+      opacity: 0.8,
+      side: THREE.DoubleSide
+    });
 
-scene.add(pointLight, ambientLight, lightHelper,)
+  const message = "Linkedin";
+
+  const shapes = font.generateShapes(message, 3);
+
+  const geometry = new THREE.ShapeGeometry(shapes);
+  geometry.computeBoundingBox();
+
+  const xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x);
+  geometry.translate(xMid, 0, 0);
+
+  text = new THREE.Mesh(geometry, matLite);
+  text.position.z = - 150;
+  text.renderOrder = -9
+  scene.add(text);
+
+  camera.lookAt(new THREE.Vector3(text.position.x, 0, text.position.z));
+
+});
+
+
+scene.add(ambientLight)
 
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.maxAzimuthAngle = Math.PI / 2
 
-const moonTexture = new THREE.TextureLoader().load('moon.jpg')
-const normalTexture = new THREE.TextureLoader().load('normal.jpg')
+const moonTexture = new THREE.TextureLoader().load('linkedin.png')
 const moon = new THREE.Mesh(
-  new THREE.SphereGeometry(3, 32, 32),
+  new THREE.BoxGeometry(8, 8, 8),
   new THREE.MeshStandardMaterial({
     map: moonTexture,
-    normalMap: normalTexture
   })
 )
 moon.name = "moon"
@@ -97,11 +105,11 @@ function animate() {
   requestAnimationFrame(animate)
   var time = Date.now() * 0.0005;
   //if (object) object.rotation.y -= 0.5 * delta;
-  torus.position.x = Math.sin(time * 0.5) * 25;
-  torus.position.y = Math.cos(time * 0.5) * 25;
-  torus.position.z = Math.cos(time * 0) * 10;
-
-  moon.position.z = torus.position.z
+  moon.position.x = Math.sin(time * 0.5) * 25;
+  moon.position.y = Math.cos(time * 0.5) * 25;
+  moon.position.z = Math.cos(time * 0) * 10;
+  moon.rotation.x += 0.01
+  moon.rotation.y += 0.01
 
   //moon.position.x = torus.position.x
   //moon.position.y = torus.position.y - 3
@@ -109,11 +117,18 @@ function animate() {
   //torus.rotation.x = torus.rotation.x + 0.01
   //torus.rotation.y += 0.005
   //torus.rotation.z += 0.11
-  torus.rotation.x += 0.01
-  torus.rotation.y += 0.01
 
-  controls.update()
-  renderer.render(scene, camera)
+
+  if (text) {
+    text.position.x = Math.sin(time * 0.5) * 25;
+    text.position.y = (Math.cos(time * 0.5) * 25) - 10;
+    text.position.z = Math.cos(time * 0) * 10;
+    text.lookAt(camera.position);
+  }
+
+
+
+
 
 
   raycaster.setFromCamera(pointer, camera);
@@ -124,21 +139,25 @@ function animate() {
 
     if (intersects[i].object.name.length && hasClicked) {
       hasClicked = 0
-      alert('CLICKED')
+      setTimeout(() => {
+        document.getElementById("twitchIframe").classList.remove("hidden")
+        document.getElementById("goHome").classList.remove("hidden")
+      }, 1000 * 1.5)
+      gsap.to(camera.position, {
+        duration: 3,
+        z: 1000,
+        onComplete: function () {
+          camera.lookAt(0, 0, 0)
+        }
+      });
     }
   }
 
+  controls.update()
 
   renderer.render(scene, camera);
 }
 
-gsap.to(camera.position, {
-  duration: 3,
-  z: 750,
-  onComplete: function () {
-    camera.lookAt(1000, 1000, 1000)
-  }
-});
 
 animate()
 
@@ -171,6 +190,20 @@ function moveCamera() {
 }
 
 document.body.onscroll = moveCamera
+
+
+
+document.getElementById("goHome").addEventListener('click', function (event) {
+  document.getElementById("twitchIframe").classList.add("hidden")
+  document.getElementById("goHome").classList.add("hidden")
+  gsap.to(camera.position, {
+    duration: 3,
+    z: 50,
+    onComplete: function () {
+      camera.lookAt(0, 0, 0)
+    }
+  });
+}, false);
 
 document.querySelector("#bg").addEventListener('wheel', function (event) {
   moveCamera()
