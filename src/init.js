@@ -30,21 +30,44 @@ export function init() {
 
     gsap.to(camera.position, { duration: 1.5, z: 75 })
 
-    createMeshProject("me", 0, [14, 15, 0])
+
     createPlanet("sun", 1000, [50, 50, 50])
     createPlanet("venus", 2000, [20, 20, 20])
+    createPlanet("mars", 3000, [15, 15, 15])
+    createPlanet("jupiter", 4000, [20, 20, 20])
+    createPlanet("mercury", 5000, [20, 20, 20])
+    createPlanet("saturn", 6000, [20, 20, 20])
+    createPlanet("neptune", 7000, [20, 20, 20])
+    createPlanet("uranus", 8000, [20, 20, 20])
+
+    let loader = new THREE.TextureLoader();
+    var ringTexture = loader.load("/planetTexture/saturnRIng.png");
+    let saturnRadius = 0.98;
+    var ringGeometry = new THREE.RingGeometry(30.4 * saturnRadius, 60.5 * saturnRadius, 60 * 32, 120, 0, Math.PI * 2);
+    var ringMaterial = new THREE.MeshBasicMaterial({
+        map: ringTexture,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.7,
+    });
+
+    var ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.name = "rings"
+    scene.add(ring);
+    listPlanetMesh.push(ring)
+
+
+    createMeshProject("me.png", 0, [14, 15, 0])
 
     fontLoader.load('a.json', function (font) {
-        createMeshProject("linkedin", 1000, [8, 8, 8])
+        createMeshProject("linkedin.png", 1000, [8, 8, 8])
         createText(font, "Linkedin", 1000)
-        createMeshProject("linkedin", 2000, [8, 8, 8])
-        createText(font, "Linkedin", 2000)
-        createMeshProject("linkedin", 3000, [8, 8, 8])
-        createText(font, "Linkedin", 3000)
+        createMeshProject("/planetTexture/earth.jpg", 3000, [8, 8, 8])
+        createText(font, "Earth", 3000)
+
+        createMeshProject("/planetTexture/moon.jpg", 6000, [8, 8, 8])
+        createText(font, "Moon", 3000)
     })
-
-
-
 
     for (let i = 0; i < 1000; i++) {
         const geometry = new THREE.SphereGeometry(0.08, 6, 6)
@@ -108,20 +131,20 @@ function createText(font, text, orderTime) {
 }
 
 function createMeshProject(name, orderTime, size) {
-    const meshTexture = new THREE.TextureLoader().load(name + '.png')
+    const meshTexture = new THREE.TextureLoader().load(name)
     const mesh = new THREE.Mesh(
         new THREE.BoxGeometry(size[0], size[1], size[2]),
         new THREE.MeshStandardMaterial({
             map: meshTexture,
         })
     )
-    if (name !== "me") {
+    if (name !== "me.png") {
         mesh.rotation.x = getRandomArbitrary(1, 360)
         mesh.rotation.y = getRandomArbitrary(1, 360)
     }
     mesh.name = name
     mesh.orderTime = orderTime
-    if (name === "me")
+    if (name === "me.png")
         scene2.add(mesh)
     else {
 

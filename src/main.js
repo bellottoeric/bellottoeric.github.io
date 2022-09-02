@@ -23,9 +23,14 @@ setInterval(() => {
   requestAnimationFrame(animate)
   let time = Date.now() * 0.0005
 
-
-
+  let rings
   for (let i of listPlanetMesh) {
+    if (i.name === "rings")
+      rings = i
+  }
+  for (let i of listPlanetMesh) {
+    if (i.name === "rings")
+      continue
     let newTime = time
     if (i.orderTime)
       newTime = time + i.orderTime
@@ -35,6 +40,13 @@ setInterval(() => {
     i.position.z = Math.cos(newTime * 8 / 100) * 40 * 4
     i.rotation.x += 0.0015
     i.rotation.y += 0.0015
+    if (i.name === "saturn") {
+      rings.position.x = i.position.x
+      rings.position.y = i.position.y
+      rings.position.z = i.position.z
+      rings.rotation.x += 0.005
+      rings.rotation.y += 0.005
+    }
     if (i.name === "sun") {
       pointLight.position.y = i.position.y
       pointLight.position.x = i.position.x
