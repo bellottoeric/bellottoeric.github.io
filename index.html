@@ -10,7 +10,12 @@
   </head>
   <body>
     <main>
-      <canvas id="bg"></canvas>
+      <div id="parentLoader" >
+        <h1>Bellotto Eric</h1>
+        <div id="loader" class="loader"></div>
+        <h2>Loading...</h2>
+      </div>
+      <canvas id="bg" class="hidden"></canvas>
       <iframe id="twitchIframe" class="hidden" src="https://player.twitch.tv/?channel=pomatobot&parent=pomatobot.com&muted=false" allowfullscreen></iframe>
       <img id="goHome" class="hidden" src="https://upload.wikimedia.org/wikipedia/commons/b/b8/Moon_rotating_full_160px.gif?20160323000922">
     </main>

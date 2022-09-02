@@ -11,11 +11,14 @@ const renderer = new THREE.WebGL1Renderer({
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 const fontLoader = new FontLoader()
 const listMesh = []
+const listPlanetMesh = []
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
 const pointLight = new THREE.PointLight("#ffffff", 2, 1000)
 const controls = new OrbitControls(camera, renderer.domElement)
 const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
+
+scene2.add((new THREE.AmbientLight(0xffffff, 1)))
 
 export function init() {
     let img = new Image()
@@ -23,22 +26,28 @@ export function init() {
         scene.background = new THREE.TextureLoader().load(img.src)
         setBackground(scene, img.width, img.height)
     }
-    img.src = "space.jpg"
+    //img.src = "space2.jpg"
 
     gsap.to(camera.position, { duration: 1.5, z: 75 })
 
+    createMeshProject("me", 0, [14, 15, 0])
+    createPlanet("sun", 1000, [50, 50, 50])
+    createPlanet("venus", 2000, [20, 20, 20])
+
     fontLoader.load('a.json', function (font) {
-        createMesh("me", 0, [14, 15, 0])
-        createMesh("linkedin", 1000, [8, 8, 8])
+        createMeshProject("linkedin", 1000, [8, 8, 8])
         createText(font, "Linkedin", 1000)
-        createMesh("linkedin", 2000, [8, 8, 8])
+        createMeshProject("linkedin", 2000, [8, 8, 8])
         createText(font, "Linkedin", 2000)
-        createMesh("linkedin", 3000, [8, 8, 8])
+        createMeshProject("linkedin", 3000, [8, 8, 8])
         createText(font, "Linkedin", 3000)
     })
 
-    for (let i = 0; i < 250; i++) {
-        const geometry = new THREE.SphereGeometry(0.25, 24, 24)
+
+
+
+    for (let i = 0; i < 1000; i++) {
+        const geometry = new THREE.SphereGeometry(0.08, 6, 6)
         const material = new THREE.MeshStandardMaterial({ color: 0xffffff })
         const star = new THREE.Mesh(geometry, material)
         const [x, y, z] = Array(3).fill().map(() => (THREE.MathUtils.randFloatSpread(100)))
@@ -46,9 +55,33 @@ export function init() {
         star.position.set(x, y, z)
         scene.add(star)
     }
-    return ([scene, scene2, renderer, camera, listMesh, ambientLight, pointLight, controls, raycaster, pointer])
+
+    let stars = []
+    for (var z = -1000; z < 1000; z += 3) {
+        var geometry = new THREE.SphereGeometry(0.5, 32, 32)
+        var material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        var sphere = new THREE.Mesh(geometry, material)
+        sphere.position.x = Math.random() * 1000 - 500;
+        sphere.position.y = Math.random() * 1000 - 500;
+        sphere.position.z = z;
+        sphere.scale.x = sphere.scale.y = 2;
+        scene.add(sphere);
+        stars.push(sphere);
+    }
+    return ([scene, scene2, renderer, camera, listMesh, ambientLight, pointLight, controls, raycaster, pointer, listPlanetMesh])
 }
 
+function createPlanet(name, orderTime, size) {
+    const meshTexture = new THREE.TextureLoader().load("/planetTexture/" + name + '.jpg')
+    const s_Geometry = new THREE.SphereGeometry(size[0], size[1], size[2])
+    const s_materials = new THREE.MeshStandardMaterial({ color: 0xffffff, map: meshTexture })
+    const mesh = new THREE.Mesh(s_Geometry, s_materials)
+
+    mesh.orderTime = orderTime
+    mesh.name = name
+    scene2.add(mesh)
+    listPlanetMesh.push(mesh)
+}
 
 function createText(font, text, orderTime) {
     const matLite = new THREE.MeshBasicMaterial({
@@ -74,7 +107,7 @@ function createText(font, text, orderTime) {
     listMesh.push(meshText)
 }
 
-function createMesh(name, orderTime, size) {
+function createMeshProject(name, orderTime, size) {
     const meshTexture = new THREE.TextureLoader().load(name + '.png')
     const mesh = new THREE.Mesh(
         new THREE.BoxGeometry(size[0], size[1], size[2]),
@@ -90,9 +123,11 @@ function createMesh(name, orderTime, size) {
     mesh.orderTime = orderTime
     if (name === "me")
         scene2.add(mesh)
-    else
+    else {
+
         scene.add(mesh)
-    listMesh.push(mesh)
+        listMesh.push(mesh)
+    }
 }
 
 function getRandomArbitrary(min, max) {

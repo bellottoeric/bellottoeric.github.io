@@ -30,4 +30,21 @@ export function utils(pointer, camera) {
         pointer.x = (event.clientX / window.innerWidth) * 2 - 1
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     })
+
+
+    let waitLoad = 0
+    setTimeout(() => {
+        if (waitLoad) {
+            document.getElementById("parentLoader").classList.add("hidden")
+            document.getElementById("bg").classList.remove("hidden")
+        } else
+            waitLoad = 1
+    }, 1000 * 0.02)
+    window.addEventListener("load", function (event) {
+        if (waitLoad) {
+            document.getElementById("parentLoader").classList.add("hidden")
+            document.getElementById("bg").classList.remove("hidden")
+        } else
+            waitLoad = 1
+    })
 }

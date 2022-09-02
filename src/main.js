@@ -1,11 +1,10 @@
 import '../style.css'
-import * as THREE from 'three'
 import { init } from './init'
 import { utils } from './utils'
 
 window.clicked = 0
 let direction = 1
-const [scene, scene2, renderer, camera, listMesh, ambientLight, pointLight, controls, raycaster, pointer] = init()
+const [scene, scene2, renderer, camera, listMesh, ambientLight, pointLight, controls, raycaster, pointer, listPlanetMesh] = init()
 utils(pointer, camera)
 
 renderer.setPixelRatio(window.devicePixelRatio)
@@ -20,32 +19,32 @@ setInterval(() => {
   direction *= -1
 }, 1000 * 15);
 
-
-
-const sunLight = new THREE.AmbientLight(0xffffff, 1)
-scene2.add(sunLight)
-
-const s_Geometry = new THREE.SphereGeometry(50, 50, 50);
-const s_texture = new THREE.TextureLoader().load('https://raw.githubusercontent.com/uemura5683/threejs_plactice/master/earth_vol2/img/sun.jpg');
-const s_materials = new THREE.MeshStandardMaterial({ color: 0xffffff, map: s_texture });
-const sunMesh = new THREE.Mesh(s_Geometry, s_materials);
-
-scene2.add(sunMesh);
-
-
 (function animate() {
   requestAnimationFrame(animate)
   let time = Date.now() * 0.0005
 
-  for (let i of listMesh) {
-    if (i.name === "me") {
-      pointLight.position.x = Math.cos(time * 10 / 50) * 50 * 4;
-      pointLight.position.y = Math.cos(time * 7 / 50) * 30 * 4;
-      pointLight.position.z = Math.cos(time * 8 / 50) * 40 * 4;
-      pointLight.rotation.x += 0.005
-      pointLight.rotation.y += 0.005
-      continue
+
+
+  for (let i of listPlanetMesh) {
+    let newTime = time
+    if (i.orderTime)
+      newTime = time + i.orderTime
+
+    i.position.x = Math.cos(newTime * 10 / 100) * 50 * 4
+    i.position.y = Math.cos(newTime * 7 / 100) * 30 * 4
+    i.position.z = Math.cos(newTime * 8 / 100) * 40 * 4
+    i.rotation.x += 0.0015
+    i.rotation.y += 0.0015
+    if (i.name === "sun") {
+      pointLight.position.y = i.position.y
+      pointLight.position.x = i.position.x
+      pointLight.position.z = i.position.z
+      pointLight.rotation.y = i.rotation.y
+      pointLight.rotation.x = i.rotation.x
     }
+  }
+
+  for (let i of listMesh) {
     let newTime = time
     if (i.orderTime)
       newTime = time + i.orderTime
@@ -76,10 +75,9 @@ scene2.add(sunMesh);
   camera.position.z -= 0.015 * direction
   pointLight.position.y += 0.455 * direction
   controls.update()
-  sunMesh.position.y = pointLight.position.y
-  sunMesh.position.x = pointLight.position.x
-  sunMesh.position.z = pointLight.position.z
-  sunMesh.rotation.y = pointLight.rotation.y
+
+
+
   renderer.clear();
   renderer.render(scene, camera)
   renderer.render(scene2, camera)
