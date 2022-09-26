@@ -1,9 +1,12 @@
 import { setBackground } from './background'
 
-export function utils(pointer, camera) {
+export function utils(pointer, camera, renderer) {
     document.getElementById("goHome").addEventListener('click', function (event) {
-        document.getElementById("twitchIframe").classList.add("hidden")
-        document.getElementById("goHome").classList.add("hidden")
+        document.getElementById("presentation").classList.add("hidden")
+        document.getElementById("parcour").classList.add("hidden")
+        document.getElementById("github").classList.add("hidden")
+        document.getElementById("moon").classList.add("hidden")
+        document.getElementById("me").classList.add("hidden")
         gsap.to(camera.position, { duration: 1.5, z: 75 })
     }, false)
 
@@ -33,6 +36,8 @@ export function utils(pointer, camera) {
 
 
     let waitLoad = 0
+    document.getElementById("parentLoader").classList.add("hidden")
+    document.getElementById("bg").classList.remove("hidden")
     setTimeout(() => {
         if (waitLoad) {
             document.getElementById("parentLoader").classList.add("hidden")
@@ -47,4 +52,6 @@ export function utils(pointer, camera) {
         } else
             waitLoad = 1
     })
+
+
 }

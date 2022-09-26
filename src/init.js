@@ -10,7 +10,7 @@ const renderer = new THREE.WebGL1Renderer({
 })
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
 const fontLoader = new FontLoader()
-const listMesh = []
+const meshAroundMe = []
 const listPlanetMesh = []
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
 const pointLight = new THREE.PointLight("#ffffff", 2, 1000)
@@ -18,7 +18,7 @@ const controls = new OrbitControls(camera, renderer.domElement)
 const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
 
-scene2.add((new THREE.AmbientLight(0xffffff, 1)))
+scene.add((new THREE.AmbientLight(0xffffff, 1)))
 
 export function init() {
     let img = new Image()
@@ -30,8 +30,7 @@ export function init() {
 
     gsap.to(camera.position, { duration: 1.5, z: 75 })
 
-
-    createPlanet("sun", 1000, [50, 50, 50])
+    createPlanet("earth", 1000, [20, 20, 20])
     createPlanet("venus", 2000, [20, 20, 20])
     createPlanet("mars", 3000, [15, 15, 15])
     createPlanet("jupiter", 4000, [20, 20, 20])
@@ -39,34 +38,34 @@ export function init() {
     createPlanet("saturn", 6000, [20, 20, 20])
     createPlanet("neptune", 7000, [20, 20, 20])
     createPlanet("uranus", 8000, [20, 20, 20])
+    createPlanet("sun", 9000, [75, 75, 75])
 
-    let loader = new THREE.TextureLoader();
-    var ringTexture = loader.load("/planetTexture/saturnRIng.png");
-    let saturnRadius = 0.98;
-    var ringGeometry = new THREE.RingGeometry(30.4 * saturnRadius, 60.5 * saturnRadius, 60 * 32, 120, 0, Math.PI * 2);
-    var ringMaterial = new THREE.MeshBasicMaterial({
-        map: ringTexture,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.7,
-    });
-
-    var ring = new THREE.Mesh(ringGeometry, ringMaterial);
-    ring.name = "rings"
-    scene.add(ring);
+    let ring = createRing()
+    scene.add(ring)
     listPlanetMesh.push(ring)
 
+    let moon = createMoon()
+    scene.add(moon)
+    listPlanetMesh.push(moon)
 
-    createMeshProject("me.png", 0, [14, 15, 0])
+    for (let i of listPlanetMesh) {
+        if (i.name === "earth")
+            i.add(moon)
+    }
 
+
+    createMeshAroundMe("me.png", 0, [14, 15, 0])
     fontLoader.load('a.json', function (font) {
-        createMeshProject("linkedin.png", 1000, [8, 8, 8])
-        createText(font, "Linkedin", 1000)
-        createMeshProject("/planetTexture/earth.jpg", 3000, [8, 8, 8])
-        createText(font, "Earth", 3000)
-
-        createMeshProject("/planetTexture/moon.jpg", 6000, [8, 8, 8])
-        createText(font, "Moon", 3000)
+        createMeshAroundMe("linkedin.png", 0, [8, 8, 8])
+        createText(font, "Parcour", 0)
+        createMeshAroundMe("github.png", 480, [3, 10, 10], "cone")
+        createText(font, "Github", 480)
+        createMeshAroundMe("/planetTexture/earth.jpg", 960, [6.5, 64, 32], "sphere")
+        createText(font, "xpert-agro.fr", 960)
+        createMeshAroundMe("/planetTexture/moon.jpg", 1440, [6.5, 64, 32], "sphere")
+        createText(font, "pomatobot.com", 1440)
+        createMeshAroundMe("/planetTexture/neptune.jpg", 1920, [8, 8, 5, 3], "cylindre")
+        createText(font, "Contact", 1920)
     })
 
     for (let i = 0; i < 1000; i++) {
@@ -91,7 +90,34 @@ export function init() {
         scene.add(sphere);
         stars.push(sphere);
     }
-    return ([scene, scene2, renderer, camera, listMesh, ambientLight, pointLight, controls, raycaster, pointer, listPlanetMesh])
+    return ([scene, scene2, renderer, camera, meshAroundMe, ambientLight, pointLight, controls, raycaster, pointer, listPlanetMesh])
+}
+function createMoon() {
+    const meshTexture = new THREE.TextureLoader().load("/planetTexture/moon.jpg")
+    const s_Geometry = new THREE.SphereGeometry(6.5, 64, 32)
+    const s_materials = new THREE.MeshStandardMaterial({ map: meshTexture })
+    let moon = new THREE.Mesh(s_Geometry, s_materials)
+
+    moon.name = "moon"
+    moon.orderTime = 0
+
+    return (moon)
+}
+function createRing() {
+    let loader = new THREE.TextureLoader();
+    var ringTexture = loader.load("/planetTexture/saturnRIng.png");
+    let saturnRadius = 0.98;
+    var ringGeometry = new THREE.RingGeometry(30.4 * saturnRadius, 60.5 * saturnRadius, 60 * 32, 120, 0, Math.PI * 2);
+    var ringMaterial = new THREE.MeshBasicMaterial({
+        map: ringTexture,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.7,
+    });
+
+    let ring = new THREE.Mesh(ringGeometry, ringMaterial);
+    ring.name = "ring"
+    return (ring)
 }
 
 function createPlanet(name, orderTime, size) {
@@ -102,7 +128,10 @@ function createPlanet(name, orderTime, size) {
 
     mesh.orderTime = orderTime
     mesh.name = name
-    scene2.add(mesh)
+    if (name !== "sun")
+        scene2.add(mesh)
+    else
+        scene.add(mesh)
     listPlanetMesh.push(mesh)
 }
 
@@ -127,17 +156,33 @@ function createText(font, text, orderTime) {
     meshText.orderTime = orderTime
     meshText.lookAtMe = 1
     scene.add(meshText)
-    listMesh.push(meshText)
+    meshAroundMe.push(meshText)
 }
 
-function createMeshProject(name, orderTime, size) {
+function createMeshAroundMe(name, orderTime, size, type) {
     const meshTexture = new THREE.TextureLoader().load(name)
-    const mesh = new THREE.Mesh(
-        new THREE.BoxGeometry(size[0], size[1], size[2]),
-        new THREE.MeshStandardMaterial({
-            map: meshTexture,
-        })
-    )
+    let mesh
+    if (type === "sphere") {
+        mesh = new THREE.Mesh(
+            new THREE.SphereGeometry(size[0], size[1], size[2]),
+            new THREE.MeshBasicMaterial({ map: meshTexture, })
+        )
+    } else if (type === "cone") {
+        mesh = new THREE.Mesh(
+            new THREE.ConeGeometry(size[0], size[1], size[2]),
+            new THREE.MeshBasicMaterial({ map: meshTexture, })
+        )
+    } else if (type === "cylindre") {
+        mesh = new THREE.Mesh(
+            new THREE.CylinderGeometry(size[0], size[1], size[2], size[3]),
+            new THREE.MeshBasicMaterial({ map: meshTexture, })
+        )
+    } else {
+        mesh = new THREE.Mesh(
+            new THREE.BoxGeometry(size[0], size[1], size[2]),
+            new THREE.MeshBasicMaterial({ map: meshTexture, })
+        )
+    }
     if (name !== "me.png") {
         mesh.rotation.x = getRandomArbitrary(1, 360)
         mesh.rotation.y = getRandomArbitrary(1, 360)
@@ -147,9 +192,8 @@ function createMeshProject(name, orderTime, size) {
     if (name === "me.png")
         scene2.add(mesh)
     else {
-
         scene.add(mesh)
-        listMesh.push(mesh)
+        meshAroundMe.push(mesh)
     }
 }
 

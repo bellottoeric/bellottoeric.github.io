@@ -1,7 +1,7 @@
 export function setBackground(scene, backgroundImageWidth, backgroundImageHeight) {
-    var windowSize = function (withScrollBar) {
-        var wid = 0;
-        var hei = 0;
+    let windowSize = function (withScrollBar) {
+        let wid = 0;
+        let hei = 0;
         if (typeof window.innerWidth != "undefined") {
             wid = window.innerWidth;
             hei = window.innerHeight;
@@ -20,9 +20,8 @@ export function setBackground(scene, backgroundImageWidth, backgroundImageHeight
     };
 
     if (scene.background) {
-
-        var size = windowSize(true);
-        var factor = (backgroundImageWidth / backgroundImageHeight) / (size.width / size.height);
+        let size = windowSize(true);
+        let factor = (backgroundImageWidth / backgroundImageHeight) / (size.width / size.height);
 
         scene.background.offset.x = factor > 1 ? (1 - 1 / factor) / 2 : 0;
         scene.background.offset.y = factor > 1 ? 0 : (1 - factor) / 2;
