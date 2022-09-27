@@ -38,7 +38,7 @@ export function init() {
     createPlanet("saturn", 6000, [20, 20, 20])
     createPlanet("neptune", 7000, [20, 20, 20])
     createPlanet("uranus", 8000, [20, 20, 20])
-    createPlanet("sun", 9000, [75, 75, 75])
+    createPlanet("sun", 3500, [75, 75, 75])
 
     let ring = createRing()
     scene.add(ring)
@@ -55,13 +55,20 @@ export function init() {
 
 
     createMeshAroundMe("me.png", 0, [14, 15, 0])
+    createMeshAroundMe("me2.jpg", 0, [14, 15, 0])
+
     fontLoader.load('a.json', function (font) {
+        createText(font, "Le monde ne tourne pas autour de toi, ha si !", -1, [0, -15, 0])
+        createText(font, "- Bellotto Eric", -1, [0, -18, 0])
+        createText(font, "Cinematic", -1, [-25, 0, 0])
+        createText(font, "Sound on/off", -1, [25, 0, 0])
+
         createMeshAroundMe("linkedin.png", 0, [8, 8, 8])
         createText(font, "Parcour", 0)
-        createMeshAroundMe("github.png", 480, [3, 10, 10], "cone")
-        createText(font, "Github", 480)
-        createMeshAroundMe("/planetTexture/earth.jpg", 960, [6.5, 64, 32], "sphere")
-        createText(font, "xpert-agro.fr", 960)
+        createMeshAroundMe("github.png", 960, [3, 10, 10], "cone")
+        createText(font, "Github", 960)
+        createMeshAroundMe("/planetTexture/earth.jpg", 480, [6.5, 64, 32], "sphere")
+        createText(font, "xpert-agro.fr", 480)
         createMeshAroundMe("/planetTexture/moon.jpg", 1440, [6.5, 64, 32], "sphere")
         createText(font, "pomatobot.com", 1440)
         createMeshAroundMe("/planetTexture/neptune.jpg", 1920, [8, 8, 5, 3], "cylindre")
@@ -135,7 +142,7 @@ function createPlanet(name, orderTime, size) {
     listPlanetMesh.push(mesh)
 }
 
-function createText(font, text, orderTime) {
+function createText(font, text, orderTime, pos) {
     const matLite = new THREE.MeshBasicMaterial({
         color: "#ffffff",
         transparent: true,
@@ -153,10 +160,17 @@ function createText(font, text, orderTime) {
     meshText.position.x = 50
     meshText.position.y = -10
     meshText.position.z = 0
-    meshText.orderTime = orderTime
     meshText.lookAtMe = 1
-    scene.add(meshText)
+    meshText.isText = 1
+    meshText.orderTime = orderTime
+    meshText.name = text
+    if (pos) {
+        meshText.position.x = pos[0]
+        meshText.position.y = pos[1]
+        meshText.position.z = pos[2]
+    }
     meshAroundMe.push(meshText)
+    scene.add(meshText)
 }
 
 function createMeshAroundMe(name, orderTime, size, type) {
@@ -183,13 +197,16 @@ function createMeshAroundMe(name, orderTime, size, type) {
             new THREE.MeshBasicMaterial({ map: meshTexture, })
         )
     }
-    if (name !== "me.png") {
+    if (name !== "me.png" && name !== "me2.jpg") {
         mesh.rotation.x = getRandomArbitrary(1, 360)
         mesh.rotation.y = getRandomArbitrary(1, 360)
     }
     mesh.name = name
     mesh.orderTime = orderTime
-    if (name === "me.png")
+    if (name === "me2.jpg")
+        mesh.position.z = -0.05
+
+    if (name === "me.png" || name === "me2.jpg")
         scene2.add(mesh)
     else {
         scene.add(mesh)

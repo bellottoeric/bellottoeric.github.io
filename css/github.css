@@ -1,24 +1,54 @@
+.childGithub {
+  display: flex;
+  background-color: white;
+  flex-direction: column;
+  align-content: center;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 10px;
+}
+#navGithub {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+@media (min-width: 1024px) {
+  #navGithub {
+    flex-direction: row;
+  }
+}
+
+.spacer {
+  visibility: hidden;
+  margin: 130px;
+}
+
 .contact-area {
   width: 100%;
   height: 100vh;
   position: relative;
 }
 .contact {
+  height: 100vh;
   position: relative;
-  width: 420px;
-  overflow: hidden;
-  margin: 0 auto;
+  /* display: flex; */
+  display: flex;
+  align-items: center;
+  /* align-items: center; */
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  width: 80vw;
 }
 @media (min-width: 1024px) {
   .contact {
-    position: absolute;
-    top: 25%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    width: 100%;
   }
 }
 .contact main {
@@ -33,6 +63,8 @@
   background-color: #eb524a;
 }
 .contact main section .content {
+  padding: 10px;
+
   float: left;
   width: 100%;
   position: relative;
@@ -210,7 +242,7 @@
   transition: all 0.5s;
 }
 .contact nav.active {
-  max-height: 600px;
+  max-height: 100%;
   -webkit-transition: all 1s;
   -moz-transition: all 1s;
   -o-transition: all 1s;
@@ -240,7 +272,7 @@
 .contact nav a {
   float: left;
   width: 100%;
-  margin-top: 18px;
+  margin-bottom: 18px;
   background-color: #fff;
   /*padding: 18px 20px;*/
   border-radius: 5px;

@@ -6,8 +6,8 @@ import { setupVideoPlayer } from './videoPlayer'
 window.clicked = 0
 let direction = 1
 const [scene, scene2, renderer, camera, meshAroundMe, ambientLight, pointLight, controls, raycaster, pointer, listPlanetMesh] = init()
-utils(pointer, camera, renderer)
-//setupVideoPlayer()
+utils(pointer, camera, renderer, scene, scene2, controls)
+setupVideoPlayer()
 
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerHeight, window.innerHeight)
@@ -19,7 +19,12 @@ scene2.add(pointLight)
 
 setInterval(() => {
   direction *= -1
-}, 1000 * 15);
+}, 1000 * 15)
+let soundClicked = 0
+setInterval(() => {
+  if (soundClicked)
+    soundClicked = 0
+}, 100);
 
 (function animate() {
   requestAnimationFrame(animate)
@@ -40,10 +45,12 @@ setInterval(() => {
     if (i.orderTime)
       newTime = time + i.orderTime
 
-
-    i.position.x = Math.cos(newTime * 10 / 100) * 50 * 3
-    i.position.y = Math.cos(newTime * 7 / 100) * 30 * 3
-    i.position.z = Math.cos(newTime * 8 / 100) * 40 * 3
+    /*i.position.x = Math.cos(newTime * 10 / 100) * 50 * 3
+  i.position.y = Math.cos(newTime * 7 / 100) * 30 * 3
+  i.position.z = Math.cos(newTime * 8 / 100) * 40 * 3*/
+    i.position.x = Math.cos(newTime * 10 / 100) * 80 * 5
+    i.position.y = Math.cos(newTime * 7 / 100) * 80 * 5
+    i.position.z = Math.cos(newTime * 8 / 100) * 80 * 5
     i.rotation.x += 0.0015
     i.rotation.y += 0.0015
     if (i.name === "saturn") {
@@ -73,23 +80,37 @@ setInterval(() => {
     let newTime = time
     if (i.orderTime)
       newTime = time + i.orderTime
-    i.position.x = Math.sin(newTime * 0.5) * 25
+    if (i.orderTime !== -1)
+      i.position.x = Math.sin(newTime * 0.15) * 50
     if (i.lookAtMe) {
       i.lookAt(camera.position)
-      i.position.y = (Math.cos(newTime * 0.5) * 25) - 10
+      if (i.orderTime !== -1)
+        i.position.y = (Math.cos(newTime * 0.15) * 50) - 10
     } else {
       i.rotation.x += 5 / 1000 * direction
       i.rotation.y += 5 / 1000 * direction
-      i.position.y = (Math.cos(newTime * 0.5) * 25)
+      i.position.y = (Math.cos(newTime * 0.15) * 50)
     }
   }
   raycaster.setFromCamera(pointer, camera)
   const intersects = raycaster.intersectObjects(scene.children)
   for (let i = 0; i < intersects.length; i++) {
     let name = intersects[i].object.name
-    console.log(name)
+    console.log("-->", name, intersects[i].object.isText)
     if (name.length && clicked) {
-      if (name !== "ring" && name !== "moon" && name !== "sun") {
+      if (name === "/planetTexture/moon.jpg") {
+        window.open("https://pomatobot.com");
+      } else if (name === "/planetTexture/earth.jpg") {
+        window.open("https://xpert-agro.fr");
+      } else if (name === "Cinematic") {
+        cinematic()
+      } else if (name.includes("on/off") && !soundClicked) {
+        soundClicked = 1
+        if (window.player.isMuted())
+          window.player.unMute()
+        else
+          window.player.mute()
+      } else if (name !== "ring" && name !== "moon" && name !== "sun" && !intersects[i].object.isText) {
         clicked = 0
         setTimeout(() => {
           document.getElementById("presentation").classList.remove("hidden")
@@ -108,7 +129,9 @@ setInterval(() => {
           } else if (name.includes('neptune')) {
             document.getElementById("me").classList.remove("hidden")
           }
+          controls.enabled = true;
         }, 1000)
+        controls.enabled = false;
         gsap.to(camera.position, { duration: 1.5, z: 1000 })
       }
     }
@@ -122,46 +145,24 @@ setInterval(() => {
   renderer.clear();
   renderer.render(scene, camera)
   renderer.render(scene2, camera)
-})()
+})();
 
-function getRandomArbitrary(min, max) {
-  return Math.random() * (max - min) + min;
+async function cinematic() {
+  controls.enabled = false;
+  await gsap.timeline()
+    .to(camera.position, { duration: 1.5, x: 50, y: 0, z: 0, ease: "none" })
+    .to(camera.position, { duration: 1.5, x: 150, y: 0, z: -250, ease: "none" })
+    .to(camera.position, { duration: 1.5, x: -150, y: 50, z: -150, ease: "none" })
+    .to(camera.position, { duration: 1.5, x: -250, y: 50, z: 0, ease: "none" })
+    .to(camera.position, { duration: 1.5, x: -350, y: -50, z: 250, ease: "none" })
+    .to(camera.position, { duration: 1.5, x: 0, y: -50, z: 550, ease: "none" })
+    .to(camera.position, { duration: 1.5, x: 0, y: 0, z: 50, ease: "none" })
+  controls.enabled = true;
 }
+setTimeout(() => {
+  if (!localStorage.getItem('cinematicated')) {
+    localStorage.setItem('cinematicated', 1)
+    cinematic()
+  }
+}, 2000)
 
-var btn = document.querySelector('.js-message-btn');
-var card = document.querySelector('.js-profile-card');
-var closeBtn = document.querySelectorAll('.js-message-close');
-
-btn.addEventListener('click', function (e) {
-  e.preventDefault();
-  card.classList.add('active');
-});
-
-closeBtn.forEach(function (element, index) {
-  console.log(element);
-  element.addEventListener('click', function (e) {
-    e.preventDefault();
-    card.classList.remove('active');
-  });
-});
-
-document.getElementById("buttonGithub").addEventListener('click', function (event) {
-  toggleGithub()
-}, false)
-
-function toggleGithub() {
-  if (document.getElementById("buttonGithub").classList.toString().includes('active'))
-    document.getElementById("buttonGithub").classList.remove("active")
-  else
-    document.getElementById("buttonGithub").classList.add("active")
-
-  if (document.getElementById("titleGithub").classList.toString().includes('active'))
-    document.getElementById("titleGithub").classList.remove("active")
-  else
-    document.getElementById("titleGithub").classList.add("active")
-
-  if (document.getElementById("navGithub").classList.toString().includes('active'))
-    document.getElementById("navGithub").classList.remove("active")
-  else
-    document.getElementById("navGithub").classList.add("active")
-}

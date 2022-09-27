@@ -1,12 +1,12 @@
 export function setupVideoPlayer() {
-    let player
+    window.player = undefined
     const tag = document.createElement('script');
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     tag.src = "https://www.youtube.com/iframe_api";
     tag.onload = function () {
         setTimeout(() => {
-            player = new YT.Player('player', {
+            window.player = new YT.Player('player', {
                 height: '390',
                 width: '640',
                 videoId: 'Qt0-9mO-ZXY',
@@ -34,6 +34,6 @@ export function setupVideoPlayer() {
         event.target.playVideo();
     }
     function stopVideo() {
-        player.playVideo();
+        window.player.playVideo();
     }
 }

@@ -1,3 +1,32 @@
+.profile-card__txt {
+  font-size: 2.4rem !important;
+}
+@media (min-width: 1024px) {
+  .profile-card__txt {
+    font-size: 1.6rem !important;
+  }
+}
+
+#me {
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  text-align: center;
+  display: flex;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.meIcon {
+  width: 45px !important;
+  height: 45px !important;
+}
+
 a,
 a:hover {
   text-decoration: none;
@@ -138,8 +167,8 @@ a:hover {
 }
 .profile-card-social__item {
   display: inline-flex;
-  width: 55px;
-  height: 55px;
+  width: 70px;
+  height: 70px;
   margin: 15px;
   border-radius: 50%;
   align-items: center;
@@ -208,6 +237,7 @@ a:hover {
   justify-content: center;
   align-items: center;
   margin-top: 40px;
+  justify-content: space-evenly;
 }
 @media screen and (max-width: 576px) {
   .profile-card-ctr {
