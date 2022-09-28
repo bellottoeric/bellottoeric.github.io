@@ -23,15 +23,18 @@ export function setupVideoPlayer() {
 
     let done = false;
     function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
+        //window.player.playVideo();
+        /*if (event.data == YT.PlayerState.PLAYING && !done) {
             setTimeout(stopVideo, 1000);
             setTimeout(stopVideo, 2000);
             setTimeout(stopVideo, 5000);
             done = true;
-        }
+        }*/
     }
     function onPlayerReady(event) {
-        event.target.playVideo();
+        console.log("Player ready")
+        //event.target.playVideo();
+        window.player.playVideo();
     }
     function stopVideo() {
         window.player.playVideo();

@@ -2,10 +2,8 @@ import { setBackground } from './background'
 
 export function utils(pointer, camera, renderer, scene, scene2, controls) {
     document.getElementById("goHome").addEventListener('click', function (event) {
-        document.getElementById("presentation").classList.add("hidden")
         document.getElementById("parcour").classList.add("hidden")
         document.getElementById("github").classList.add("hidden")
-        document.getElementById("moon").classList.add("hidden")
         document.getElementById("me").classList.add("hidden")
         controls.enabled = false;
         setTimeout(() => {
@@ -39,25 +37,19 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     })
 
-
     let waitLoad = 0
-    document.getElementById("parentLoader").classList.add("hidden")
-    document.getElementById("bg").classList.remove("hidden")
     setTimeout(() => {
         if (waitLoad) {
-            document.getElementById("parentLoader").classList.add("hidden")
-            document.getElementById("bg").classList.remove("hidden")
+            removeLoader()
         } else
             waitLoad = 1
-    }, 1000 * 0.02)
+    }, 1000 * 3)
     window.addEventListener("load", function (event) {
         if (waitLoad) {
-            document.getElementById("parentLoader").classList.add("hidden")
-            document.getElementById("bg").classList.remove("hidden")
+            removeLoader()
         } else
             waitLoad = 1
     })
-
 
     ////// GITHUB 
     document.getElementById("buttonGithub").addEventListener('click', function (event) {
@@ -80,4 +72,15 @@ window.toggleGithub = function () {
         document.getElementById("navGithub").classList.remove("active")
     else
         document.getElementById("navGithub").classList.add("active")
+}
+
+function removeLoader() {
+    document.getElementById("parentLoader").classList.add("hidden")
+    document.getElementById("bg").classList.remove("hidden")
+    setTimeout(() => {
+        if (!localStorage.getItem('cinematicated')) {
+            localStorage.setItem('cinematicated', 1);
+            cinematic()
+        }
+    }, 2000)
 }

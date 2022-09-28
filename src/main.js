@@ -24,14 +24,14 @@ let soundClicked = 0
 setInterval(() => {
   if (soundClicked)
     soundClicked = 0
-}, 100);
+}, 200);
 
 (function animate() {
   requestAnimationFrame(animate)
   let time = Date.now() * 0.0005
-
   let ring
   let moon
+
   for (let i of listPlanetMesh) {
     if (i.name === "ring")
       ring = i
@@ -45,12 +45,9 @@ setInterval(() => {
     if (i.orderTime)
       newTime = time + i.orderTime
 
-    /*i.position.x = Math.cos(newTime * 10 / 100) * 50 * 3
-  i.position.y = Math.cos(newTime * 7 / 100) * 30 * 3
-  i.position.z = Math.cos(newTime * 8 / 100) * 40 * 3*/
-    i.position.x = Math.cos(newTime * 10 / 100) * 80 * 5
-    i.position.y = Math.cos(newTime * 7 / 100) * 80 * 5
-    i.position.z = Math.cos(newTime * 8 / 100) * 80 * 5
+    i.position.x = Math.cos(newTime * 10 / 100) * 50 * 5 + i.orderTime / 100
+    i.position.y = Math.cos(newTime * 7 / 100) * 50 * 5 + i.orderTime / 100
+    i.position.z = Math.cos(newTime * 8 / 100) * 50 * 5 + i.orderTime / 100
     i.rotation.x += 0.0015
     i.rotation.y += 0.0015
     if (i.name === "saturn") {
@@ -96,8 +93,7 @@ setInterval(() => {
   const intersects = raycaster.intersectObjects(scene.children)
   for (let i = 0; i < intersects.length; i++) {
     let name = intersects[i].object.name
-    console.log("-->", name, intersects[i].object.isText)
-    if (name.length && clicked) {
+    if (name.length && clicked && controls.enabled) {
       if (name === "/planetTexture/moon.jpg") {
         window.open("https://pomatobot.com");
       } else if (name === "/planetTexture/earth.jpg") {
@@ -111,6 +107,7 @@ setInterval(() => {
         else
           window.player.mute()
       } else if (name !== "ring" && name !== "moon" && name !== "sun" && !intersects[i].object.isText) {
+        controls.enabled = false;
         clicked = 0
         setTimeout(() => {
           document.getElementById("presentation").classList.remove("hidden")
@@ -147,22 +144,42 @@ setInterval(() => {
   renderer.render(scene2, camera)
 })();
 
-async function cinematic() {
+window.cinematic = async function () {
+  document.querySelector("body").requestFullscreen().then(function () { }).catch(function (error) { });
   controls.enabled = false;
-  await gsap.timeline()
-    .to(camera.position, { duration: 1.5, x: 50, y: 0, z: 0, ease: "none" })
-    .to(camera.position, { duration: 1.5, x: 150, y: 0, z: -250, ease: "none" })
-    .to(camera.position, { duration: 1.5, x: -150, y: 50, z: -150, ease: "none" })
-    .to(camera.position, { duration: 1.5, x: -250, y: 50, z: 0, ease: "none" })
-    .to(camera.position, { duration: 1.5, x: -350, y: -50, z: 250, ease: "none" })
-    .to(camera.position, { duration: 1.5, x: 0, y: -50, z: 550, ease: "none" })
-    .to(camera.position, { duration: 1.5, x: 0, y: 0, z: 50, ease: "none" })
-  controls.enabled = true;
-}
-setTimeout(() => {
-  if (!localStorage.getItem('cinematicated')) {
-    localStorage.setItem('cinematicated', 1)
-    cinematic()
-  }
-}, 2000)
 
+  await gsap.timeline()
+
+    .to(camera.position, { duration: 0.8, x: 50, y: 0, z: 0, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: 50, y: 0, z: -50, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: 0, y: 0, z: -50, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: -50, y: 0, z: -50, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: -50, y: 0, z: 0, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: -50, y: 0, z: 50, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: 0, y: 0, z: 50, ease: "none" })
+
+
+
+    .to(camera.position, { duration: 0.8, x: 100, y: 10, z: 0, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: 100, y: 20, z: -100, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: 0, y: 30, z: -100, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: -100, y: 40, z: -100, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: -100, y: 50, z: 0, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: -100, y: 60, z: 100, ease: "none" })
+    .to(camera.position, { duration: 0.8, x: 0, y: 70, z: 100, ease: "none" })
+
+
+
+    .to(camera.position, { duration: 1.8, x: 200, y: 0, z: 0, ease: "none" })
+    .to(camera.position, { duration: 1.8, x: 200, y: -100, z: -200, ease: "none" })
+    .to(camera.position, { duration: 1.8, x: 0, y: 0, z: -200, ease: "none" })
+    .to(camera.position, { duration: 1.8, x: -200, y: 100, z: -200, ease: "none" })
+    .to(camera.position, { duration: 1.8, x: -200, y: 0, z: 0, ease: "none" })
+    .to(camera.position, { duration: 1.8, x: -200, y: -100, z: 200, ease: "none" })
+    .to(camera.position, { duration: 1.8, x: 0, y: 0, z: 200, ease: "none" })
+
+    .to(camera.position, { duration: 2, x: 0, y: 0, z: 75, ease: "none" })
+
+  controls.enabled = true;
+  document.exitFullscreen().then(function () { }).catch(function (error) { });
+}
