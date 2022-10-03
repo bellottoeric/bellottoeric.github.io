@@ -1,15 +1,14 @@
-import { setBackground } from './background'
-
 export function utils(pointer, camera, renderer, scene, scene2, controls) {
     document.getElementById("goHome").addEventListener('click', function (event) {
-        document.getElementById("parcour").classList.add("hidden")
+        document.getElementById("parcours").classList.add("hidden")
         document.getElementById("github").classList.add("hidden")
         document.getElementById("me").classList.add("hidden")
         controls.enabled = false;
         setTimeout(() => {
             controls.enabled = true;
         }, 1500)
-        gsap.to(camera.position, { duration: 1.5, z: 75 })
+        controls.maxDistance = 1000
+        gsap.to(camera.position, { duration: 1.5, y: 0, z: 75 })
     }, false)
 
     window.addEventListener('resize', ev => {
@@ -19,8 +18,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         renderer.setSize(width, height)
         camera.aspect = width / height
         camera.updateProjectionMatrix()
-        setBackground(scene, img.width, img.height)
-        setBackground(scene2, img.width, img.height)
+
     })
 
     window.addEventListener('pointerdown', (event) => {
@@ -38,6 +36,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     })
 
     let waitLoad = 0
+    removeLoader()
     setTimeout(() => {
         if (waitLoad) {
             removeLoader()

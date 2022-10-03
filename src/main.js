@@ -5,9 +5,9 @@ import { setupVideoPlayer } from './videoPlayer'
 
 window.clicked = 0
 let direction = 1
-const [scene, scene2, renderer, camera, meshAroundMe, ambientLight, pointLight, controls, raycaster, pointer, listPlanetMesh] = init()
+const [scene, scene2, renderer, camera, meshAroundMe, pointLight, controls, raycaster, pointer, listPlanetMesh, asteroids, asteroids2] = init()
 utils(pointer, camera, renderer, scene, scene2, controls)
-setupVideoPlayer()
+//setupVideoPlayer()
 
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerHeight, window.innerHeight)
@@ -26,11 +26,40 @@ setInterval(() => {
     soundClicked = 0
 }, 200);
 
+let point = 0.075
+let sign = 1
+setInterval(() => {
+
+  point = point + (0.00001 * sign)
+  if (point > 0.5 || point < 0.02) {
+    sign = sign * -1
+  }
+}, 1);
+
 (function animate() {
   requestAnimationFrame(animate)
   let time = Date.now() * 0.0005
   let ring
   let moon
+  for (let i = 0, l = asteroids.length; i < l; i++) {
+    const theta = i * point + Math.PI + (time / 6)
+    const y = - (i * 13) + 850;
+    let u = asteroids[i]
+    u.position.setFromCylindricalCoords(y, theta, y);
+    if (u.position.y < 50 && u.position.y > -50)
+      u.position.z = 3000
+    u.rotation.y += Math.random() * 0.002 - 0.005
+    u.rotation.x += Math.random() * 0.002 - 0.005
+
+    u = asteroids2[i]
+    if (!u)
+      continue
+    u.position.setFromCylindricalCoords(y, -theta, y);
+    if (u.position.y < 50 && u.position.y > -50)
+      u.position.z = 3000
+    u.rotation.y += Math.random() * 0.002 - 0.005
+    u.rotation.x += Math.random() * 0.002 - 0.005
+  }
 
   for (let i of listPlanetMesh) {
     if (i.name === "ring")
@@ -39,17 +68,19 @@ setInterval(() => {
       moon = i
   }
   for (let i of listPlanetMesh) {
-    if (i.name === "ring" || i.name === "moon")
+    if (i.name === "ring" || i.name === "moon" || i.isText)
       continue
     let newTime = time
     if (i.orderTime)
       newTime = time + i.orderTime
 
-    i.position.x = Math.cos(newTime * 10 / 100) * 50 * 5 + i.orderTime / 100
-    i.position.y = Math.cos(newTime * 7 / 100) * 50 * 5 + i.orderTime / 100
-    i.position.z = Math.cos(newTime * 8 / 100) * 50 * 5 + i.orderTime / 100
+    /*i.position.x = Math.cos(newTime * 9 / 100) * 1000 + i.orderTime / 100
+    i.position.y = Math.cos(newTime * 8 / 100) * 1000 + i.orderTime / 100
+    i.position.z = Math.cos(newTime * 7 / 100) * 1000 + i.orderTime / 100
     i.rotation.x += 0.0015
-    i.rotation.y += 0.0015
+    i.rotation.y += 0.0015*/
+    i.position.z = Math.cos(newTime * 0.033) * 1000
+    i.position.x = Math.sin(newTime * 0.033) * 1000
     if (i.name === "saturn") {
       ring.position.x = i.position.x
       ring.position.y = i.position.y
@@ -64,6 +95,7 @@ setInterval(() => {
       moon.rotation.x += 0.005
       moon.rotation.y += 0.005
     }
+
     if (i.name === "sun") {
       pointLight.position.y = i.position.y
       pointLight.position.x = i.position.x
@@ -71,6 +103,19 @@ setInterval(() => {
       pointLight.rotation.y = i.rotation.y
       pointLight.rotation.x = i.rotation.x
     }
+    for (var j of listPlanetMesh) {
+      if (j.name === i.name) {
+        if (j.lookAtMe) {
+          j.lookAt(camera.position)
+          if (j.orderTime === -1) {
+            j.position.x = i.position.x
+            j.position.z = i.position.z
+            j.position.y = i.position.y - 250
+          }
+        }
+      }
+    }
+
   }
 
   for (let i of meshAroundMe) {
@@ -112,7 +157,7 @@ setInterval(() => {
         setTimeout(() => {
           document.getElementById("presentation").classList.remove("hidden")
           if (name.includes('linkedin')) {
-            document.getElementById("parcour").classList.remove("hidden")
+            document.getElementById("parcours").classList.remove("hidden")
           } else if (name.includes('github')) {
             document.getElementById("github").classList.remove("hidden")
             document.getElementById("buttonGithub").classList.remove("active")
@@ -129,7 +174,8 @@ setInterval(() => {
           controls.enabled = true;
         }, 1000)
         controls.enabled = false;
-        gsap.to(camera.position, { duration: 1.5, z: 1000 })
+        controls.maxDistance = 3000
+        gsap.to(camera.position, { duration: 3, y: 3000 })
       }
     }
   }
