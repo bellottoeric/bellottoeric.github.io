@@ -27,6 +27,11 @@ controls.minDistance = 50
 controls.maxDistance = 1750
 controls.enableDamping = true
 controls.dampingFactor = 0.25
+controls.touches = {
+    ONE: THREE.TOUCH.ROTATE,
+}
+
+alert('update')
 
 scene.add((new THREE.AmbientLight(0xffffff, 1)))
 scene2.add((new THREE.AmbientLight(0xffffff, 0.3)))
