@@ -3,12 +3,12 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         document.getElementById("parcours").classList.add("hidden")
         document.getElementById("github").classList.add("hidden")
         document.getElementById("me").classList.add("hidden")
-        controls.enabled = false;
+        controls.enabled = false
         setTimeout(() => {
-            controls.enabled = true;
+            controls.enabled = true
         }, 1500)
-        controls.maxDistance = 1000
-        gsap.to(camera.position, { duration: 1.5, y: 0, z: 75 })
+        controls.maxDistance = 1750
+        gsap.to(camera.position, { duration: 3, y: 0, z: 100, x: 0 })
     }, false)
 
     window.addEventListener('resize', ev => {
@@ -50,7 +50,6 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             waitLoad = 1
     })
 
-    ////// GITHUB 
     document.getElementById("buttonGithub").addEventListener('click', function (event) {
         toggleGithub()
     }, false)
@@ -74,11 +73,12 @@ window.toggleGithub = function () {
 }
 
 function removeLoader() {
+    document.getElementById("goHome").classList.remove("hidden")
     document.getElementById("parentLoader").classList.add("hidden")
     document.getElementById("bg").classList.remove("hidden")
     setTimeout(() => {
         if (!localStorage.getItem('cinematicated')) {
-            localStorage.setItem('cinematicated', 1);
+            localStorage.setItem('cinematicated', 1)
             cinematic()
         }
     }, 2000)
