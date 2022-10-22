@@ -1,6 +1,18 @@
-@import url("http://fonts.cdnfonts.com/css/nasalization-2");
+@font-face {
+  font-family: "Naza";
+  font-style: normal;
+  font-weight: 400;
+  font-display: auto;
+  src: url(/fonts/nazalisation.otf);
+}
+
 * {
-  font-family: "Nasalization", sans-serif;
+  font-family: "Naza", sans-serif;
+}
+
+#presentation {
+  width: 100vw;
+  height: 100vh;
 }
 
 #parentLoader {
@@ -97,6 +109,8 @@ canvas {
 
 .hidden {
   display: none !important;
+  width: 0vw !important;
+  height: 0vh !important;
 }
 
 .socialCenter {

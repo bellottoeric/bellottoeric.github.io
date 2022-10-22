@@ -24,40 +24,20 @@ const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
 
 controls.minDistance = 50
-controls.maxDistance = 1750
+controls.maxDistance = 1850
 controls.enableDamping = true
 controls.dampingFactor = 0.25
 controls.touches = {
     ONE: THREE.TOUCH.ROTATE,
 }
 
-alert('update')
-
 scene.add((new THREE.AmbientLight(0xffffff, 1)))
 scene2.add((new THREE.AmbientLight(0xffffff, 0.3)))
 
-setInterval(() => {
-    adjustPixelRatio(62)
-}, 100)
-
-function adjustPixelRatio(fps) {
-    if (fps > 60) {
-        if (renderer.getPixelRatio() !== window.devicePixelRatio) {
-            renderer.setPixelRatio(window.devicePixelRatio)
-        }
-
-    } else if (fps < 30 && fps > 50) {
-        if (renderer.getPixelRatio() !== window.devicePixelRatio / 2) {
-            renderer.setPixelRatio(window.devicePixelRatio / 2)
-        }
-
-    } else if (fps < 30) {
-        if (renderer.getPixelRatio() !== 0.8) {
-            renderer.setPixelRatio(0.8)
-        }
-
-    }
-}
+renderer.setPixelRatio(window.devicePixelRatio)
+renderer.setSize(window.innerHeight, window.innerHeight)
+renderer.render(scene, camera)
+renderer.autoClear = false
 
 export async function init() {
     return new Promise(async (resolve, reject) => {
@@ -114,11 +94,6 @@ export async function init() {
 
             createStars(scene)
             createAsteroidsLine(scene, asteroids, asteroids2)
-
-            renderer.setPixelRatio(window.devicePixelRatio)
-            renderer.setSize(window.innerHeight, window.innerHeight)
-            renderer.render(scene, camera)
-            renderer.autoClear = false
 
             pointLight.position.set(0, 0, 100)
             scene2.add(pointLight)
@@ -390,7 +365,7 @@ async function createAsteroidsLine(scene, asteroids, asteroids2) {
         }
     })
 
-    for (let z = 0; z < 100; z += 1) {
+    for (let z = 0; z < 50; z++) {
         let ast
         let randomAst = Math.floor(getRandomArbitrary(1, 4))
         if (randomAst === 1) {
@@ -404,6 +379,7 @@ async function createAsteroidsLine(scene, asteroids, asteroids2) {
         ast.rotation.y = getRandomArbitrary(1, 360)
         ast.rotation.x = getRandomArbitrary(1, 360)
         asteroids.push(ast)
+        scene.add(ast)
 
         let ast2
         if (randomAst === 1) {
@@ -417,6 +393,7 @@ async function createAsteroidsLine(scene, asteroids, asteroids2) {
         ast2.rotation.y = getRandomArbitrary(1, 360)
         ast2.rotation.x = getRandomArbitrary(1, 360)
         asteroids2.push(ast2)
+        scene.add(ast2)
     }
 }
 

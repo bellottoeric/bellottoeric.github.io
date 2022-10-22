@@ -1,14 +1,13 @@
 export function utils(pointer, camera, renderer, scene, scene2, controls) {
-    document.getElementById("goHome").addEventListener('click', function (event) {
+    document.getElementById("goHome").addEventListener('click', async function (event) {
+        document.getElementById("presentation").classList.add("hidden")
         document.getElementById("parcours").classList.add("hidden")
         document.getElementById("github").classList.add("hidden")
         document.getElementById("me").classList.add("hidden")
         controls.enabled = false
-        setTimeout(() => {
-            controls.enabled = true
-        }, 1500)
-        controls.maxDistance = 1750
-        gsap.to(camera.position, { duration: 3, y: 0, z: 100, x: 0 })
+        controls.maxDistance = 1850
+        await gsap.to(camera.position, { duration: 3, y: 0, z: 100, x: 0 })
+        controls.enabled = true
     }, false)
 
     window.addEventListener('resize', ev => {

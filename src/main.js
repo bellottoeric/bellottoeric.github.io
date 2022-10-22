@@ -79,7 +79,7 @@ function clickDetection() {
           window.player.unMute()
         else
           window.player.mute()
-      } else if (name.includes('linkedin') || name.includes('github') || name.includes('moon')) {
+      } else if (name.includes('parcours') || name.includes('github') || name.includes('contact')) {
         openHTMLView(name)
       } else if (type === "planet") {
         planetInfo(name)
@@ -104,7 +104,7 @@ async function planetInfo(name) {
         continue
       movingCamera = 1
       controls.enabled = false
-      gsap.to(camera.position, { duration: 2, x: vec[0] * 0.85, y: -400, z: vec[1] * 0.85 })
+      gsap.to(camera.position, { duration: 2, x: vec[0] * 0.9, y: -400, z: vec[1] * 0.9 })
       setTimeout(() => {
         movingCamera = 0
         controls.enabled = true
@@ -228,22 +228,16 @@ function animateAroundMe(time) {
 }
 
 function animateAsteroids(time) {
-  let howMany = -3
-  let distanceCamera = camera.position.distanceTo({ x: 0, y: 0, z: 0 })
-
-  let hide = howMany
+  let even = 1
   for (let i = 0, l = asteroids.length; i < l; i++) {
-    hide++
     const theta = i * point + Math.PI + (time / 6)
-    const y = - (i * 15) + 850
+    const y = - (i * 30) + 850
     let u = asteroids[i]
     u.position.setFromCylindricalCoords(y, theta, y)
     u.rotation.y += Math.random() * 0.002 - 0.005
     u.rotation.x += Math.random() * 0.002 - 0.005
-    if (hide || (u.position.y < 50 && u.position.y > -50))
+    if (even || (u.position.y < 50 && u.position.y > -50))
       scene.remove(u)
-    else
-      scene.add(u)
 
     u = asteroids2[i]
     if (!u)
@@ -251,12 +245,12 @@ function animateAsteroids(time) {
     u.position.setFromCylindricalCoords(y, -theta, y)
     u.rotation.y += Math.random() * 0.002 - 0.005
     u.rotation.x += Math.random() * 0.002 - 0.005
-    if (hide || (u.position.y < 50 && u.position.y > -50))
+    if (!even || (u.position.y < 50 && u.position.y > -50))
       scene.remove(u)
-    else
-      scene.add(u)
-    if (hide >= 1)
-      hide = howMany
+    if (!even)
+      even = 1
+    else even = 0
+
   }
 }
 
@@ -274,13 +268,11 @@ function openHTMLView(name) {
       document.getElementById("navGithub").classList.remove("active")
       setTimeout(() => {
         toggleGithub()
-      }, 750)
-    } else if (name.includes('neptune')) {
+      }, 650)
+    } else if (name.includes('contact')) {
       document.getElementById("me").classList.remove("hidden")
     }
-    controls.enabled = true
   }, 1000)
-  controls.enabled = false
   controls.maxDistance = 3000
   gsap.to(camera.position, { duration: 3, y: 3000 })
 }
