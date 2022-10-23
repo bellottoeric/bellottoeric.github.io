@@ -42,7 +42,6 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
-            gsap.to(camera.position, { duration: 1.5, z: 100, y: 0 })
             let asteroids = []
             let asteroids2 = []
 

@@ -22,13 +22,16 @@ async function start(e) {
       [scene, scene2, renderer, camera, meshAroundMe, pointLight, controls, raycaster, pointer, listPlanetMesh, asteroids, asteroids2] = await init()
       utils(pointer, camera, renderer, scene, scene2, controls)
       //setupVideoPlayer()
-
       animate()
     } catch (e) {
       console.log('Error in function', e)
     }
   }))
 }
+
+window.addEventListener("load", function (event) {
+  gsap.to(camera.position, { duration: 1.5, z: 100, y: 0 })
+})
 
 setInterval(() => {
   if (soundClicked)

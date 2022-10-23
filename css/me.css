@@ -3,7 +3,7 @@
 }
 @media (min-width: 1024px) {
   .profile-card__txt {
-    font-size: 1.6rem !important;
+    font-size: 1.2rem !important;
   }
 }
 
@@ -23,8 +23,8 @@
 }
 
 .meIcon {
-  width: 45px !important;
-  height: 45px !important;
+  width: 43px !important;
+  height: 42px !important;
 }
 
 a,
