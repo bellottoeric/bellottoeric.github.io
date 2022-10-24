@@ -51,7 +51,7 @@ setInterval(() => {
 function animate() {
   requestAnimationFrame(animate)
 
-  let time = performance.now() * 0.0005 - 200
+  let time = performance.now() * 0.0005 + 20000
 
   clickDetection()
   animateAroundMe(time)
@@ -112,7 +112,9 @@ async function planetInfo(name) {
       movingCamera = 1
       controls.enabled = false
       let vectorMutiplier = 0.7
-      if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 301)
+      if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 20)
+        vectorMutiplier = 2
+      else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 301)
         vectorMutiplier = 1.6
       else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 451)
         vectorMutiplier = 1.2
@@ -149,10 +151,6 @@ function animatePlanet(time) {
     if (i.orderTime)
       newTime = time + i.orderTime
 
-
-
-    //if (camera.position.x > 1000 || camera.position.x < -1000 || camera.position.z > 1000 || camera.position.z < -1000)
-    //  blockPlanetMovement = 1
     if (movingCamera)
       blockPlanetMovement = 1
     if (!blockPlanetMovement) {
@@ -163,24 +161,35 @@ function animatePlanet(time) {
       distancePlanet['earth'] = 600
       distancePlanet['mars'] = 750
       distancePlanet['jupiter'] = 1000
-      distancePlanet['saturn'] = 1350
-      distancePlanet['uranus'] = 1500
-      distancePlanet['neptune'] = 1750
+      distancePlanet['saturn'] = 1300
+      distancePlanet['uranus'] = 1600
+      distancePlanet['neptune'] = 1900
       let speedPlanet = []
       speedPlanet['sun'] = 0
-      speedPlanet['mercury'] = 0.2
-      speedPlanet['venus'] = 0.1
-      speedPlanet['earth'] = 0.08
-      speedPlanet['mars'] = 0.06
-      speedPlanet['jupiter'] = 0.02
-      speedPlanet['saturn'] = 0.015
-      speedPlanet['uranus'] = 0.010
-      speedPlanet['neptune'] = 0.005
+      speedPlanet['mercury'] = 0.08727
+      speedPlanet['venus'] = 0.063636
+      speedPlanet['earth'] = 0.05454
+      speedPlanet['mars'] = 0.043636
+      speedPlanet['jupiter'] = 0.02363
+      speedPlanet['saturn'] = 0.01763
+      speedPlanet['uranus'] = 0.01236
+      speedPlanet['neptune'] = 0.01
 
       i.position.z = Math.cos(newTime * speedPlanet[i.name]) * distancePlanet[i.name]
       i.position.x = Math.sin(newTime * speedPlanet[i.name]) * distancePlanet[i.name]
     }
-    i.rotation.y += 0.005
+
+    let rotateSpeedPlanet = []
+    rotateSpeedPlanet['sun'] = 0.0006172839
+    rotateSpeedPlanet['mercury'] = 0.0002873563
+    rotateSpeedPlanet['venus'] = 0.0000685871
+    rotateSpeedPlanet['earth'] = 0.0166666666
+    rotateSpeedPlanet['mars'] = 0.016
+    rotateSpeedPlanet['jupiter'] = 0.04
+    rotateSpeedPlanet['saturn'] = 0.0363636363
+    rotateSpeedPlanet['uranus'] = 0.0235294117
+    rotateSpeedPlanet['neptune'] = 0.025
+    i.rotation.y += rotateSpeedPlanet[i.name]
 
     if (i.name === "saturn") {
       ring.position.x = i.position.x
@@ -207,9 +216,9 @@ function animatePlanet(time) {
             j.position.x = i.position.x
             j.position.z = i.position.z
             if (!j.isDescription)
-              j.position.y = i.position.y - 210
+              j.position.y = i.position.y - 150
             else
-              j.position.y = i.position.y - 230
+              j.position.y = i.position.y - 170
           }
         }
       }
@@ -230,7 +239,7 @@ function animatePlanet(time) {
           j.material.opacity = 1
           j.material.transparent = false
           j.visible = true
-          if (j.position.distanceTo(camera.position) > 1000) {
+          if (j.position.distanceTo(camera.position) > 1000 && j.isDescription) {
             blockPlanetMovement = 0
             j.material.opacity = 0
             j.material.transparent = false

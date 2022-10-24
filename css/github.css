@@ -60,9 +60,9 @@
   border-radius: 5px;
   float: left;
   width: 100%;
-  background-color: #eb524a;
 }
 .contact main section .content {
+  color: white;
   float: left;
   width: 100%;
   position: relative;

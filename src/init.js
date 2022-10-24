@@ -287,11 +287,11 @@ async function createMeshAroundMe(name, orderTime, size, type) {
 
 function getNeonMaterial(name, cc) {
     let listColors = []
-    listColors['play'] = [0xF1F1F1]
-    listColors['music'] = [0xFDB827]
-    listColors['contact'] = [0x21209C]
-    listColors['parcours'] = [0x222831, 0xFDB827]
-    listColors['github'] = [0x222831, 0xF1F1F1, 0x21209C, 0xFDB827, 0x393E46]
+    listColors['play'] = [0x393E46]
+    listColors['music'] = [0xf05924]
+    listColors['contact'] = [0xf05924]
+    listColors['parcours'] = [0x222831, 0xf05924]
+    listColors['github'] = [0x222831, 0xF1F1F1, 0xf05924, 0xf05924, 0x393E46]
     let selected = listColors[name][cc]
 
     let vertexShader = `
@@ -314,12 +314,12 @@ function getNeonMaterial(name, cc) {
     void main()
     {
         vec3 glow = glowColor * intensity;
-        gl_FragColor = vec4( glow, 1.0 );
+        gl_FragColor = vec4( glow, 1.5 );
     }`
     var neonMaterial = new THREE.ShaderMaterial({
         uniforms: {
-            "c": { type: "f", value: 1.0 },
-            "p": { type: "f", value: 1.4 },
+            "c": { type: "f", value: 1.5 },
+            "p": { type: "f", value: 1.5 },
             glowColor: { type: "c", value: new THREE.Color(selected) },
             viewVector: { type: "v3", value: camera.position }
         },
