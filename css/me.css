@@ -121,6 +121,7 @@ a:hover {
   font-weight: 700;
 }
 .profile-card-loc {
+  color: #324e63;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -213,7 +214,7 @@ a:hover {
   );
   box-shadow: 0px 4px 30px rgba(120, 64, 190, 0.6);
 }
-.profile-card-social__item.behance {
+.profile-card-social__item.linkedin {
   background: linear-gradient(45deg, #1769ff, #213fca);
   box-shadow: 0px 4px 30px rgba(27, 86, 231, 0.7);
 }
@@ -221,7 +222,7 @@ a:hover {
   background: linear-gradient(45deg, #333, #626b73);
   box-shadow: 0px 4px 30px rgba(63, 65, 67, 0.6);
 }
-.profile-card-social__item.codepen {
+.profile-card-social__item.s {
   background: linear-gradient(45deg, #324e63, #414447);
   box-shadow: 0px 4px 30px rgba(55, 75, 90, 0.6);
 }
@@ -232,11 +233,17 @@ a:hover {
 .profile-card-social .icon-font {
   display: inline-flex;
 }
+.profile-subtitle {
+  font-weight: 700;
+  font-size: 20px;
+  color: #6944ff;
+  margin-bottom: 15px;
+  margin-top: 40px;
+}
 .profile-card-ctr {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 40px;
   justify-content: space-evenly;
 }
 @media screen and (max-width: 576px) {
@@ -247,7 +254,6 @@ a:hover {
 .profile-card__button {
   background: none;
   border: none;
-  font-family: "Quicksand", sans-serif;
   font-weight: 700;
   font-size: 19px;
   margin: 15px 35px;
@@ -367,7 +373,6 @@ a:hover {
   padding: 15px 20px;
   color: #324e63;
   font-weight: 500;
-  font-family: "Quicksand", sans-serif;
   outline: none;
   transition: all 0.3s;
 }

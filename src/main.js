@@ -5,21 +5,24 @@ import { init } from './init'
 import { utils } from './utils'
 import { setupVideoPlayer } from './videoPlayer'
 
+window.cinematicOn = 0
 window.clicked = 0
+window.selectedPlanet = ""
+
 let point = 0.075
 let sign = 1
 let soundClicked = 0
 let blockPlanetMovement = 0
 let movingCamera = 0
 
-var [scene, scene2, renderer, camera, meshAroundMe, pointLight, controls, raycaster, pointer, listPlanetMesh, asteroids, asteroids2] = ""
+var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh] = ""
 
 start()
 
 async function start(e) {
   return (new Promise(async (resolve, reject) => {
     try {
-      [scene, scene2, renderer, camera, meshAroundMe, pointLight, controls, raycaster, pointer, listPlanetMesh, asteroids, asteroids2] = await init()
+      [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh] = await init()
       utils(pointer, camera, renderer, scene, scene2, controls)
       //setupVideoPlayer()
       animate()
@@ -30,7 +33,7 @@ async function start(e) {
 }
 
 window.addEventListener("load", function (event) {
-  gsap.to(camera.position, { duration: 1.5, z: 100, y: 0 })
+  gsap.to(camera.position, { duration: 1.5, z: 125, y: 0 })
 })
 
 setInterval(() => {
@@ -48,12 +51,13 @@ setInterval(() => {
 function animate() {
   requestAnimationFrame(animate)
 
-  let time = performance.now() * 0.0005 - 20
+  let time = performance.now() * 0.0005 - 200
 
   clickDetection()
   animateAroundMe(time)
   animatePlanet(time)
-  animateAsteroids(time)
+
+
 
   controls.update()
   renderer.clear()
@@ -69,6 +73,7 @@ function clickDetection() {
     let type = intersects[i].object.type
     if (name.length && clicked && controls.enabled) {
       window.clicked = 0
+      selectedPlanet = ""
       console.log(name)
       if (name === "/planetTexture/moon.jpg") {
         window.open("https://pomatobot.com")
@@ -97,17 +102,28 @@ async function planetInfo(name) {
       return this.map((e, i) => e + other[i]);
     }
   }
-
+  selectedPlanet = name
   for (let i of listPlanetMesh) {
     if (i.name === name) {
-      blockPlanetMovement = 1
-      let v = new Vector(0 + i.position.x, 0 + i.position.z);
-      let vec = v.add(v)
+      let vec = new Vector(0 + i.position.x, 0 + i.position.z);
+      vec = vec.map((e, i) => e + vec[i])
       if (movingCamera)
         continue
       movingCamera = 1
       controls.enabled = false
-      gsap.to(camera.position, { duration: 2, x: vec[0] * 0.9, y: -400, z: vec[1] * 0.9 })
+      let vectorMutiplier = 0.7
+      if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 301)
+        vectorMutiplier = 1.6
+      else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 451)
+        vectorMutiplier = 1.2
+      else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 601)
+        vectorMutiplier = 1
+      else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 1001)
+        vectorMutiplier = 0.9
+      else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 1351)
+        vectorMutiplier = 0.8
+
+      gsap.to(camera.position, { duration: 2, x: vec[0] * vectorMutiplier, y: -400, z: vec[1] * vectorMutiplier })
       setTimeout(() => {
         movingCamera = 0
         controls.enabled = true
@@ -133,16 +149,38 @@ function animatePlanet(time) {
     if (i.orderTime)
       newTime = time + i.orderTime
 
-    if (camera.position.x > 1000 || camera.position.x < -1000 || camera.position.z > 1000 || camera.position.z < -1000)
+
+
+    //if (camera.position.x > 1000 || camera.position.x < -1000 || camera.position.z > 1000 || camera.position.z < -1000)
+    //  blockPlanetMovement = 1
+    if (movingCamera)
       blockPlanetMovement = 1
-    else if (!movingCamera)
-      blockPlanetMovement = 0
     if (!blockPlanetMovement) {
-      i.position.z = Math.cos(newTime * 0.033) * 1000
-      i.position.x = Math.sin(newTime * 0.033) * 1000
+      let distancePlanet = []
+      distancePlanet['sun'] = 0
+      distancePlanet['mercury'] = 300
+      distancePlanet['venus'] = 450
+      distancePlanet['earth'] = 600
+      distancePlanet['mars'] = 750
+      distancePlanet['jupiter'] = 1000
+      distancePlanet['saturn'] = 1350
+      distancePlanet['uranus'] = 1500
+      distancePlanet['neptune'] = 1750
+      let speedPlanet = []
+      speedPlanet['sun'] = 0
+      speedPlanet['mercury'] = 0.2
+      speedPlanet['venus'] = 0.1
+      speedPlanet['earth'] = 0.08
+      speedPlanet['mars'] = 0.06
+      speedPlanet['jupiter'] = 0.02
+      speedPlanet['saturn'] = 0.015
+      speedPlanet['uranus'] = 0.010
+      speedPlanet['neptune'] = 0.005
+
+      i.position.z = Math.cos(newTime * speedPlanet[i.name]) * distancePlanet[i.name]
+      i.position.x = Math.sin(newTime * speedPlanet[i.name]) * distancePlanet[i.name]
     }
     i.rotation.y += 0.005
-    i.rotation.x += 0.005
 
     if (i.name === "saturn") {
       ring.position.x = i.position.x
@@ -159,13 +197,7 @@ function animatePlanet(time) {
       moon.rotation.y += 0.005
     }
 
-    if (i.name === "sun") {
-      pointLight.position.y = i.position.y
-      pointLight.position.x = i.position.x
-      pointLight.position.z = i.position.z
-      pointLight.rotation.y = i.rotation.y
-      pointLight.rotation.x = i.rotation.x
-    }
+
     // text above planet
     for (let j of listPlanetMesh) {
       if (j.name === i.name) {
@@ -183,6 +215,10 @@ function animatePlanet(time) {
       }
     }
   }
+  if (selectedPlanet.length)
+    blockPlanetMovement = 1
+  else
+    blockPlanetMovement = 0
   for (let j of listPlanetMesh) {
     if (j.lookAtMe) {
       if (j.orderTime === -1) {
@@ -190,18 +226,27 @@ function animatePlanet(time) {
           j.material.opacity = 1
           j.material.transparent = false
         }
-        if (j.isDescription && j.position.distanceTo(camera.position) > 850) {
-          j.material.transparent = true
-          j.material.opacity = 0
-        } else if (j.isDescription && j.position.distanceTo(camera.position) < 850) {
+        if (selectedPlanet === j.name) {
           j.material.opacity = 1
           j.material.transparent = false
+          j.visible = true
+          if (j.position.distanceTo(camera.position) > 1000) {
+            blockPlanetMovement = 0
+            j.material.opacity = 0
+            j.material.transparent = false
+            j.visible = false
+          } else
+            blockPlanetMovement = 1
+        } else if (j.isDescription) {
+          j.material.transparent = true
+          j.material.opacity = 0
+          j.visible = false
         }
       }
     }
   }
   // goHomeButton
-  if (camera.position.distanceTo({ x: 0, y: 0, z: 0 }) > 200 && document.getElementById("goHome"))
+  if (camera.position.distanceTo({ x: 0, y: 0, z: 0 }) > 125 && document.getElementById("goHome") && !cinematicOn)
     document.getElementById("goHome").classList.remove("hidden")
   else if (document.getElementById("goHome") && !document.getElementById("goHome").classList.toString().includes('hidden'))
     document.getElementById("goHome").classList.add("hidden")
@@ -230,33 +275,6 @@ function animateAroundMe(time) {
   }
 }
 
-function animateAsteroids(time) {
-  let even = 1
-  for (let i = 0, l = asteroids.length; i < l; i++) {
-    const theta = i * point + Math.PI + (time / 6)
-    const y = - (i * 30) + 850
-    let u = asteroids[i]
-    u.position.setFromCylindricalCoords(y, theta, y)
-    u.rotation.y += Math.random() * 0.002 - 0.005
-    u.rotation.x += Math.random() * 0.002 - 0.005
-    if (even || (u.position.y < 50 && u.position.y > -50))
-      scene.remove(u)
-
-    u = asteroids2[i]
-    if (!u)
-      continue
-    u.position.setFromCylindricalCoords(y, -theta, y)
-    u.rotation.y += Math.random() * 0.002 - 0.005
-    u.rotation.x += Math.random() * 0.002 - 0.005
-    if (!even || (u.position.y < 50 && u.position.y > -50))
-      scene.remove(u)
-    if (!even)
-      even = 1
-    else even = 0
-
-  }
-}
-
 function openHTMLView(name) {
   controls.enabled = false
   clicked = 0
@@ -281,6 +299,7 @@ function openHTMLView(name) {
 }
 
 window.cinematic = async function () {
+  cinematicOn = 1
   document.querySelector("body").requestFullscreen().then(function () { }).catch(function (error) { })
   controls.enabled = false
 
@@ -307,7 +326,9 @@ window.cinematic = async function () {
 
   for (let i of scene.children) {
     scene.remove(i)
-    if (i.material && !i.isText && !i.name === "ring" && !i.name === "moon") {
+
+    if ((i.material && !i.isText && !i.name === "ring" && !i.name === "moon") || i.name === "sun") {
+
       i.material.transparent = true
       i.material.opacity = 0
     } else if (i.children.length) {
@@ -329,12 +350,12 @@ window.cinematic = async function () {
   let copy = listPlanetMesh.constructor()
   let index = 0
   for (let attr in listPlanetMesh) {
-    if (!listPlanetMesh[attr].name === "ring" && !listPlanetMesh[attr].name === "moon" && !listPlanetMesh[attr].isText) {
+    if (!listPlanetMesh[attr].name === "ring" && !listPlanetMesh[attr].name === "moon" && !listPlanetMesh[attr].isText && !listPlanetMesh[attr].name === "sun") {
       listPlanetMesh[attr].material.opacity = 0
       listPlanetMesh[attr].material.transparent = true
     }
     if (listPlanetMesh.hasOwnProperty(attr)) {
-      if (listPlanetMesh[attr].name === "ring" || listPlanetMesh[attr].name === "moon" || listPlanetMesh[attr].isText)
+      if (listPlanetMesh[attr].name === "ring" || listPlanetMesh[attr].name === "moon" || listPlanetMesh[attr].isText || listPlanetMesh[attr].name === "sun")
         continue
       copy[index] = listPlanetMesh[attr]
       index++
@@ -346,12 +367,10 @@ window.cinematic = async function () {
 
   let sunPos
   for (let i of copy) {
-    if (i.name !== "sun") {
+    if (i.name !== "mercury") {
       TweenMax.to(i.material, 2, { opacity: 0 })
       scene2.remove(i)
-    }
-    else {
-
+    } else {
       i.visible = true
       i.material.opacity = 1
       i.material.transparent = false
@@ -365,7 +384,15 @@ window.cinematic = async function () {
     if (i.name === "/assets/me2.jpg")
       scene2.remove(i)
 
-  await timeline.to(camera.position, { duration: 2, x: (sunPos.x * -1) / 8, y: sunPos.y * -1, z: (sunPos.z * -1) / 8, ease: "none" })
+  for (let i of scene.children) {
+    if (i.name === "sun") {
+      i.visible = false
+      i.material.opacity = 0
+      i.material.transparent = true
+    }
+  }
+
+  await timeline.to(camera.position, { duration: 2, x: (sunPos.x * -1) / 2, y: sunPos.y * -1, z: (sunPos.z * -1) / 2, ease: "none" })
   for (let i of copy) {
     for (let j of listPlanetMesh) {
       if (j.isText && j.name === i.name) {
@@ -379,9 +406,16 @@ window.cinematic = async function () {
     else
       scene.add(i)
     TweenMax.to(i.material, 2, { opacity: 1 })
-    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 8, y: i.position.y * -1, z: (i.position.z * -1) / 8, ease: "none" })
+    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 2, y: i.position.y * -1, z: (i.position.z * -1) / 2, ease: "none" })
   }
-  await timeline.to(camera.position, { duration: 2, x: (sunPos.x * -1) / 8, y: sunPos.y * -1, z: (sunPos.z * -1) / 8, ease: "none" })
+
+  for (let i of scene.children) {
+    if (i.name === "sun") {
+      i.visible = true
+      i.material.opacity = 1
+      i.material.transparent = false
+    }
+  }
 
   for (let i of meshAroundMe)
     i.visible = true
@@ -394,8 +428,9 @@ window.cinematic = async function () {
       i.material.color.setHex(0xffffff)
     }
   }
-  await timeline.to(camera.position, { duration: 3, y: 0, z: 100, x: 0 })
+  await timeline.to(camera.position, { duration: 3, y: 0, z: 125, x: 0 })
   controls.enabled = true
   document.exitFullscreen().then(function () { }).catch(function (error) { })
+  cinematicOn = 0
 }
 

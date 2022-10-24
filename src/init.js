@@ -24,7 +24,7 @@ const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
 
 controls.minDistance = 50
-controls.maxDistance = 1850
+controls.maxDistance = 2500
 controls.enableDamping = true
 controls.dampingFactor = 0.25
 controls.touches = {
@@ -33,6 +33,8 @@ controls.touches = {
 
 scene.add((new THREE.AmbientLight(0xffffff, 1)))
 scene2.add((new THREE.AmbientLight(0xffffff, 0.3)))
+pointLight.position.set(0, 0, 100)
+scene2.add(pointLight)
 
 renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerHeight, window.innerHeight)
@@ -44,9 +46,6 @@ export async function init() {
         try {
             let asteroids = []
             let asteroids2 = []
-
-            createMeshAroundMe("/assets/me2.jpg", 0, [20, 20, 0], "box")
-            createMeshAroundMe("/assets/me.png", 0, [20, 20, 0], "box")
 
             fontLoader.load('/fonts/nazalisation.json', function (font) {
                 createMeshAroundMe("play.fbx", 0)
@@ -67,7 +66,7 @@ export async function init() {
                 createMeshAroundMe("/planetTexture/moon.jpg", 32, [6.5, 64, 32], "sphere")
                 createTextAroundMe(font, "pomatobot.com", 32)
 
-                createPlanet("sun", 0, [150, 150, 150], font)
+                createPlanet("sun", 0, [18, 18, 18], font)
                 createPlanet("mercury", 21, [12, 12, 12], font)
                 createPlanet("venus", 42, [22, 22, 22], font)
                 createPlanet("earth", 63, [30, 30, 30], font)
@@ -94,9 +93,7 @@ export async function init() {
             createStars(scene)
             createAsteroidsLine(scene, asteroids, asteroids2)
 
-            pointLight.position.set(0, 0, 100)
-            scene2.add(pointLight)
-            resolve([scene, scene2, renderer, camera, meshAroundMe, pointLight, controls, raycaster, pointer, listPlanetMesh, asteroids, asteroids2])
+            resolve([scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh])
         } catch (e) {
             console.log("????")
             console.log('Error in function', e)
@@ -364,9 +361,18 @@ async function createAsteroidsLine(scene, asteroids, asteroids2) {
         }
     })
 
-    for (let z = 0; z < 50; z++) {
+
+    object1.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
+
+    object2.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
+
+    object3.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
+
+    for (let z = 0; z < 100; z++) {
+        const angle = Math.random() * Math.PI * 2;
         let ast
         let randomAst = Math.floor(getRandomArbitrary(1, 4))
+
         if (randomAst === 1) {
             ast = object1.clone()
         } else if (randomAst === 2) {
@@ -374,25 +380,13 @@ async function createAsteroidsLine(scene, asteroids, asteroids2) {
         } else {
             ast = object3.clone()
         }
-        ast.scale.multiplyScalar(getRandomArbitrary(0.02, 0.03))
+
         ast.rotation.y = getRandomArbitrary(1, 360)
         ast.rotation.x = getRandomArbitrary(1, 360)
-        asteroids.push(ast)
-        scene.add(ast)
+        ast.position.z = Math.sin(angle) * getRandomArbitrary(825, 875)
+        ast.position.x = Math.cos(angle) * getRandomArbitrary(825, 875)
 
-        let ast2
-        if (randomAst === 1) {
-            ast2 = object1.clone()
-        } else if (randomAst === 2) {
-            ast2 = object2.clone()
-        } else {
-            ast2 = object3.clone()
-        }
-        ast2.scale.multiplyScalar(getRandomArbitrary(0.02, 0.03))
-        ast2.rotation.y = getRandomArbitrary(1, 360)
-        ast2.rotation.x = getRandomArbitrary(1, 360)
-        asteroids2.push(ast2)
-        scene.add(ast2)
+        scene.add(ast)
     }
 }
 

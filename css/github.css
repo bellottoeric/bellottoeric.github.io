@@ -63,16 +63,19 @@
   background-color: #eb524a;
 }
 .contact main section .content {
-  padding: 10px;
-
   float: left;
   width: 100%;
   position: relative;
   text-align: center;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 @media (min-width: 414px) {
   .contact main section .content {
-    text-align: left;
+    text-align: center;
   }
 }
 .contact main section .content img {
@@ -111,7 +114,8 @@
 .contact main .title {
   float: left;
   width: 100%;
-  background-color: #c63535;
+  background: linear-gradient(45deg, #d5135a, #f05924);
+  box-shadow: 0px 4px 30px rgb(223 45 70 / 60%);
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   overflow: hidden;
@@ -154,22 +158,24 @@
   transform: scale(0);
 }
 .contact main button {
-  position: absolute;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
   bottom: 0;
   right: 50%;
   top: 100%;
-  background-color: #ffbe44;
-  color: #c63535;
+  background: linear-gradient(45deg, #d5135a, #f05924);
+  box-shadow: 0px 4px 30px rgba(223, 45, 70, 0.6);
   border: 0;
   width: 220px;
   height: 48px;
   text-align: center;
   border-radius: 30px;
-  font-size: 16px;
-  letter-spacing: 0.5px;
+  font-size: 18px;
+  letter-spacing: 2.5px;
   text-transform: uppercase;
   margin-bottom: -24px;
-  margin-right: -100px;
   -webkit-transition: all 0.4s;
   -moz-transition: all 0.4s;
   -o-transition: all 0.4s;
@@ -192,15 +198,14 @@
   float: left;
   padding: 15px 0px;
 }
+.middleButton {
+  color: black;
+}
 .contact main button svg {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  height: 150px;
+  width: 50px;
+
   opacity: 0;
   -webkit-transition: all 0.4s;
   -moz-transition: all 0.4s;
@@ -208,7 +213,7 @@
   transition: all 0.4s;
 }
 .contact main button svg path {
-  fill: #c63535;
+  fill: black;
 }
 .contact main button.active {
   margin-right: 0;

@@ -113,12 +113,11 @@
             <main>
               <section>
                 <div class="content">
-                  <img src="/assets/me.png"
-                    alt="Profile Image">
-                  <aside>
-                    <h3>Bellotto Eric</h3>
+                    <div class="profile-card__name">Projet publique</div>
                     <p>- Freelance<br>- Full Stack JS Developer<br>- Blockchain enthusiast<br>- Bot maker</p>
-                  </aside>
+                  <div id="titleGithub" class="title">
+                    <a class="middleButton" target="_blank" href="https://github.com/bellottoeric">github.com/bellottoeric</a>
+                  </div>
                   <button id="buttonGithub">
                     <span>Explore</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
@@ -128,9 +127,7 @@
                     </svg>
                   </button>
                 </div>
-                <div id="titleGithub" class="title">
-                  <a target="_blank" href="https://github.com/bellottoeric">github.com/bellottoeric</a>        
-                </div>
+                
               </section>
             </main>
             <nav id="navGithub">
@@ -190,6 +187,11 @@
                 </div>
               </div>
               <div class="profile-card-social">
+                <a href="https://www.linkedin.com/in/eric-bellotto/" class="profile-card-social__item linkedin" target="_blank">
+                  <span class="icon-font">
+                    <img class="meIcon" src="assets/linkedin2.png">
+                  </span>
+                </a>
                 <a href="https://github.com/bellottoeric" class="profile-card-social__item github" target="_blank">
                   <span class="icon-font">
                     <svg class="icon meIcon">
@@ -197,12 +199,15 @@
                     </svg>
                   </span>
                 </a>
-                <a href="https://www.linkedin.com/in/eric-bellotto/" class="profile-card-social__item linkedin" target="_blank">
+                <a href="https://twitter.com/bellotto_eric" class="profile-card-social__item twitter" target="_blank">
                   <span class="icon-font">
-                    <img class="meIcon" src="assets/linkedin.png" >
+                    <svg class="icon meIcon">
+                      <use xlink:href="#icon-twitter"></use>
+                    </svg>
                   </span>
                 </a>
               </div>
+              <div class="profile-subtitle">Contactez moi</div>
               <div class="profile-card-ctr">
                 <a href="mailto:bellottoeric@gmail.com"><button class="profile-card__button button--blue">Mail</button></a>
                 <a href="tel:+33624149627"><button class="profile-card__button button--orange">Phone</button></a>

@@ -1,12 +1,13 @@
 export function utils(pointer, camera, renderer, scene, scene2, controls) {
     document.getElementById("goHome").addEventListener('click', async function (event) {
+        window.selectedPlanet = ""
         document.getElementById("presentation").classList.add("hidden")
         document.getElementById("parcours").classList.add("hidden")
         document.getElementById("github").classList.add("hidden")
         document.getElementById("me").classList.add("hidden")
         controls.enabled = false
-        controls.maxDistance = 1850
-        await gsap.to(camera.position, { duration: 3, y: 0, z: 100, x: 0 })
+        controls.maxDistance = 2500
+        await gsap.to(camera.position, { duration: 3, y: 0, z: 125, x: 0 })
         controls.enabled = true
     }, false)
 
@@ -20,7 +21,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
 
     })
 
-    window.addEventListener('pointerdown', (event) => {
+    window.addEventListener('click', (event) => {
         pointer.x = (event.clientX / window.innerWidth) * 2 - 1
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
         window.clicked = 1
@@ -35,6 +36,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     })
 
     let waitLoad = 0
+    removeLoader()
     setTimeout(() => {
         if (waitLoad) {
             removeLoader()
@@ -71,7 +73,8 @@ window.toggleGithub = function () {
 }
 
 function removeLoader() {
-    document.getElementById("goHome").classList.remove("hidden")
+    if (!cinematicOn)
+        document.getElementById("goHome").classList.remove("hidden")
     document.getElementById("parentLoader").classList.add("hidden")
     document.getElementById("bg").classList.remove("hidden")
     setTimeout(() => {
