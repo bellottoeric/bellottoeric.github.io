@@ -5,6 +5,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         document.getElementById("parcours").classList.add("hidden")
         document.getElementById("github").classList.add("hidden")
         document.getElementById("me").classList.add("hidden")
+        aboutMe = 0
         controls.enabled = false
         controls.maxDistance = 2500
         await gsap.to(camera.position, { duration: 3, y: 0, z: 125, x: 0 })
@@ -21,14 +22,36 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
 
     })
 
-    window.addEventListener('click', (event) => {
-        pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-        pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
-        window.clicked = 1
-        setTimeout(() => {
-            window.clicked = 0
-        }, 100)
-    })
+    // if it's mobile
+    if (!(typeof screen.orientation !== 'undefined')) {
+        window.addEventListener('click', (event) => {
+            pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+            pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
+            window.clicked = 1
+            setTimeout(() => {
+                window.clicked = 0
+            }, 100)
+        })
+    } else {
+        window.addEventListener('mousedown', (event) => {
+            window.clickOne = 1
+            console.log(window.clickOne)
+            console.log("2", window.clickTwo)
+        })
+
+        window.addEventListener('mouseup', (event) => {
+            window.clickOne = 0
+            if (!clickTwo.length)
+                return
+
+            pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+            pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
+            window.clicked = 1
+            setTimeout(() => {
+                window.clicked = 0
+            }, 100)
+        })
+    }
 
     window.addEventListener('pointermove', (event) => {
         pointer.x = (event.clientX / window.innerWidth) * 2 - 1

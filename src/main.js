@@ -8,6 +8,9 @@ import { setupVideoPlayer } from './videoPlayer'
 window.cinematicOn = 0
 window.clicked = 0
 window.selectedPlanet = ""
+window.clickOne = 0
+window.clickTwo = ""
+window.aboutMe = 0
 
 let point = 0.075
 let sign = 1
@@ -15,14 +18,14 @@ let soundClicked = 0
 let blockPlanetMovement = 0
 let movingCamera = 0
 
-var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh] = ""
+var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = ""
 
 start()
 
 async function start(e) {
   return (new Promise(async (resolve, reject) => {
     try {
-      [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh] = await init()
+      [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = await init()
       utils(pointer, camera, renderer, scene, scene2, controls)
       //setupVideoPlayer()
       animate()
@@ -56,8 +59,7 @@ function animate() {
   clickDetection()
   animateAroundMe(time)
   animatePlanet(time)
-
-
+  animateAboutMe(time)
 
   controls.update()
   renderer.clear()
@@ -68,9 +70,22 @@ function animate() {
 function clickDetection() {
   raycaster.setFromCamera(pointer, camera)
   const intersects = raycaster.intersectObjects(scene.children.concat(scene2.children))
+  if (!intersects.length) {
+    clickOne = ""
+    clickTwo = ""
+  }
   for (let i = 0; i < intersects.length; i++) {
     let name = intersects[i].object.name
     let type = intersects[i].object.type
+    if (name.length && controls.enabled && clickOne) {
+      clickOne = 1
+    } else {
+      clickOne = 0
+    }
+
+    if (name.length && controls.enabled && clickOne)
+      clickTwo = name
+
     if (name.length && clicked && controls.enabled) {
       window.clicked = 0
       selectedPlanet = ""
@@ -87,12 +102,26 @@ function clickDetection() {
           window.player.unMute()
         else
           window.player.mute()
-      } else if (name.includes('parcours') || name.includes('github') || name.includes('contact')) {
+      } else if (name.includes('parcours') || name.includes('github') || name.includes('contact') || name.includes('assets/me')) {
         openHTMLView(name)
+      } else if (name.includes('tea')) {
+        document.location.href = "/en";
+      } else if (name.includes('pallete')) {
+        document.location.href = "/";
       } else if (type === "planet") {
         planetInfo(name)
       }
     }
+  }
+}
+
+function animateAboutMe(time) {
+  for (let i of aboutMeMesh) {
+    if (aboutMe)
+      i.visible = true
+    else
+      i.visible = false
+    i.rotation.y += 0.01
   }
 }
 
@@ -112,9 +141,7 @@ async function planetInfo(name) {
       movingCamera = 1
       controls.enabled = false
       let vectorMutiplier = 0.7
-      if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 20)
-        vectorMutiplier = 2
-      else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 301)
+      if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 301)
         vectorMutiplier = 1.6
       else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 451)
         vectorMutiplier = 1.2
@@ -124,7 +151,8 @@ async function planetInfo(name) {
         vectorMutiplier = 0.9
       else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 1351)
         vectorMutiplier = 0.8
-
+      if (vec[0] === 0) // sun
+        vec = [400, 400]
       gsap.to(camera.position, { duration: 2, x: vec[0] * vectorMutiplier, y: -400, z: vec[1] * vectorMutiplier })
       setTimeout(() => {
         movingCamera = 0
@@ -199,13 +227,11 @@ function animatePlanet(time) {
     }
     if (i.name === "earth") {
       moon.position.set(0, 0, 0)
-      moon.position.y = 250
-      moon.rotateY(0.01)
-      moon.translateX(75)
-      moon.rotation.x += 0.005
-      moon.rotation.y += 0.005
+      moon.rotateY(0.001)
+      moon.translateX(50)
+      moon.rotation.x += 0.002
+      moon.rotation.y += 0.002
     }
-
 
     // text above planet
     for (let j of listPlanetMesh) {
@@ -228,6 +254,17 @@ function animatePlanet(time) {
     blockPlanetMovement = 1
   else
     blockPlanetMovement = 0
+
+  // make title planet visible  
+  for (let k of listPlanetMesh) {
+    if (k.lookAtMe && k.orderTime === -1) {
+      if (!k.isDescription) {
+        k.material.opacity = 1
+        k.material.transparent = false
+        k.visible = true
+      }
+    }
+  }
   for (let j of listPlanetMesh) {
     if (j.lookAtMe) {
       if (j.orderTime === -1) {
@@ -246,16 +283,42 @@ function animatePlanet(time) {
             j.visible = false
           } else
             blockPlanetMovement = 1
+
+          // if close, remove title planets except targeted one
+          if (j.position.distanceTo(camera.position) < 1000) {
+            for (let k of listPlanetMesh) {
+              if (k.lookAtMe && k.orderTime === -1) {
+                if (selectedPlanet !== k.name && !k.isDescription) {
+                  k.material.opacity = 0
+                  k.material.transparent = true
+                  k.visible = false
+                }
+              }
+            }
+          } else {
+            // if far, display title planets except targeted one
+            for (let k of listPlanetMesh) {
+              if (k.lookAtMe && k.orderTime === -1) {
+                if (selectedPlanet !== k.name && !k.isDescription) {
+                  k.material.opacity = 1
+                  k.material.transparent = false
+                  k.visible = true
+                }
+              }
+            }
+          }
         } else if (j.isDescription) {
           j.material.transparent = true
           j.material.opacity = 0
           j.visible = false
         }
+
       }
     }
   }
+
   // goHomeButton
-  if (camera.position.distanceTo({ x: 0, y: 0, z: 0 }) > 125 && document.getElementById("goHome") && !cinematicOn)
+  if (camera.position.distanceTo({ x: 0, y: 0, z: 0 }) > 150 && document.getElementById("goHome") && !cinematicOn)
     document.getElementById("goHome").classList.remove("hidden")
   else if (document.getElementById("goHome") && !document.getElementById("goHome").classList.toString().includes('hidden'))
     document.getElementById("goHome").classList.add("hidden")
@@ -280,11 +343,15 @@ function animateAroundMe(time) {
       if (i.dicons)
         i.rotation.x = 0
       i.position.y = (Math.cos(newTime * 0.15) * 50)
+      if (i.name === "/assets/me2.jpg")
+        i.position.x = i.position.x + 0.1
     }
   }
 }
 
 function openHTMLView(name) {
+  if (name.includes('assets/me'))
+    aboutMe = 1
   controls.enabled = false
   clicked = 0
   setTimeout(() => {
@@ -304,7 +371,7 @@ function openHTMLView(name) {
     }
   }, 1000)
   controls.maxDistance = 3000
-  gsap.to(camera.position, { duration: 3, y: 3000 })
+  gsap.to(camera.position, { duration: 3, y: 3000, x: 0, z: 0 })
 }
 
 window.cinematic = async function () {
@@ -415,7 +482,7 @@ window.cinematic = async function () {
     else
       scene.add(i)
     TweenMax.to(i.material, 2, { opacity: 1 })
-    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 2, y: i.position.y * -1, z: (i.position.z * -1) / 2, ease: "none" })
+    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 1, y: i.position.y * -1, z: (i.position.z * -1) / 1, ease: "none" })
   }
 
   for (let i of scene.children) {
