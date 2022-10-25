@@ -82,7 +82,7 @@ export async function init() {
                 createAboutMe("eth.fbx", 0.08, [40, 25])
 
 
-                /*createPlanet("sun", 0, [18, 18, 18], font)
+                createPlanet("sun", 0, [18, 18, 18], font)
                 createPlanet("mercury", 21, [12, 12, 12], font)
                 createPlanet("venus", 42, [22, 22, 22], font)
                 createPlanet("earth", 63, [30, 30, 30], font)
@@ -103,13 +103,10 @@ export async function init() {
                 for (let i of listPlanetMesh)
                     if (i.name === "earth" && i.orderTime !== -1)
                         i.add(moon)
-                        */
-
-
             })
 
-            //createStars(scene)
-            //createAsteroidsLine(scene)
+            createStars(scene)
+            createAsteroidsLine(scene)
 
             resolve([scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh])
         } catch (e) {

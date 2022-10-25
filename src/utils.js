@@ -59,7 +59,6 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     })
 
     let waitLoad = 0
-    removeLoader()
     setTimeout(() => {
         if (waitLoad) {
             removeLoader()
