@@ -25,10 +25,34 @@ h1 {
 h2 {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 25%;
   transform: translate(-50%, -100%);
   z-index: 1;
   color: white;
+  font-size: 1.5rem;
+}
+
+h3 {
+  position: absolute;
+  left: 20%;
+  top: 75%;
+  transform: translate(-10%, -80%);
+  z-index: 1;
+  color: white;
+  font-size: 15px;
+}
+
+@media (min-width: 1024px) {
+  h2 {
+    font-size: 3rem;
+  }
+  h3 {
+    font-size: 1.8rem;
+    left: 50%;
+    top: 75%;
+    text-align: center;
+    transform: translate(-50%, -100%);
+  }
 }
 
 /* LOADER */
@@ -36,12 +60,34 @@ h2 {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 260px;
-  height: 260px;
+  width: 250px;
+  height: 250px;
   border-radius: 100%;
   background: linear-gradient(5deg, transparent, transparent 40%, #e5f403);
   animation: animate 2s linear infinite;
-  z-index: -1;
+  transition: 2s;
+}
+
+#inLoader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 240px;
+  height: 240px;
+  border-radius: 100%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  background-repeat: no-repeat;
+}
+
+body {
+  overflow: hidden;
+}
+
+.biggerLoader {
+  width: 300vw;
+  height: 300vh;
+
+  overflow: hidden;
 }
 
 .loader::before {
@@ -51,7 +97,7 @@ h2 {
   left: 6px;
   bottom: 6px;
   right: 6px;
-  background: #000;
+
   border-radius: 50%;
   z-index: 1000;
 }

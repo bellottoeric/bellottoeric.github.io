@@ -18,6 +18,28 @@ let soundClicked = 0
 let blockPlanetMovement = 0
 let movingCamera = 0
 
+/*const timer = ms => new Promise(res => setTimeout(res, ms))
+function isOverflown(element) {
+  return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+}
+
+async function load() {
+  for (let i = 0; i < 1400; i++) {
+    if (!isOverflown(document.getElementById("loader"))) {
+      console.log(document.getElementById("loader").scrollHeight > document.getElementById("loader").clientHeight)
+      document.getElementById("loader").style.width = i + "px"
+      document.getElementById("loader").style.height = i + "px"
+      await timer(1)
+    } else
+      continue
+  }
+  console.log("finito")
+  document.getElementById("loader").style.width = document.getElementById("loader").clientWidth + "px"
+  document.getElementById("loader").style.height = document.getElementById("loader").clientHeight + "px"
+}
+
+load();*/
+
 var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = ""
 
 start()
@@ -36,7 +58,8 @@ async function start(e) {
 }
 
 window.addEventListener("load", function (event) {
-  gsap.to(camera.position, { duration: 1.5, z: 125, y: 0 })
+  if (camera?.position)
+    gsap.to(camera.position, { duration: 1.5, z: 125, y: 0 })
 })
 
 setInterval(() => {

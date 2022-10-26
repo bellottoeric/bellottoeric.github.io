@@ -22,6 +22,24 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
 
     })
 
+
+    function clickFunc(e) {
+        if (e.touches) {
+            e.preventDefault(); //Try to comment it out: double triggers on short tap
+            window.removeEventListener("touchend", clickFunc);
+            console.log('tapped!');
+        }
+        //
+        //Your code here
+    }
+    function touchFunc() {
+        window.addEventListener("touchend", clickFunc);
+    }
+    window.onload = function () {
+        window.addEventListener("touchstart", touchFunc);
+    }
+
+
     // if it's mobile
     if (!(typeof screen.orientation !== 'undefined')) {
         window.addEventListener('click', (event) => {
@@ -35,8 +53,6 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     } else {
         window.addEventListener('mousedown', (event) => {
             window.clickOne = 1
-            console.log(window.clickOne)
-            console.log("2", window.clickTwo)
         })
 
         window.addEventListener('mouseup', (event) => {
@@ -56,10 +72,27 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     window.addEventListener('pointermove', (event) => {
         pointer.x = (event.clientX / window.innerWidth) * 2 - 1
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
-    })
+    });
+
+    (async () => {
+        let saveMaxWidth = window.innerWidth
+        let saveMaxHeight = window.innerHeight
+        for (let i = 250; i < saveMaxHeight + saveMaxWidth; i = i + 10) {
+            if (i > saveMaxWidth && i > saveMaxHeight)
+                continue
+            document.getElementById("inLoader").style.height = i + "px"
+            document.getElementById("loader").style.height = i + "px"
+            document.getElementById("inLoader").style.width = i + "px"
+            document.getElementById("loader").style.width = i + "px"
+            await (new Promise(res => setTimeout(res, 1)))
+        }
+        removeLoader()
+    })()
 
     let waitLoad = 0
-    setTimeout(() => {
+
+
+    /*setTimeout(() => {
         if (waitLoad) {
             removeLoader()
         } else
@@ -70,7 +103,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             removeLoader()
         } else
             waitLoad = 1
-    })
+    })*/
 
     document.getElementById("buttonGithub").addEventListener('click', function (event) {
         toggleGithub()
