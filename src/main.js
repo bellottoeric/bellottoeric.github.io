@@ -288,57 +288,61 @@ function animatePlanet(time) {
       }
     }
   }
-  for (let j of listPlanetMesh) {
-    if (j.lookAtMe) {
-      if (j.orderTime === -1) {
-        if (!j.isDescription) {
-          j.material.opacity = 1
-          j.material.transparent = false
-        }
-        if (selectedPlanet === j.name) {
-          j.material.opacity = 1
-          j.material.transparent = false
-          j.visible = true
-          if (j.position.distanceTo(camera.position) > 1000 && j.isDescription) {
-            blockPlanetMovement = 0
-            j.material.opacity = 0
+  if (!cinematicOn) {
+
+    for (let j of listPlanetMesh) {
+      if (j.lookAtMe) {
+        if (j.orderTime === -1) {
+          if (!j.isDescription) {
+            j.material.opacity = 1
             j.material.transparent = false
-            j.visible = false
-          } else
-            blockPlanetMovement = 1
-
-          // if close, remove title planets except targeted one
-          if (j.position.distanceTo(camera.position) < 1000) {
-            for (let k of listPlanetMesh) {
-              if (k.lookAtMe && k.orderTime === -1) {
-                if (selectedPlanet !== k.name && !k.isDescription) {
-                  k.material.opacity = 0
-                  k.material.transparent = true
-                  k.visible = false
-                }
-              }
-            }
-          } else {
-            // if far, display title planets except targeted one
-            for (let k of listPlanetMesh) {
-              if (k.lookAtMe && k.orderTime === -1) {
-                if (selectedPlanet !== k.name && !k.isDescription) {
-                  k.material.opacity = 1
-                  k.material.transparent = false
-                  k.visible = true
-                }
-              }
-            }
           }
-        } else if (j.isDescription) {
-          j.material.transparent = true
-          j.material.opacity = 0
-          j.visible = false
-        }
+          if (selectedPlanet === j.name) {
+            j.material.opacity = 1
+            j.material.transparent = false
+            j.visible = true
+            if (j.position.distanceTo(camera.position) > 1000 && j.isDescription) {
+              blockPlanetMovement = 0
+              j.material.opacity = 0
+              j.material.transparent = false
+              j.visible = false
+            } else
+              blockPlanetMovement = 1
 
+            // if close, remove title planets except targeted one
+            if (j.position.distanceTo(camera.position) < 1000) {
+              for (let k of listPlanetMesh) {
+                if (k.lookAtMe && k.orderTime === -1) {
+                  if (selectedPlanet !== k.name && !k.isDescription) {
+                    k.material.opacity = 0
+                    k.material.transparent = true
+                    k.visible = false
+                  }
+                }
+              }
+            } else {
+              // if far, display title planets except targeted one
+              for (let k of listPlanetMesh) {
+                if (k.lookAtMe && k.orderTime === -1) {
+                  if (selectedPlanet !== k.name && !k.isDescription) {
+                    k.material.opacity = 1
+                    k.material.transparent = false
+                    k.visible = true
+                  }
+                }
+              }
+            }
+          } else if (j.isDescription) {
+            j.material.transparent = true
+            j.material.opacity = 0
+            j.visible = false
+          }
+
+        }
       }
     }
   }
+
 
   // goHomeButton
   if (camera.position.distanceTo({ x: 0, y: 0, z: 0 }) > 150 && document.getElementById("goHome") && !cinematicOn)
@@ -493,19 +497,20 @@ window.cinematic = async function () {
 
   await timeline.to(camera.position, { duration: 2, x: (sunPos.x * -1) / 2, y: sunPos.y * -1, z: (sunPos.z * -1) / 2, ease: "none" })
   for (let i of copy) {
+    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 10, y: i.position.y * -1, z: (i.position.z * -1) / 10, ease: "none" })
     for (let j of listPlanetMesh) {
-      if (j.isText && j.name === i.name) {
-        j.visible = true
-        scene.add(j)
+      if (j.isText && j.name === i.name && !j.isDescription) {
         TweenMax.to(j.material, 2, { opacity: 1 })
+        scene.add(j)
+        j.visible = true
       }
     }
+    TweenMax.to(i.material, 2, { opacity: 1 })
     if (i.name !== "sun")
       scene2.add(i)
     else
       scene.add(i)
-    TweenMax.to(i.material, 2, { opacity: 1 })
-    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 1, y: i.position.y * -1, z: (i.position.z * -1) / 1, ease: "none" })
+    await timeline.to(camera.position, { duration: 1, x: (i.position.x * -1) / 10, y: i.position.y * -1, z: (i.position.z * -1) / 10, ease: "none" })
   }
 
   for (let i of scene.children) {

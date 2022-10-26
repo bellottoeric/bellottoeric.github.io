@@ -45,6 +45,7 @@ h3 {
 @media (min-width: 1024px) {
   h2 {
     font-size: 3rem;
+    color: white;
   }
   h3 {
     font-size: 1.8rem;
@@ -52,6 +53,7 @@ h3 {
     top: 75%;
     text-align: center;
     transform: translate(-50%, -100%);
+    color: white;
   }
 }
 

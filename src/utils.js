@@ -22,32 +22,31 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
 
     })
 
+    window.addEventListener('mouseup', (event) => {
+        window.clickOne = 0
+        if (!clickTwo.length)
+            return
 
-    function clickFunc(e) {
-        if (e.touches) {
-            e.preventDefault(); //Try to comment it out: double triggers on short tap
-            window.removeEventListener("touchend", clickFunc);
-            console.log('tapped!');
-        }
-        //
-        //Your code here
-    }
-    function touchFunc() {
-        window.addEventListener("touchend", clickFunc);
-    }
-    window.onload = function () {
-        window.addEventListener("touchstart", touchFunc);
-    }
+        pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+        pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
+        window.clicked = 1
+        setTimeout(() => {
+            window.clicked = 0
+        }, 100)
+    })
 
-
-    // if it's mobile
-    if (!(typeof screen.orientation !== 'undefined')) {
+    // if it's Mobile
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         window.addEventListener('click', (event) => {
             pointer.x = (event.clientX / window.innerWidth) * 2 - 1
             pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
             window.clicked = 1
+            window.clickOne = 1
+            window.clickTwo = 1
             setTimeout(() => {
                 window.clicked = 0
+                window.clickOne = 0
+                window.clickTwo = 0
             }, 100)
         })
     } else {
@@ -74,7 +73,8 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     });
 
-    (async () => {
+    removeLoader()
+    window.addEventListener("load", async function (event) {
         let saveMaxWidth = window.innerWidth
         let saveMaxHeight = window.innerHeight
         for (let i = 250; i < saveMaxHeight + saveMaxWidth; i = i + 10) {
@@ -87,7 +87,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             await (new Promise(res => setTimeout(res, 1)))
         }
         removeLoader()
-    })()
+    })
 
     let waitLoad = 0
 
