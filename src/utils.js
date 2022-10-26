@@ -73,7 +73,6 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     });
 
-    removeLoader()
     window.addEventListener("load", async function (event) {
         let saveMaxWidth = window.innerWidth
         let saveMaxHeight = window.innerHeight
