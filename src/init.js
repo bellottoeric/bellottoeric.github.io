@@ -47,6 +47,24 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
+            createAboutMe("gym.fbx", 0.08, [-25, 50])
+            createAboutMe("chess.fbx", 0.08, [0, 50])
+            createAboutMe("eth.fbx", 0.08, [25, 50])
+            createStars(scene)
+            createAsteroidsLine(scene)
+
+            let ring = createRing()
+            scene.add(ring)
+            listPlanetMesh.push(ring)
+
+            let moon = createMoon()
+            scene.add(moon)
+            listPlanetMesh.push(moon)
+
+            for (let i of listPlanetMesh)
+                if (i.name === "earth" && i.orderTime !== -1)
+                    i.add(moon)
+
             fontLoader.load('/fonts/nazalisation.json', function (font) {
                 createMeshAroundMe("play.fbx", 0)
                 createTextAroundMe(font, "Cinematic", 0)
@@ -79,9 +97,6 @@ export async function init() {
                 createMeshAroundMe("/planetTexture/moon.jpg", 36, [6.5, 64, 32], "sphere")
                 createTextAroundMe(font, "pomatobot.com", 36)
 
-                createAboutMe("gym.fbx", 0.08, [-25, 50])
-                createAboutMe("chess.fbx", 0.08, [0, 50])
-                createAboutMe("eth.fbx", 0.08, [25, 50])
 
 
                 createPlanet("sun", 0, [18, 18, 18], font)
@@ -94,23 +109,7 @@ export async function init() {
                 createPlanet("uranus", 147, [62, 62, 62], font)
                 createPlanet("neptune", 168, [60, 60, 60], font)
 
-                let ring = createRing()
-                scene.add(ring)
-                listPlanetMesh.push(ring)
-
-                let moon = createMoon()
-                scene.add(moon)
-                listPlanetMesh.push(moon)
-
-                for (let i of listPlanetMesh)
-                    if (i.name === "earth" && i.orderTime !== -1)
-                        i.add(moon)
             })
-
-            createStars(scene)
-
-            createAsteroidsLine(scene)
-
             resolve([scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh])
         } catch (e) {
             console.log('Error in function', e)
@@ -395,13 +394,11 @@ function getNeonMaterial(name, cc) {
 }
 
 async function createAsteroidsLine(scene) {
-    const [texture, object1, texture2, object2, texture3, object3] = await Promise.all([
+    const [texture, object1, texture2, object2] = await Promise.all([
         textureLoader.loadAsync('asteroids/1.jpg'),
         objLoader.loadAsync('asteroids/1.obj'),
         textureLoader.loadAsync('asteroids/2.jpg'),
         objLoader.loadAsync('asteroids/2.obj'),
-        textureLoader.loadAsync('asteroids/3.jpg'),
-        objLoader.loadAsync('asteroids/3.obj'),
     ])
     object1.traverse(function (child) {
         if (child.isMesh) {
@@ -416,32 +413,20 @@ async function createAsteroidsLine(scene) {
             child.geometry.computeVertexNormals()
         }
     })
-    object3.traverse(function (child) {
-        if (child.isMesh) {
-            child.material.map = texture3
-            child.geometry.computeVertexNormals()
-        }
-    })
-
 
     object1.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
 
     object2.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
 
-    object3.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
-
-
     for (let z = 0; z < 150; z++) {
         const angle = Math.random() * Math.PI * 2;
         let ast
-        let randomAst = Math.floor(getRandomArbitrary(1, 4))
-
+        let randomAst = Math.floor(getRandomArbitrary(1, 3))
+        console.log(randomAst)
         if (randomAst === 1) {
             ast = object1.clone()
         } else if (randomAst === 2) {
             ast = object2.clone()
-        } else {
-            ast = object3.clone()
         }
 
         ast.rotation.y = getRandomArbitrary(1, 360)
@@ -459,17 +444,17 @@ async function createStars(scene) {
         let geometry = new THREE.SphereGeometry(0.5, 32, 32)
         let material = new THREE.MeshBasicMaterial({ color: 0xffffff })
         let sphere = new THREE.Mesh(geometry, material)
-        sphere.position.x = getRandomArbitrary(-2800, 2800)
-        sphere.position.y = getRandomArbitrary(-2800, 2800)
-        sphere.position.z = getRandomArbitrary(-2800, 2800)
-        sphere.scale.x = sphere.scale.y = 4
+        sphere.position.x = getRandomArbitrary(-3000, 3000)
+        sphere.position.y = getRandomArbitrary(-3000, 3000)
+        sphere.position.z = getRandomArbitrary(-3000, 3000)
+        sphere.scale.x = sphere.scale.y = 10
 
         let dx = sphere.position.x - 0
         let dy = sphere.position.y - 0
         let dz = sphere.position.z - 0
-        if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 1000)
+        if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 2500)
             continue
-        await timer(10)
+        await timer(100)
         scene.add(sphere)
         stars.push(sphere)
     }

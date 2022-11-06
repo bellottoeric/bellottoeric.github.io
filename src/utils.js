@@ -71,7 +71,6 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     })
 
-
     let saveMaxWidth = window.innerWidth
     let saveMaxHeight = window.innerHeight
 
@@ -79,6 +78,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     let loaded = 0
     window.addEventListener("load", async function (event) {
         animate()
+        //cinematic()
         await (new Promise(res => setTimeout(res, 500)))
         ready = 1
     });
@@ -99,26 +99,9 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         if (ready && loaded) {
             console.log("Launch loader")
             removeLoader()
-            clear(checkReadyloaded)
+            clearInterval(checkReadyloaded)
         }
     }, 100)
-
-
-    /*
-    let waitLoad = 0
-
-    setTimeout(() => {
-        if (waitLoad) {
-            removeLoader()
-        } else
-            waitLoad = 1
-    }, 1000 * 3)
-    window.addEventListener("load", function (event) {
-        if (waitLoad) {
-            removeLoader()
-        } else
-            waitLoad = 1
-    })*/
 
     document.getElementById("buttonProjects").addEventListener('click', function (event) {
         toggleProjects()
@@ -147,11 +130,9 @@ function removeLoader() {
         document.getElementById("goHome").classList.remove("hidden")
     document.getElementById("parentLoader").classList.add("hidden")
     document.getElementById("bg").classList.remove("hidden")
-    setTimeout(() => {
-        if (!localStorage.getItem('cinematicated')) {
-            localStorage.setItem('cinematicated', 1)
-            cinematic()
-        }
-    }, 2000)
+    if (!localStorage.getItem('cinematicated')) {
+        localStorage.setItem('cinematicated', 1)
+        cinematic()
+    }
 }
 
