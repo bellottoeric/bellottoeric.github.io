@@ -5,6 +5,8 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { descriptions } from '../lang/planet'
 
+const timer = ms => new Promise(res => setTimeout(res, ms))
+
 const scene = new THREE.Scene()
 const scene2 = new THREE.Scene()
 const renderer = new THREE.WebGL1Renderer({
@@ -66,8 +68,8 @@ export async function init() {
 
                 createMeshAroundMe("parcours.fbx", 16)
                 createTextAroundMe(font, "parcours", 16)
-                createMeshAroundMe("github.fbx", 20)
-                createTextAroundMe(font, "Github", 20)
+                createMeshAroundMe("projects.fbx", 20)
+                createTextAroundMe(font, "Projects", 20)
                 createMeshAroundMe("contact.fbx", 24)
                 createTextAroundMe(font, "Contact", 24)
 
@@ -77,9 +79,9 @@ export async function init() {
                 createMeshAroundMe("/planetTexture/moon.jpg", 36, [6.5, 64, 32], "sphere")
                 createTextAroundMe(font, "pomatobot.com", 36)
 
-                createAboutMe("gym.fbx", 0.08, [-40, 25])
-                createAboutMe("chess.fbx", 0.08, [0, 25])
-                createAboutMe("eth.fbx", 0.08, [40, 25])
+                createAboutMe("gym.fbx", 0.08, [-25, 50])
+                createAboutMe("chess.fbx", 0.08, [0, 50])
+                createAboutMe("eth.fbx", 0.08, [25, 50])
 
 
                 createPlanet("sun", 0, [18, 18, 18], font)
@@ -106,6 +108,7 @@ export async function init() {
             })
 
             createStars(scene)
+
             createAsteroidsLine(scene)
 
             resolve([scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh])
@@ -173,7 +176,7 @@ function createRing() {
     return (ring)
 }
 
-function createPlanet(name, orderTime, size, font) {
+async function createPlanet(name, orderTime, size, font) {
     const meshTexture = new THREE.TextureLoader().load("/planetTexture/" + name + '.jpg')
     const s_Geometry = new THREE.SphereGeometry(size[0], size[1], size[2])
     const s_materials = new THREE.MeshStandardMaterial({ color: 0xffffff, map: meshTexture })
@@ -261,7 +264,7 @@ function createPlanet(name, orderTime, size, font) {
     scene.add(meshDescription)
 }
 
-function createTextAroundMe(font, text, orderTime, pos) {
+async function createTextAroundMe(font, text, orderTime, pos) {
     const matLite = new THREE.MeshBasicMaterial({
         color: "#ffffff",
         transparent: true,
@@ -342,7 +345,7 @@ function getNeonMaterial(name, cc) {
     listColors['music'] = [0xf05924]
     listColors['contact'] = [0xf05924]
     listColors['parcours'] = [0x222831, 0xf05924]
-    listColors['github'] = [0x222831, 0xF1F1F1, 0xf05924, 0xf05924, 0x393E46]
+    listColors['projects'] = [0x222831, 0xF1F1F1, 0xf05924, 0xf05924, 0x393E46]
 
     listColors['gym'] = [0x222831, 0xf05924, 0xf05924, 0xf05924, 0x393E46]
     listColors['chess'] = [0x222831, 0xf05924, 0xf05924, 0xf05924, 0x393E46]
@@ -427,7 +430,8 @@ async function createAsteroidsLine(scene) {
 
     object3.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
 
-    for (let z = 0; z < 100; z++) {
+
+    for (let z = 0; z < 150; z++) {
         const angle = Math.random() * Math.PI * 2;
         let ast
         let randomAst = Math.floor(getRandomArbitrary(1, 4))
@@ -444,27 +448,28 @@ async function createAsteroidsLine(scene) {
         ast.rotation.x = getRandomArbitrary(1, 360)
         ast.position.z = Math.sin(angle) * getRandomArbitrary(825, 875)
         ast.position.x = Math.cos(angle) * getRandomArbitrary(825, 875)
-
+        await timer(333)
         scene.add(ast)
     }
 }
 
-function createStars(scene) {
+async function createStars(scene) {
     let stars = []
     for (let z = 0; z < 2000; z++) {
         let geometry = new THREE.SphereGeometry(0.5, 32, 32)
         let material = new THREE.MeshBasicMaterial({ color: 0xffffff })
         let sphere = new THREE.Mesh(geometry, material)
-        sphere.position.x = getRandomArbitrary(-3000, 4000)
-        sphere.position.y = getRandomArbitrary(-3000, 4000)
-        sphere.position.z = getRandomArbitrary(-3000, 4000)
-        sphere.scale.x = sphere.scale.y = 2
+        sphere.position.x = getRandomArbitrary(-2800, 2800)
+        sphere.position.y = getRandomArbitrary(-2800, 2800)
+        sphere.position.z = getRandomArbitrary(-2800, 2800)
+        sphere.scale.x = sphere.scale.y = 4
 
         let dx = sphere.position.x - 0
         let dy = sphere.position.y - 0
         let dz = sphere.position.z - 0
         if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 1000)
             continue
+        await timer(10)
         scene.add(sphere)
         stars.push(sphere)
     }

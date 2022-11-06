@@ -3,7 +3,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         window.selectedPlanet = ""
         document.getElementById("presentation").classList.add("hidden")
         document.getElementById("parcours").classList.add("hidden")
-        document.getElementById("github").classList.add("hidden")
+        document.getElementById("projects").classList.add("hidden")
         document.getElementById("me").classList.add("hidden")
         aboutMe = 0
         controls.enabled = false
@@ -19,14 +19,12 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         renderer.setSize(width, height)
         camera.aspect = width / height
         camera.updateProjectionMatrix()
-
     })
 
     window.addEventListener('mouseup', (event) => {
         window.clickOne = 0
         if (!clickTwo.length)
             return
-
         pointer.x = (event.clientX / window.innerWidth) * 2 - 1
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
         window.clicked = 1
@@ -71,13 +69,23 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     window.addEventListener('pointermove', (event) => {
         pointer.x = (event.clientX / window.innerWidth) * 2 - 1
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
+    })
+
+
+    let saveMaxWidth = window.innerWidth
+    let saveMaxHeight = window.innerHeight
+
+    let ready = 0
+    let loaded = 0
+    window.addEventListener("load", async function (event) {
+        animate()
+        await (new Promise(res => setTimeout(res, 500)))
+        ready = 1
     });
 
-    window.addEventListener("load", async function (event) {
-        let saveMaxWidth = window.innerWidth
-        let saveMaxHeight = window.innerHeight
-        for (let i = 250; i < saveMaxHeight + saveMaxWidth; i = i + 10) {
-            if (i > saveMaxWidth && i > saveMaxHeight)
+    (async () => {
+        for (let i = 250; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
+            if ((i > saveMaxWidth && i > saveMaxHeight) || loaded)
                 continue
             document.getElementById("inLoader").style.height = i + "px"
             document.getElementById("loader").style.height = i + "px"
@@ -85,13 +93,21 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             document.getElementById("loader").style.width = i + "px"
             await (new Promise(res => setTimeout(res, 1)))
         }
-        removeLoader()
-    })
+        loaded = 1
+    })();
+    let checkReadyloaded = setInterval(() => {
+        if (ready && loaded) {
+            console.log("Launch loader")
+            removeLoader()
+            clear(checkReadyloaded)
+        }
+    }, 100)
 
+
+    /*
     let waitLoad = 0
 
-
-    /*setTimeout(() => {
+    setTimeout(() => {
         if (waitLoad) {
             removeLoader()
         } else
@@ -104,26 +120,26 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             waitLoad = 1
     })*/
 
-    document.getElementById("buttonGithub").addEventListener('click', function (event) {
-        toggleGithub()
+    document.getElementById("buttonProjects").addEventListener('click', function (event) {
+        toggleProjects()
     }, false)
 }
 
-window.toggleGithub = function () {
-    if (document.getElementById("buttonGithub").classList.toString().includes('active'))
-        document.getElementById("buttonGithub").classList.remove("active")
+window.toggleProjects = function () {
+    if (document.getElementById("buttonProjects").classList.toString().includes('active'))
+        document.getElementById("buttonProjects").classList.remove("active")
     else
-        document.getElementById("buttonGithub").classList.add("active")
+        document.getElementById("buttonProjects").classList.add("active")
 
-    if (document.getElementById("titleGithub").classList.toString().includes('active'))
-        document.getElementById("titleGithub").classList.remove("active")
+    if (document.getElementById("titleProjects").classList.toString().includes('active'))
+        document.getElementById("titleProjects").classList.remove("active")
     else
-        document.getElementById("titleGithub").classList.add("active")
+        document.getElementById("titleProjects").classList.add("active")
 
-    if (document.getElementById("navGithub").classList.toString().includes('active'))
-        document.getElementById("navGithub").classList.remove("active")
+    if (document.getElementById("navProjects").classList.toString().includes('active'))
+        document.getElementById("navProjects").classList.remove("active")
     else
-        document.getElementById("navGithub").classList.add("active")
+        document.getElementById("navProjects").classList.add("active")
 }
 
 function removeLoader() {
@@ -138,3 +154,4 @@ function removeLoader() {
         }
     }, 2000)
 }
+

@@ -40,6 +40,7 @@ async function load() {
 
 load();*/
 
+var scene3
 var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = ""
 
 start()
@@ -50,7 +51,6 @@ async function start(e) {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = await init()
       utils(pointer, camera, renderer, scene, scene2, controls)
       //setupVideoPlayer()
-      animate()
     } catch (e) {
       console.log('Error in function', e)
     }
@@ -74,10 +74,10 @@ setInterval(() => {
   }
 }, 1)
 
-function animate() {
+window.animate = function () {
   requestAnimationFrame(animate)
 
-  let time = performance.now() * 0.0005 + 20000
+  let time = performance.now() * 0.0005 + 22000
 
   clickDetection()
   animateAroundMe(time)
@@ -88,6 +88,8 @@ function animate() {
   renderer.clear()
   renderer.render(scene, camera)
   renderer.render(scene2, camera)
+  if (scene3)
+    renderer.render(scene3, camera)
 }
 
 function clickDetection() {
@@ -125,7 +127,7 @@ function clickDetection() {
           window.player.unMute()
         else
           window.player.mute()
-      } else if (name.includes('parcours') || name.includes('github') || name.includes('contact') || name.includes('assets/me')) {
+      } else if (name.includes('parcours') || name.includes('projects') || name.includes('contact') || name.includes('assets/me')) {
         openHTMLView(name)
       } else if (name.includes('tea')) {
         document.location.href = "/en";
@@ -154,6 +156,12 @@ async function planetInfo(name) {
       return this.map((e, i) => e + other[i]);
     }
   }
+  console.log(name)
+  if (name === "ring")
+    name = "saturn"
+  if (name === "moon")
+    name = "earth"
+
   selectedPlanet = name
   for (let i of listPlanetMesh) {
     if (i.name === name) {
@@ -190,8 +198,9 @@ function animatePlanet(time) {
   let moon
 
   for (let i of listPlanetMesh) {
-    if (i.name === "ring")
+    if (i.name === "ring") {
       ring = i
+    }
     if (i.name === "moon")
       moon = i
   }
@@ -242,13 +251,17 @@ function animatePlanet(time) {
     rotateSpeedPlanet['neptune'] = 0.025
     i.rotation.y += rotateSpeedPlanet[i.name]
 
+
     if (i.name === "saturn") {
-      ring.position.x = i.position.x
-      ring.position.y = i.position.y
-      ring.position.z = i.position.z
+      if (!i.children.length)
+        i.add(ring)
+      ring.rotation.y -= rotateSpeedPlanet["saturn"]
+      ring.rotation.x = 0
       ring.rotation.z += 0.005
     }
     if (i.name === "earth") {
+      if (!i.children.length)
+        i.add(moon)
       moon.position.set(0, 0, 0)
       moon.rotateY(0.001)
       moon.translateX(50)
@@ -289,7 +302,6 @@ function animatePlanet(time) {
     }
   }
   if (!cinematicOn) {
-
     for (let j of listPlanetMesh) {
       if (j.lookAtMe) {
         if (j.orderTime === -1) {
@@ -385,13 +397,13 @@ function openHTMLView(name) {
     document.getElementById("presentation").classList.remove("hidden")
     if (name.includes('parcours')) {
       document.getElementById("parcours").classList.remove("hidden")
-    } else if (name.includes('github')) {
-      document.getElementById("github").classList.remove("hidden")
-      document.getElementById("buttonGithub").classList.remove("active")
-      document.getElementById("titleGithub").classList.remove("active")
-      document.getElementById("navGithub").classList.remove("active")
+    } else if (name.includes('projects')) {
+      document.getElementById("projects").classList.remove("hidden")
+      document.getElementById("buttonProjects").classList.remove("active")
+      document.getElementById("titleProjects").classList.remove("active")
+      document.getElementById("navProjects").classList.remove("active")
       setTimeout(() => {
-        toggleGithub()
+        toggleProjects()
       }, 650)
     } else if (name.includes('contact')) {
       document.getElementById("me").classList.remove("hidden")
@@ -401,137 +413,80 @@ function openHTMLView(name) {
   gsap.to(camera.position, { duration: 3, y: 3000, x: 0, z: 0 })
 }
 
+
+
+const timer = ms => new Promise(res => setTimeout(res, ms))
 window.cinematic = async function () {
   cinematicOn = 1
   document.querySelector("body").requestFullscreen().then(function () { }).catch(function (error) { })
   controls.enabled = false
+  scene.visible = false
+  scene2.visible = false
+  scene3 = new THREE.Scene()
+  scene3.add((new THREE.AmbientLight(0xffffff, 1)))
+  renderer.render(scene3, camera)
 
-  let timeline = gsap.timeline()
-
-  for (let i of meshAroundMe) {
-    i.visible = false
-  }
-
-  for (let i of scene.children) {
-    if (i.isText || i.name === "ring" || i.name === "moon") {
-      i.visible = false
-    }
-  }
-
-  let copySceneChildren = []
-  for (let i of scene.children)
-    copySceneChildren.push(i)
-
-  let copyScene2Children = []
-  for (let i of scene2.children)
-    copyScene2Children.push(i)
-
-
-  for (let i of scene.children) {
-    scene.remove(i)
-
-    if ((i.material && !i.isText && !i.name === "ring" && !i.name === "moon") || i.name === "sun") {
-
-      i.material.transparent = true
-      i.material.opacity = 0
-    } else if (i.children.length) {
-      i.children[0].material.opacity = 0
-      i.children[0].material.transparent = true
-    }
-  }
-  for (let i of scene2.children) {
-    scene2.remove(i)
-    if (i.material && !i.isText) {
-      i.material.transparent = true
-      i.material.opacity = 0
-    } else if (i.children.length) {
-      i.children[0].material.opacity = 0
-      i.children[0].material.transparent = true
-    }
-  }
-
+  let sunPos
   let copy = listPlanetMesh.constructor()
   let index = 0
   for (let attr in listPlanetMesh) {
-    if (!listPlanetMesh[attr].name === "ring" && !listPlanetMesh[attr].name === "moon" && !listPlanetMesh[attr].isText && !listPlanetMesh[attr].name === "sun") {
-      listPlanetMesh[attr].material.opacity = 0
-      listPlanetMesh[attr].material.transparent = true
-    }
     if (listPlanetMesh.hasOwnProperty(attr)) {
+      if (listPlanetMesh[attr].name === "sun") {
+        sunPos = listPlanetMesh[attr].position
+      }
       if (listPlanetMesh[attr].name === "ring" || listPlanetMesh[attr].name === "moon" || listPlanetMesh[attr].isText || listPlanetMesh[attr].name === "sun")
         continue
       copy[index] = listPlanetMesh[attr]
       index++
     }
-    scene.remove(listPlanetMesh[attr])
   }
 
-  scene.add((new THREE.AmbientLight(0xffffff, 1)))
-
-  let sunPos
+  const timeline = gsap.timeline()
+  //await timeline.to(camera.position, { duration: 0.5, x: (sunPos.x * -1) / 2, y: sunPos.y * -1, z: (sunPos.z * -1) / 2, ease: "none" })
   for (let i of copy) {
-    if (i.name !== "mercury") {
-      TweenMax.to(i.material, 2, { opacity: 0 })
-      scene2.remove(i)
-    } else {
-      i.visible = true
-      i.material.opacity = 1
-      i.material.transparent = false
-      TweenMax.to(i.material, 2, { opacity: 1 })
-      sunPos = i.position
-      scene.add(i)
-    }
-  }
-
-  for (let i of scene2.children)
-    if (i.name === "/assets/me2.jpg")
-      scene2.remove(i)
-
-  for (let i of scene.children) {
-    if (i.name === "sun") {
-      i.visible = false
-      i.material.opacity = 0
-      i.material.transparent = true
-    }
-  }
-
-  await timeline.to(camera.position, { duration: 2, x: (sunPos.x * -1) / 2, y: sunPos.y * -1, z: (sunPos.z * -1) / 2, ease: "none" })
-  for (let i of copy) {
-    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 10, y: i.position.y * -1, z: (i.position.z * -1) / 10, ease: "none" })
+    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 10, y: i.position.y * -1, z: (i.position.z * -1) / 10 })
     for (let j of listPlanetMesh) {
       if (j.isText && j.name === i.name && !j.isDescription) {
-        TweenMax.to(j.material, 2, { opacity: 1 })
-        scene.add(j)
-        j.visible = true
+        scene3.add(j)
       }
     }
-    TweenMax.to(i.material, 2, { opacity: 1 })
+    i.material.opacity = 0
+    i.material.transparent = true
+    i.visible = true
     if (i.name !== "sun")
-      scene2.add(i)
-    else
-      scene.add(i)
+      scene3.add(i)
+    TweenMax.to(i.material, 2, { opacity: 1 })
+    if (i.children.length) {
+      i.children[0].material.opacity = 0
+      i.children[0].material.transparent = true
+      i.children[0].visible = true
+      TweenMax.to(i.children[0].material, 2, { opacity: 1 })
+    }
     await timeline.to(camera.position, { duration: 1, x: (i.position.x * -1) / 10, y: i.position.y * -1, z: (i.position.z * -1) / 10, ease: "none" })
   }
-
-  for (let i of scene.children) {
-    if (i.name === "sun") {
-      i.visible = true
-      i.material.opacity = 1
-      i.material.transparent = false
-    }
-  }
-
+  scene3 = null
+  scene.visible = true
+  scene2.visible = true
   for (let i of meshAroundMe)
     i.visible = true
-
-  scene.children = copySceneChildren
-  scene2.children = copyScene2Children
-  for (let i of scene.children) {
-    if (i.isText) {
-      i.visible = true
-      i.material.color.setHex(0xffffff)
+  for (let i of listPlanetMesh) {
+    if (i.material)
+      TweenMax.to(i.material, 0.1, { opacity: 1 })
+    i.visible = true
+    scene.add(i)
+  }
+  for (let j of listPlanetMesh) {
+    if (j.lookAtMe) {
+      if (j.orderTime === -1) {
+        if (j.isDescription) {
+          j.material.opacity = 0
+          j.material.transparent = false
+          j.visible = false
+        }
+      }
     }
   }
+
   await timeline.to(camera.position, { duration: 3, y: 0, z: 125, x: 0 })
   controls.enabled = true
   document.exitFullscreen().then(function () { }).catch(function (error) { })

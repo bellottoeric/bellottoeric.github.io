@@ -1,4 +1,4 @@
-.childGithub {
+.childProjects {
   display: flex;
   background-color: white;
   flex-direction: column;
@@ -9,7 +9,7 @@
   padding: 10px;
   margin: 10px;
 }
-#navGithub {
+#navProjects {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -18,7 +18,7 @@
   margin-top: 10px;
 }
 @media (min-width: 1024px) {
-  #navGithub {
+  #navProjects {
     flex-direction: row;
   }
 }
