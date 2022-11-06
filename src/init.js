@@ -66,38 +66,46 @@ export async function init() {
                     i.add(moon)
 
             fontLoader.load('/fonts/nazalisation.json', function (font) {
-                createMeshAroundMe("play.fbx", 0)
-                createTextAroundMe(font, "Cinematic", 0)
-                createMeshAroundMe("music.fbx", 4)
-                createTextAroundMe(font, "Sound on/off", 4)
+                let nbrObjects = 7
+                let max = 42
+                let index = 1
+                createMeshAroundMe("play.fbx", max / nbrObjects * index)
+                createTextAroundMe(font, "Cinematic", max / nbrObjects * index)
+                index++
+                createMeshAroundMe("music.fbx", max / nbrObjects * index)
+                createTextAroundMe(font, "Sound on/off", max / nbrObjects * index)
+                index++
 
                 if (document.location.href.includes('/en')) {
-                    createMeshAroundMe("pallete.fbx", 8)
-                    createTextAroundMe(font, "French Version", 8)
+                    createMeshAroundMe("pallete.fbx", max / nbrObjects * index)
+                    createTextAroundMe(font, "French Version", max / nbrObjects * index)
                 } else {
-                    createMeshAroundMe("tea.fbx", 8)
-                    createTextAroundMe(font, "English Version", 8)
+                    createMeshAroundMe("tea.fbx", max / nbrObjects * index)
+                    createTextAroundMe(font, "English Version", max / nbrObjects * index)
                 }
+                index++
+
+                createMeshAroundMe("/assets/me2.jpg", max / nbrObjects * index, [5, 32], "circle")
+                createMeshAroundMe("/assets/me.png", max / nbrObjects * index, [5, 32], "circle")
+                createTextAroundMe(font, "About me", max / nbrObjects * index)
+                index++
 
 
-                createMeshAroundMe("/assets/me2.jpg", 12, [10, 10, 0.001], "box")
-                createMeshAroundMe("/assets/me.png", 12, [10, 10, 0.001], "box")
-                createTextAroundMe(font, "About me", 12)
+                createMeshAroundMe("parcours.fbx", max / nbrObjects * index)
+                createTextAroundMe(font, "parcours", max / nbrObjects * index)
+                index++
 
-                createMeshAroundMe("parcours.fbx", 16)
-                createTextAroundMe(font, "parcours", 16)
-                createMeshAroundMe("projects.fbx", 20)
-                createTextAroundMe(font, "Projects", 20)
-                createMeshAroundMe("contact.fbx", 24)
-                createTextAroundMe(font, "Contact", 24)
+                createMeshAroundMe("projects.fbx", max / nbrObjects * index)
+                createTextAroundMe(font, "Projects", max / nbrObjects * index)
+                index++
 
+                createMeshAroundMe("contact.fbx", max / nbrObjects * index)
+                createTextAroundMe(font, "Contact", max / nbrObjects * index)
 
-                createMeshAroundMe("/planetTexture/earth.jpg", 32, [6.5, 64, 32], "sphere")
-                createTextAroundMe(font, "xpert-agro.fr", 32)
-                createMeshAroundMe("/planetTexture/moon.jpg", 36, [6.5, 64, 32], "sphere")
-                createTextAroundMe(font, "pomatobot.com", 36)
-
-
+                //createMeshAroundMe("/planetTexture/earth.jpg", 32, [6.5, 64, 32], "sphere")
+                //createTextAroundMe(font, "xpert-agro.fr", 32)
+                //createMeshAroundMe("/planetTexture/moon.jpg", 36, [6.5, 64, 32], "sphere")
+                //createTextAroundMe(font, "pomatobot.com", 36)
 
                 createPlanet("sun", 0, [18, 18, 18], font)
                 createPlanet("mercury", 21, [12, 12, 12], font)
@@ -302,11 +310,12 @@ async function createMeshAroundMe(name, orderTime, size, type) {
             new THREE.SphereGeometry(size[0], size[1], size[2]),
             new THREE.MeshBasicMaterial({ map: meshTexture, })
         )
-    } else if (type === "box") {
+    } else if (type === "circle") {
         mesh = new THREE.Mesh(
-            new THREE.BoxGeometry(size[0], size[1], size[2]),
+            new THREE.CircleGeometry(size[0], size[1]),
             new THREE.MeshBasicMaterial({ map: meshTexture })
         )
+        mesh.material.side = THREE.DoubleSide;
         mesh.dicons = 1
     } else {
         mesh = await fbxLoader.loadAsync("/" + name)
@@ -418,11 +427,11 @@ async function createAsteroidsLine(scene) {
 
     object2.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
 
+    await timer(1000 * 5)
     for (let z = 0; z < 150; z++) {
         const angle = Math.random() * Math.PI * 2;
         let ast
         let randomAst = Math.floor(getRandomArbitrary(1, 3))
-        console.log(randomAst)
         if (randomAst === 1) {
             ast = object1.clone()
         } else if (randomAst === 2) {
@@ -433,14 +442,14 @@ async function createAsteroidsLine(scene) {
         ast.rotation.x = getRandomArbitrary(1, 360)
         ast.position.z = Math.sin(angle) * getRandomArbitrary(825, 875)
         ast.position.x = Math.cos(angle) * getRandomArbitrary(825, 875)
-        await timer(333)
+        await timer(100)
         scene.add(ast)
     }
 }
 
 async function createStars(scene) {
     let stars = []
-    for (let z = 0; z < 2000; z++) {
+    for (let z = 0; z < 500; z++) {
         let geometry = new THREE.SphereGeometry(0.5, 32, 32)
         let material = new THREE.MeshBasicMaterial({ color: 0xffffff })
         let sphere = new THREE.Mesh(geometry, material)

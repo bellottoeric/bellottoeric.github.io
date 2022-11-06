@@ -78,23 +78,23 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     let loaded = 0
     window.addEventListener("load", async function (event) {
         animate()
-        //cinematic()
         await (new Promise(res => setTimeout(res, 500)))
         ready = 1
     });
+    removeLoader()
 
-    (async () => {
-        for (let i = 250; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
-            if ((i > saveMaxWidth && i > saveMaxHeight) || loaded)
-                continue
-            document.getElementById("inLoader").style.height = i + "px"
-            document.getElementById("loader").style.height = i + "px"
-            document.getElementById("inLoader").style.width = i + "px"
-            document.getElementById("loader").style.width = i + "px"
-            await (new Promise(res => setTimeout(res, 1)))
-        }
-        loaded = 1
-    })();
+        (async () => {
+            for (let i = 250; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
+                if ((i > saveMaxWidth && i > saveMaxHeight) || loaded)
+                    continue
+                document.getElementById("inLoader").style.height = i + "px"
+                document.getElementById("loader").style.height = i + "px"
+                document.getElementById("inLoader").style.width = i + "px"
+                document.getElementById("loader").style.width = i + "px"
+                await (new Promise(res => setTimeout(res, 1)))
+            }
+            loaded = 1
+        })();
     let checkReadyloaded = setInterval(() => {
         if (ready && loaded) {
             console.log("Launch loader")

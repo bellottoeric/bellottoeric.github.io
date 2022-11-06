@@ -114,7 +114,6 @@ function clickDetection() {
     if (name.length && clicked && controls.enabled) {
       window.clicked = 0
       selectedPlanet = ""
-      console.log(name)
       if (name === "/planetTexture/moon.jpg") {
         window.open("https://pomatobot.com")
       } else if (name === "/planetTexture/earth.jpg") {
@@ -130,9 +129,9 @@ function clickDetection() {
       } else if (name.includes('parcours') || name.includes('projects') || name.includes('contact') || name.includes('assets/me')) {
         openHTMLView(name)
       } else if (name.includes('tea')) {
-        document.location.href = "/en";
+        window.location.href = "/en";
       } else if (name.includes('pallete')) {
-        document.location.href = "/";
+        window.location.href = "/";
       } else if (type === "planet") {
         planetInfo(name)
       }
@@ -250,7 +249,6 @@ function animatePlanet(time) {
     rotateSpeedPlanet['uranus'] = 0.0235294117
     rotateSpeedPlanet['neptune'] = 0.025
     i.rotation.y += rotateSpeedPlanet[i.name]
-
 
     if (i.name === "saturn") {
       if (!i.children.length)
@@ -412,8 +410,6 @@ function openHTMLView(name) {
   controls.maxDistance = 3000
   gsap.to(camera.position, { duration: 3, y: 3000, x: 0, z: 0 })
 }
-
-
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
 window.cinematic = async function () {
