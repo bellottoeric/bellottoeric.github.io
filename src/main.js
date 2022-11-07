@@ -18,28 +18,6 @@ let soundClicked = 0
 let blockPlanetMovement = 0
 let movingCamera = 0
 
-/*const timer = ms => new Promise(res => setTimeout(res, ms))
-function isOverflown(element) {
-  return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
-}
-
-async function load() {
-  for (let i = 0; i < 1400; i++) {
-    if (!isOverflown(document.getElementById("loader"))) {
-      console.log(document.getElementById("loader").scrollHeight > document.getElementById("loader").clientHeight)
-      document.getElementById("loader").style.width = i + "px"
-      document.getElementById("loader").style.height = i + "px"
-      await timer(1)
-    } else
-      continue
-  }
-  console.log("finito")
-  document.getElementById("loader").style.width = document.getElementById("loader").clientWidth + "px"
-  document.getElementById("loader").style.height = document.getElementById("loader").clientHeight + "px"
-}
-
-load();*/
-
 var scene3
 var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = ""
 
@@ -50,6 +28,7 @@ async function start(e) {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = await init()
       utils(pointer, camera, renderer, scene, scene2, controls)
+      App(renderer, scene, camera)
       //setupVideoPlayer()
     } catch (e) {
       console.log('Error in function', e)
@@ -129,9 +108,9 @@ function clickDetection() {
       } else if (name.includes('parcours') || name.includes('projects') || name.includes('contact') || name.includes('assets/me')) {
         openHTMLView(name)
       } else if (name.includes('tea')) {
-        window.location.href = "/en";
+        window.open("https://bellottoeric.fr/en.html", "_self")
       } else if (name.includes('pallete')) {
-        window.location.href = "/";
+        window.open("https://bellottoeric.fr/", "_self")
       } else if (type === "planet") {
         planetInfo(name)
       }
@@ -387,8 +366,10 @@ function animateAroundMe(time) {
 }
 
 function openHTMLView(name) {
-  if (name.includes('assets/me'))
+  if (name.includes('assets/me')) {
+
     aboutMe = 1
+  }
   controls.enabled = false
   clicked = 0
   setTimeout(() => {
@@ -406,12 +387,14 @@ function openHTMLView(name) {
     } else if (name.includes('contact')) {
       document.getElementById("me").classList.remove("hidden")
     }
+    if (aboutMe) {
+      document.getElementById("aboutMe").classList.remove("hidden")
+    }
   }, 1000)
   controls.maxDistance = 3000
   gsap.to(camera.position, { duration: 3, y: 3000, x: 0, z: 0 })
 }
 
-const timer = ms => new Promise(res => setTimeout(res, ms))
 window.cinematic = async function () {
   cinematicOn = 1
   document.querySelector("body").requestFullscreen().then(function () { }).catch(function (error) { })

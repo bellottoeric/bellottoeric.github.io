@@ -5,6 +5,7 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         document.getElementById("parcours").classList.add("hidden")
         document.getElementById("projects").classList.add("hidden")
         document.getElementById("me").classList.add("hidden")
+        document.getElementById("aboutMe").classList.add("hidden")
         aboutMe = 0
         controls.enabled = false
         controls.maxDistance = 2500
@@ -81,20 +82,20 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         await (new Promise(res => setTimeout(res, 500)))
         ready = 1
     });
-    removeLoader()
+    //removeLoader();
 
-        (async () => {
-            for (let i = 250; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
-                if ((i > saveMaxWidth && i > saveMaxHeight) || loaded)
-                    continue
-                document.getElementById("inLoader").style.height = i + "px"
-                document.getElementById("loader").style.height = i + "px"
-                document.getElementById("inLoader").style.width = i + "px"
-                document.getElementById("loader").style.width = i + "px"
-                await (new Promise(res => setTimeout(res, 1)))
-            }
-            loaded = 1
-        })();
+    (async () => {
+        for (let i = 250; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
+            if ((i > saveMaxWidth && i > saveMaxHeight) || loaded)
+                continue
+            document.getElementById("inLoader").style.height = i + "px"
+            document.getElementById("loader").style.height = i + "px"
+            document.getElementById("inLoader").style.width = i + "px"
+            document.getElementById("loader").style.width = i + "px"
+            await (new Promise(res => setTimeout(res, 1)))
+        }
+        loaded = 1
+    })();
     let checkReadyloaded = setInterval(() => {
         if (ready && loaded) {
             console.log("Launch loader")
@@ -103,9 +104,32 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         }
     }, 100)
 
+    // PROJECTS
     document.getElementById("buttonProjects").addEventListener('click', function (event) {
         toggleProjects()
     }, false)
+
+    // ABOUT ME
+    const buttons = document.querySelectorAll(".card-buttons button");
+    const sections = document.querySelectorAll(".card-section");
+    const card = document.querySelector(".card");
+
+    const handleButtonClick = (e) => {
+        const targetSection = e.target.getAttribute("data-section");
+        const section = document.querySelector(targetSection);
+        targetSection !== "#about"
+            ? card.classList.add("is-active")
+            : card.classList.remove("is-active");
+        card.setAttribute("data-state", targetSection);
+        sections.forEach((s) => s.classList.remove("is-active"));
+        buttons.forEach((b) => b.classList.remove("is-active"));
+        e.target.classList.add("is-active");
+        section.classList.add("is-active");
+    };
+
+    buttons.forEach((btn) => {
+        btn.addEventListener("click", handleButtonClick);
+    });
 }
 
 window.toggleProjects = function () {

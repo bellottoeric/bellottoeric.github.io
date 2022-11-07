@@ -251,7 +251,7 @@ async function createPlanet(name, orderTime, size, font) {
     })
 
     let meshDescription
-    const shapes2 = font.generateShapes(descriptions[name], 18)
+    const shapes2 = font.generateShapes(descriptions[name], 17)
     const geometry2 = new THREE.ShapeGeometry(shapes2)
     geometry2.computeBoundingBox()
     const xMid2 = - 0.5 * (geometry2.boundingBox.max.x - geometry2.boundingBox.min.x)
@@ -449,21 +449,20 @@ async function createAsteroidsLine(scene) {
 
 async function createStars(scene) {
     let stars = []
-    for (let z = 0; z < 500; z++) {
+    for (let z = 0; z < 250; z++) {
         let geometry = new THREE.SphereGeometry(0.5, 32, 32)
         let material = new THREE.MeshBasicMaterial({ color: 0xffffff })
         let sphere = new THREE.Mesh(geometry, material)
-        sphere.position.x = getRandomArbitrary(-3000, 3000)
-        sphere.position.y = getRandomArbitrary(-3000, 3000)
-        sphere.position.z = getRandomArbitrary(-3000, 3000)
-        sphere.scale.x = sphere.scale.y = 10
+        sphere.position.x = getRandomArbitrary(-4000, 4000)
+        sphere.position.y = getRandomArbitrary(-4000, 4000)
+        sphere.position.z = getRandomArbitrary(-4000, 4000)
+        sphere.scale.x = sphere.scale.y = getRandomArbitrary(8, 16)
 
         let dx = sphere.position.x - 0
         let dy = sphere.position.y - 0
         let dz = sphere.position.z - 0
         if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 2500)
             continue
-        await timer(100)
         scene.add(sphere)
         stars.push(sphere)
     }
@@ -472,4 +471,3 @@ async function createStars(scene) {
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min
 }
-
