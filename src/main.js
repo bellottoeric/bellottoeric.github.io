@@ -28,8 +28,8 @@ async function start(e) {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = await init()
       utils(pointer, camera, renderer, scene, scene2, controls)
-      App(renderer, scene, camera)
-      //setupVideoPlayer()
+      if (document.location.href.includes('bellotto'))
+        setupVideoPlayer()
     } catch (e) {
       console.log('Error in function', e)
     }
@@ -77,10 +77,19 @@ function clickDetection() {
   if (!intersects.length) {
     clickOne = ""
     clickTwo = ""
+    if (cinematicOn)
+      document.getElementsByTagName("html")[0].style.cursor = "none"
+    else
+      document.getElementsByTagName("html")[0].style.cursor = "move"
+
   }
   for (let i = 0; i < intersects.length; i++) {
     let name = intersects[i].object.name
     let type = intersects[i].object.type
+
+    if (name.length && controls.enabled && !name.includes('sphere') && !name.includes('asteroid'))
+      document.getElementsByTagName("html")[0].style.cursor = "pointer"
+
     if (name.length && controls.enabled && clickOne) {
       clickOne = 1
     } else {
@@ -396,6 +405,7 @@ function openHTMLView(name) {
 }
 
 window.cinematic = async function () {
+  document.getElementsByTagName("html")[0].style.cursor = "none"
   cinematicOn = 1
   document.querySelector("body").requestFullscreen().then(function () { }).catch(function (error) { })
   controls.enabled = false

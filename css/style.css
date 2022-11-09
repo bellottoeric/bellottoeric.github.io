@@ -84,6 +84,9 @@ h3 {
 body {
   overflow: hidden;
 }
+html {
+  cursor: wait;
+}
 
 .biggerLoader {
   width: 300vw;
@@ -153,6 +156,7 @@ canvas {
   transform: translate(-50%, -50%);
   width: 75px;
   height: 75px;
+  cursor: pointer;
 }
 
 .hidden {

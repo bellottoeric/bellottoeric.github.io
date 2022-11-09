@@ -296,11 +296,7 @@
   transform: translateY(-10px);
   position: relative;
 }
-@media (min-width: 414px) {
-  .contact nav a {
-    /*padding: 18px 30px;*/
-  }
-}
+
 .contact nav a .arrow {
   position: absolute;
   right: 15px;

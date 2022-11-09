@@ -107,7 +107,7 @@ export async function init() {
                 //createMeshAroundMe("/planetTexture/moon.jpg", 36, [6.5, 64, 32], "sphere")
                 //createTextAroundMe(font, "pomatobot.com", 36)
 
-                createPlanet("sun", 0, [18, 18, 18], font)
+                createPlanet("sun", 0, [0.75, 64, 32], font)
                 createPlanet("mercury", 21, [12, 12, 12], font)
                 createPlanet("venus", 42, [22, 22, 22], font)
                 createPlanet("earth", 63, [30, 30, 30], font)
@@ -184,10 +184,37 @@ function createRing() {
 }
 
 async function createPlanet(name, orderTime, size, font) {
+
+    let uniforms = {
+        time: { type: "f", value: 1 },
+        scale: { type: "f", value: 1.5 }
+    }
+    let neonMaterial = new THREE.ShaderMaterial({
+        uniforms: uniforms,
+        vertexShader: document.getElementById('vertexShader').textContent,
+        fragmentShader: document.getElementById('fragmentShader').textContent
+    });
+    var oldTime = new Date().getTime();
+    setInterval(() => {
+        var time = new Date().getTime();
+        var delta = 0.001 * (time - oldTime);
+        oldTime = time;
+        uniforms.time.value += 0.275 * delta;
+    }, 1000 / 60)
+
     const meshTexture = new THREE.TextureLoader().load("/planetTexture/" + name + '.jpg')
     const s_Geometry = new THREE.SphereGeometry(size[0], size[1], size[2])
-    const s_materials = new THREE.MeshStandardMaterial({ color: 0xffffff, map: meshTexture })
-    const mesh = new THREE.Mesh(s_Geometry, s_materials)
+    let s_materials = new THREE.MeshStandardMaterial({ color: 0xffffff, map: meshTexture })
+
+    let mesh = new THREE.Mesh(s_Geometry, s_materials)
+    if (name === "sun") {
+
+        mesh = new THREE.Mesh(s_Geometry, neonMaterial)
+        mesh.scale.multiplyScalar(20)
+    }
+
+    if (name === "sun") {
+    }
 
     mesh.orderTime = orderTime
     mesh.name = name
@@ -386,7 +413,7 @@ function getNeonMaterial(name, cc) {
         vec3 glow = glowColor * intensity;
         gl_FragColor = vec4( glow, 1.2 );
     }`
-    var neonMaterial = new THREE.ShaderMaterial({
+    let neonMaterial = new THREE.ShaderMaterial({
         uniforms: {
             "c": { type: "f", value: 1.2 },
             "p": { type: "f", value: 1.2 },

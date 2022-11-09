@@ -1,9 +1,6 @@
-.aboutMe {
-  top: 0;
-}
 .card {
-  max-width: 340px;
-  margin: auto;
+  max-width: 750px;
+  height: 70%;
   overflow-y: auto;
   position: relative;
   z-index: 1;
@@ -15,17 +12,19 @@
   border-radius: 10px;
   box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.2);
 }
-.card[data-state="#about"] {
-  height: 450px;
+.card[data-state="#about"] * .card-jobtitle {
+  /*height: 450px;*/
+  display: none;
 }
+.card[data-state="#about"] * .card-fullname {
+  /*height: 450px;*/
+  display: none;
+}
+
 .card[data-state="#about"] .card-main {
   padding-top: 0;
 }
-.card[data-state="#contact"] {
-  height: 430px;
-}
 .card[data-state="#experience"] {
-  height: 550px;
 }
 .card.is-active .card-header {
   height: 80px;
@@ -58,7 +57,7 @@
 .card-header {
   position: relative;
   display: flex;
-  height: 200px;
+  height: 45%;
   flex-shrink: 0;
   width: 100%;
   transition: 0.3s;
@@ -67,6 +66,7 @@
   transition: 0.3s;
 }
 .card-cover {
+  background: linear-gradient(45deg, #d5135a, #f05924);
   width: 100%;
   height: 100%;
   position: absolute;
@@ -81,8 +81,8 @@
   transition: 0.5s;
 }
 .card-avatar {
-  width: 100px;
-  height: 100px;
+  width: 250px;
+  height: 250px;
   box-shadow: 0 8px 8px rgba(0, 0, 0, 0.2);
   border-radius: 50%;
   object-position: center;
@@ -90,7 +90,7 @@
   position: absolute;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%) translateY(-64px);
+  transform: translateX(-50%) translateY(-40px);
 }
 .card-fullname {
   position: absolute;
@@ -114,6 +114,7 @@
   margin: 0;
   left: 50%;
   transform: translateX(-50%) translateY(-7px);
+  top: 5%;
 }
 .card-main {
   position: relative;
@@ -200,6 +201,11 @@
     rgba(207, 204, 255, 0.2) 44%,
     rgba(211, 226, 255, 0.4) 100%
   );
+  background: linear-gradient(
+    45deg,
+    rgb(213, 19, 90, 0.5),
+    rgb(240, 89, 36, 1)
+  );
 }
 .card-section {
   display: none;
@@ -234,6 +240,11 @@
   height: 100%;
   position: absolute;
   content: "";
+  background: linear-gradient(
+    45deg,
+    rgb(213, 19, 90, 0.5),
+    rgb(240, 89, 36, 1)
+  );
 }
 .card-item {
   position: relative;
@@ -312,4 +323,25 @@
   font-size: 14px;
   font-weight: 500;
   transition: 0.3s;
+}
+
+.aboutMe {
+  top: 0%;
+  transform: translate(-50%, -12%) !important;
+}
+@media (max-width: 640px) {
+  .aboutMe {
+    width: 80%;
+  }
+  .card-avatar {
+    width: 120px;
+    height: 120px;
+    transform: translateX(-50%) translateY(0px);
+  }
+  .card-header {
+    height: 25%;
+  }
+  .card-content {
+    padding: 8px;
+  }
 }

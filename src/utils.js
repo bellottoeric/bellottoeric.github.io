@@ -82,7 +82,6 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         await (new Promise(res => setTimeout(res, 500)))
         ready = 1
     });
-    //removeLoader();
 
     (async () => {
         for (let i = 250; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
@@ -92,13 +91,13 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             document.getElementById("loader").style.height = i + "px"
             document.getElementById("inLoader").style.width = i + "px"
             document.getElementById("loader").style.width = i + "px"
-            await (new Promise(res => setTimeout(res, 1)))
+            await (new Promise(res => setTimeout(res, 10)))
         }
+        document.getElementsByTagName("html")[0].style.cursor = "default"
         loaded = 1
     })();
     let checkReadyloaded = setInterval(() => {
         if (ready && loaded) {
-            console.log("Launch loader")
             removeLoader()
             clearInterval(checkReadyloaded)
         }
