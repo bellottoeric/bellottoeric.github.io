@@ -71,11 +71,10 @@ export async function init() {
             createMeshAroundMe("contact.fbx", max / nbrObjects * index)
             index = 1
 
-            setTimeout(() => {
-                createAboutMe("gym.fbx", 0.08, [-25, 50])
-                createAboutMe("chess.fbx", 0.08, [0, 50])
-                createAboutMe("eth.fbx", 0.08, [25, 50])
-            }, 10000)
+            createAboutMe("gym.fbx", 0.08, [-25, 50])
+            createAboutMe("chess.fbx", 0.08, [0, 50])
+            createAboutMe("eth.fbx", 0.08, [25, 50])
+
             setTimeout(() => {
                 createStars(scene)
                 createAsteroidsLine(scene)
@@ -349,7 +348,7 @@ async function createMeshAroundMe(name, orderTime, size, type) {
         mesh.material.side = THREE.DoubleSide;
         mesh.dicons = 1
     } else {
-        mesh = await fbxLoader.loadAsync("https://5ab10550.portfolio-3rw.pages.dev/" + name)
+        mesh = await fbxLoader.loadAsync("https://assets-495.pages.dev/" + name)
         mesh.scale.multiplyScalar(0.085)
         mesh.dicons = 1
         name = name.replace('.fbx', "")
@@ -435,10 +434,10 @@ function getNeonMaterial(name, cc) {
 
 async function createAsteroidsLine(scene) {
     const [texture, object1, texture2, object2] = await Promise.all([
-        textureLoader.loadAsync('asteroids/1.jpg'),
-        objLoader.loadAsync('asteroids/1.obj'),
-        textureLoader.loadAsync('asteroids/2.jpg'),
-        objLoader.loadAsync('asteroids/2.obj'),
+        textureLoader.loadAsync('https://assets-495.pages.dev/1.jpg'),
+        objLoader.loadAsync('https://assets-495.pages.dev/1.obj'),
+        textureLoader.loadAsync('https://assets-495.pages.dev/2.jpg'),
+        objLoader.loadAsync('https://assets-495.pages.dev/2.obj'),
     ])
     object1.traverse(function (child) {
         if (child.isMesh) {
