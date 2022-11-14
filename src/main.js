@@ -27,8 +27,7 @@ async function start(e) {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = await init()
       utils(pointer, camera, renderer, scene, scene2, controls)
-      if (document.location.href.includes('bellotto'))
-        setupVideoPlayer()
+      setupVideoPlayer()
     } catch (e) {
       console.log('Error in function', e)
     }
@@ -395,6 +394,14 @@ function openHTMLView(name) {
 }
 
 window.cinematic = async function () {
+  if (document.location.href.includes('/en')) {
+    document.getElementById('audioSource').src = "/assets/introen.mp3"
+  } else {
+    document.getElementById('audioSource').src = "/assets/introfr.mp3"
+  }
+  document.getElementById("intro").load()
+  document.getElementById("intro").play()
+
   document.getElementsByTagName("html")[0].style.cursor = "none"
   cinematicOn = 1
   document.querySelector("body").requestFullscreen().then(function () { }).catch(function (error) { })
@@ -465,10 +472,10 @@ window.cinematic = async function () {
       }
     }
   }
-  await timeline.to(camera.position, { duration: 3, y: 500, z: 1200, x: 500 })
-  await timeline.to(camera.position, { duration: 3, y: 0, z: -1600, x: 0 })
-  await timeline.to(camera.position, { duration: 3, y: -500, z: 1200, x: -500 })
-  await timeline.to(camera.position, { duration: 3, y: 0, z: 150, x: 0 })
+  await timeline.to(camera.position, { duration: 3, y: 500, z: 1200, x: 500, ease: "none" })
+  await timeline.to(camera.position, { duration: 3, y: 0, z: -1600, x: 0, ease: "none" })
+  await timeline.to(camera.position, { duration: 3, y: -500, z: 1200, x: -500, ease: "none" })
+  await timeline.to(camera.position, { duration: 3, y: 0, z: 150, x: 0, ease: "none" })
   controls.enabled = true
   document.exitFullscreen().then(function () { }).catch(function (error) { })
   cinematicOn = 0

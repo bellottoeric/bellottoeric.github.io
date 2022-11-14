@@ -48,11 +48,38 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
-            createAboutMe("gym.fbx", 0.08, [-25, 50])
-            createAboutMe("chess.fbx", 0.08, [0, 50])
-            createAboutMe("eth.fbx", 0.08, [25, 50])
-            createStars(scene)
-            createAsteroidsLine(scene)
+            let index = 1
+            let nbrObjects = 7
+            let max = 42
+            createMeshAroundMe("play.fbx", max / nbrObjects * index)
+            index++
+            createMeshAroundMe("music.fbx", max / nbrObjects * index)
+            index++
+            if (document.location.href.includes('/en')) {
+                createMeshAroundMe("pallete.fbx", max / nbrObjects * index)
+            } else {
+                createMeshAroundMe("tea.fbx", max / nbrObjects * index)
+            }
+            index++
+            createMeshAroundMe("/assets/me2.png", max / nbrObjects * index, [5, 32], "circle")
+            createMeshAroundMe("/assets/me.png", max / nbrObjects * index, [5, 32], "circle")
+            index++
+            createMeshAroundMe("parcours.fbx", max / nbrObjects * index)
+            index++
+            createMeshAroundMe("projects.fbx", max / nbrObjects * index)
+            index++
+            createMeshAroundMe("contact.fbx", max / nbrObjects * index)
+            index = 1
+
+            setTimeout(() => {
+                createAboutMe("gym.fbx", 0.08, [-25, 50])
+                createAboutMe("chess.fbx", 0.08, [0, 50])
+                createAboutMe("eth.fbx", 0.08, [25, 50])
+            }, 10000)
+            setTimeout(() => {
+                createStars(scene)
+                createAsteroidsLine(scene)
+            }, 2000)
 
             let ring = createRing()
             scene.add(ring)
@@ -67,40 +94,22 @@ export async function init() {
                     i.add(moon)
 
             fontLoader.load('/fonts/nazalisation.json', function (font) {
-                let nbrObjects = 7
-                let max = 42
-                let index = 1
-                createMeshAroundMe("play.fbx", max / nbrObjects * index)
                 createTextAroundMe(font, "Cinematic", max / nbrObjects * index)
                 index++
-                createMeshAroundMe("music.fbx", max / nbrObjects * index)
                 createTextAroundMe(font, "Sound on/off", max / nbrObjects * index)
                 index++
-
                 if (document.location.href.includes('/en')) {
-                    createMeshAroundMe("pallete.fbx", max / nbrObjects * index)
                     createTextAroundMe(font, "French Version", max / nbrObjects * index)
                 } else {
-                    createMeshAroundMe("tea.fbx", max / nbrObjects * index)
                     createTextAroundMe(font, "English Version", max / nbrObjects * index)
                 }
                 index++
-
-                createMeshAroundMe("/assets/me2.png", max / nbrObjects * index, [5, 32], "circle")
-                createMeshAroundMe("/assets/me.png", max / nbrObjects * index, [5, 32], "circle")
                 createTextAroundMe(font, "About me", max / nbrObjects * index)
                 index++
-
-
-                createMeshAroundMe("parcours.fbx", max / nbrObjects * index)
                 createTextAroundMe(font, "parcours", max / nbrObjects * index)
                 index++
-
-                createMeshAroundMe("projects.fbx", max / nbrObjects * index)
                 createTextAroundMe(font, "Projects", max / nbrObjects * index)
                 index++
-
-                createMeshAroundMe("contact.fbx", max / nbrObjects * index)
                 createTextAroundMe(font, "Contact", max / nbrObjects * index)
 
 
@@ -340,7 +349,7 @@ async function createMeshAroundMe(name, orderTime, size, type) {
         mesh.material.side = THREE.DoubleSide;
         mesh.dicons = 1
     } else {
-        mesh = await fbxLoader.loadAsync("/" + name)
+        mesh = await fbxLoader.loadAsync("https://5ab10550.portfolio-3rw.pages.dev/" + name)
         mesh.scale.multiplyScalar(0.085)
         mesh.dicons = 1
         name = name.replace('.fbx', "")

@@ -1,16 +1,11 @@
-const x = document.getElementById("myAudio")
+const music = document.getElementById("music")
 
 export function setupVideoPlayer() {
-    function ttt() {
-        console.log("click")
-    }
     let soundOn = setInterval(() => {
-        x.play().then(() => {
+        music.volume = 0.1
+        music.play().then(() => {
             clearInterval(soundOn)
-            console.log("OK")
-            x.volume = 0.2;
         }).catch((e) => {
-            //console.log("--->", e)
         })
     }, 1000)
 }
