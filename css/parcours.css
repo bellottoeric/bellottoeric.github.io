@@ -241,6 +241,9 @@ body {
 }
 
 @media screen and (max-width: 660px) {
+  .profile-badge__content-profile-name {
+    display: none !important;
+  }
   .timeline {
     display: none;
     width: 100%;

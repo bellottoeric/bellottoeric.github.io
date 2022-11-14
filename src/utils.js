@@ -80,7 +80,11 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     window.addEventListener("load", async function (event) {
         document.getElementsByTagName("h2")[0].style.opacity = '0';
         document.getElementsByTagName("h3")[0].style.opacity = '0';
-        for (let i = 0; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
+        let stop = saveMaxHeight + saveMaxWidth
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+            stop = stop / 3
+        animate()
+        for (let i = 0; i < stop; i = i + 10) {
             if ((i > saveMaxWidth && i > saveMaxHeight) || loaded)
                 continue
             document.getElementById("inLoader").style.height = i + "px"
@@ -89,7 +93,6 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             document.getElementById("loader").style.width = i + "px"
             await (new Promise(res => setTimeout(res, 10)))
         }
-        animate()
         await (new Promise(res => setTimeout(res, 500)))
         removeLoader()
     });

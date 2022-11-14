@@ -215,7 +215,11 @@ async function createPlanet(name, orderTime, size, font) {
             fragmentShader: sunFragment()
         });
         mesh = new THREE.Mesh(s_Geometry, neonMaterial)
-        mesh.scale.multiplyScalar(20)
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+            mesh.scale.multiplyScalar(10)
+        else
+            mesh.scale.multiplyScalar(20)
+
     }
 
 
