@@ -10,16 +10,25 @@
   margin: 10px;
 }
 #navProjects {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
+  display: block;
+  overflow-y: scroll;
   margin-top: 10px;
+}
+#navProjects * img {
+  width: 100%;
 }
 @media (min-width: 1024px) {
   #navProjects {
+    overflow-y: auto !important;
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: center;
     flex-direction: row;
+    overflow-y: scroll;
+  }
+  #navProjects * img {
+    width: 360px !important;
   }
 }
 
@@ -34,7 +43,8 @@
   position: relative;
 }
 .contact {
-  height: 100vh;
+  margin: 5vh 0 5vh 0;
+  height: 90vh;
   position: relative;
   /* display: flex; */
   display: flex;
@@ -113,7 +123,6 @@
 }
 .contact main .title {
   float: left;
-  width: 100%;
   background: linear-gradient(45deg, #d5135a, #f05924);
   box-shadow: 0px 4px 30px rgb(223 45 70 / 60%);
   border-bottom-left-radius: 5px;
@@ -123,6 +132,8 @@
   -moz-transition: all 0.55s;
   -o-transition: all 0.55s;
   transition: all 0.55s;
+  padding: 10px;
+  border-radius: 10px;
 }
 .contact main .title.active {
   max-height: 100px;
@@ -158,6 +169,7 @@
   transform: scale(0);
 }
 .contact main button {
+  cursor: pointer;
   display: flex;
   align-content: center;
   justify-content: center;
@@ -185,7 +197,7 @@
   overflow: hidden;
   z-index: 10;
   font-family: inherit;
-  margin: 10px;
+  margin: 85px 0 0 0;
 }
 .contact main button span {
   opacity: 1;
@@ -198,9 +210,10 @@
   width: 200px;
   float: left;
   padding: 15px 0px;
+  color: white;
 }
 .middleButton {
-  color: black;
+  color: white;
 }
 .contact main button svg {
   position: absolute;
@@ -214,13 +227,13 @@
   transition: all 0.4s;
 }
 .contact main button svg path {
-  fill: black;
+  fill: white;
 }
 .contact main button.active {
   margin-right: 0;
   right: 20px;
-  width: 65px;
-  height: 65px;
+  width: 45px;
+  height: 45px;
   margin-bottom: -32.5px;
   text-indent: 100%;
   white-space: nowrap;
@@ -228,6 +241,13 @@
   border-radius: 65px;
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
   margin: 10px;
+}
+
+@media (min-width: 1024px) {
+  .contact main button.active {
+    width: 65px;
+    height: 65px;
+  }
 }
 .contact main button.active span {
   opacity: 0;

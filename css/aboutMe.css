@@ -127,6 +127,7 @@
   font-weight: 700;
   font-size: 13px;
   margin-bottom: 8px;
+  color: white;
 }
 .card-content {
   padding: 20px;
@@ -193,8 +194,7 @@
 }
 .card-buttons button.is-active,
 .card-buttons button:hover {
-  color: #2b2c48;
-  border-bottom: 3px solid #8a84ff;
+  color: white;
   background: linear-gradient(
     to bottom,
     rgba(127, 199, 231, 0) 0%,

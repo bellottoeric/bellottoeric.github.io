@@ -14,7 +14,6 @@ window.aboutMe = 0
 
 let point = 0.075
 let sign = 1
-let soundClicked = 0
 let blockPlanetMovement = 0
 let movingCamera = 0
 
@@ -38,13 +37,8 @@ async function start(e) {
 
 window.addEventListener("load", function (event) {
   if (camera?.position)
-    gsap.to(camera.position, { duration: 1.5, z: 125, y: 0 })
+    gsap.to(camera.position, { duration: 1.5, z: 150, y: 0 })
 })
-
-setInterval(() => {
-  if (soundClicked)
-    soundClicked = 0
-}, 200)
 
 setInterval(() => {
   point = point + (0.00001 * sign)
@@ -98,7 +92,6 @@ function clickDetection() {
 
     if (name.length && controls.enabled && clickOne)
       clickTwo = name
-
     if (name.length && clicked && controls.enabled) {
       window.clicked = 0
       selectedPlanet = ""
@@ -108,12 +101,11 @@ function clickDetection() {
         window.open("https://xpert-agro.fr")
       } else if (name === "play") {
         cinematic()
-      } else if (name.includes("on/off") && !soundClicked) {
-        soundClicked = 1
-        if (window.player.isMuted())
-          window.player.unMute()
-        else
-          window.player.mute()
+      } else if (name.includes("music")) {
+        document.getElementsByTagName("audio")[0].style.opacity = '1';
+        setTimeout(() => {
+          document.getElementsByTagName("audio")[0].style.opacity = '0';
+        }, 5000)
       } else if (name.includes('parcours') || name.includes('projects') || name.includes('contact') || name.includes('assets/me')) {
         openHTMLView(name)
       } else if (name.includes('tea')) {
@@ -170,7 +162,7 @@ async function planetInfo(name) {
       else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 1351)
         vectorMutiplier = 0.8
       if (vec[0] === 0) // sun
-        vec = [400, 400]
+        vec = [425, 425]
       gsap.to(camera.position, { duration: 2, x: vec[0] * vectorMutiplier, y: -400, z: vec[1] * vectorMutiplier })
       setTimeout(() => {
         movingCamera = 0
@@ -341,9 +333,8 @@ function animatePlanet(time) {
     }
   }
 
-
   // goHomeButton
-  if (camera.position.distanceTo({ x: 0, y: 0, z: 0 }) > 150 && document.getElementById("goHome") && !cinematicOn)
+  if (camera.position.distanceTo({ x: 0, y: 0, z: 0 }) > 170 && document.getElementById("goHome") && !cinematicOn)
     document.getElementById("goHome").classList.remove("hidden")
   else if (document.getElementById("goHome") && !document.getElementById("goHome").classList.toString().includes('hidden'))
     document.getElementById("goHome").classList.add("hidden")
@@ -368,7 +359,7 @@ function animateAroundMe(time) {
       if (i.dicons)
         i.rotation.x = 0
       i.position.y = (Math.cos(newTime * 0.15) * 50)
-      if (i.name === "/assets/me2.jpg")
+      if (i.name === "/assets/me2.png")
         i.position.x = i.position.x + 0.1
     }
   }
@@ -376,7 +367,6 @@ function animateAroundMe(time) {
 
 function openHTMLView(name) {
   if (name.includes('assets/me')) {
-
     aboutMe = 1
   }
   controls.enabled = false
@@ -475,8 +465,10 @@ window.cinematic = async function () {
       }
     }
   }
-
-  await timeline.to(camera.position, { duration: 3, y: 0, z: 125, x: 0 })
+  await timeline.to(camera.position, { duration: 3, y: 500, z: 1200, x: 500 })
+  await timeline.to(camera.position, { duration: 3, y: 0, z: -1600, x: 0 })
+  await timeline.to(camera.position, { duration: 3, y: -500, z: 1200, x: -500 })
+  await timeline.to(camera.position, { duration: 3, y: 0, z: 150, x: 0 })
   controls.enabled = true
   document.exitFullscreen().then(function () { }).catch(function (error) { })
   cinematicOn = 0

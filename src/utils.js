@@ -8,8 +8,8 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
         document.getElementById("aboutMe").classList.add("hidden")
         aboutMe = 0
         controls.enabled = false
-        controls.maxDistance = 2500
-        await gsap.to(camera.position, { duration: 3, y: 0, z: 125, x: 0 })
+        controls.maxDistance = 2600
+        await gsap.to(camera.position, { duration: 3, y: 0, z: 150, x: 0 })
         controls.enabled = true
     }, false)
 
@@ -78,13 +78,9 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     let ready = 0
     let loaded = 0
     window.addEventListener("load", async function (event) {
-        animate()
-        await (new Promise(res => setTimeout(res, 500)))
-        ready = 1
-    });
-
-    (async () => {
-        for (let i = 250; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
+        document.getElementsByTagName("h2")[0].style.opacity = '0';
+        document.getElementsByTagName("h3")[0].style.opacity = '0';
+        for (let i = 0; i < (saveMaxHeight + saveMaxWidth); i = i + 10) {
             if ((i > saveMaxWidth && i > saveMaxHeight) || loaded)
                 continue
             document.getElementById("inLoader").style.height = i + "px"
@@ -93,15 +89,10 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             document.getElementById("loader").style.width = i + "px"
             await (new Promise(res => setTimeout(res, 10)))
         }
-        document.getElementsByTagName("html")[0].style.cursor = "default"
-        loaded = 1
-    })();
-    let checkReadyloaded = setInterval(() => {
-        if (ready && loaded) {
-            removeLoader()
-            clearInterval(checkReadyloaded)
-        }
-    }, 100)
+        animate()
+        await (new Promise(res => setTimeout(res, 500)))
+        removeLoader()
+    });
 
     // PROJECTS
     document.getElementById("buttonProjects").addEventListener('click', function (event) {

@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { descriptions } from '../lang/planet'
+import { sunVertex, sunFragment } from './sunShaders'
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
@@ -27,7 +28,7 @@ const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
 
 controls.minDistance = 50
-controls.maxDistance = 2500
+controls.maxDistance = 2600
 controls.enableDamping = true
 controls.dampingFactor = 0.25
 controls.touches = {
@@ -85,7 +86,7 @@ export async function init() {
                 }
                 index++
 
-                createMeshAroundMe("/assets/me2.jpg", max / nbrObjects * index, [5, 32], "circle")
+                createMeshAroundMe("/assets/me2.png", max / nbrObjects * index, [5, 32], "circle")
                 createMeshAroundMe("/assets/me.png", max / nbrObjects * index, [5, 32], "circle")
                 createTextAroundMe(font, "About me", max / nbrObjects * index)
                 index++
@@ -102,10 +103,6 @@ export async function init() {
                 createMeshAroundMe("contact.fbx", max / nbrObjects * index)
                 createTextAroundMe(font, "Contact", max / nbrObjects * index)
 
-                //createMeshAroundMe("/planetTexture/earth.jpg", 32, [6.5, 64, 32], "sphere")
-                //createTextAroundMe(font, "xpert-agro.fr", 32)
-                //createMeshAroundMe("/planetTexture/moon.jpg", 36, [6.5, 64, 32], "sphere")
-                //createTextAroundMe(font, "pomatobot.com", 36)
 
                 createPlanet("sun", 0, [0.75, 64, 32], font)
                 createPlanet("mercury", 21, [12, 12, 12], font)
@@ -185,22 +182,6 @@ function createRing() {
 
 async function createPlanet(name, orderTime, size, font) {
 
-    let uniforms = {
-        time: { type: "f", value: 1 },
-        scale: { type: "f", value: 1.5 }
-    }
-    let neonMaterial = new THREE.ShaderMaterial({
-        uniforms: uniforms,
-        vertexShader: document.getElementById('vertexShader').textContent,
-        fragmentShader: document.getElementById('fragmentShader').textContent
-    });
-    var oldTime = new Date().getTime();
-    setInterval(() => {
-        var time = new Date().getTime();
-        var delta = 0.001 * (time - oldTime);
-        oldTime = time;
-        uniforms.time.value += 0.275 * delta;
-    }, 1000 / 60)
 
     const meshTexture = new THREE.TextureLoader().load("/planetTexture/" + name + '.jpg')
     const s_Geometry = new THREE.SphereGeometry(size[0], size[1], size[2])
@@ -208,13 +189,27 @@ async function createPlanet(name, orderTime, size, font) {
 
     let mesh = new THREE.Mesh(s_Geometry, s_materials)
     if (name === "sun") {
+        let uniforms = {
+            time: { type: "f", value: 1 },
+            scale: { type: "f", value: 1.5 }
+        }
+        let oldTime = new Date().getTime();
+        setInterval(() => {
+            const time = new Date().getTime();
+            const delta = 0.001 * (time - oldTime);
+            oldTime = time;
+            uniforms.time.value += 0.175 * delta;
+        }, 1000 / 60)
 
+        const neonMaterial = new THREE.ShaderMaterial({
+            uniforms: uniforms,
+            vertexShader: sunVertex(),
+            fragmentShader: sunFragment()
+        });
         mesh = new THREE.Mesh(s_Geometry, neonMaterial)
         mesh.scale.multiplyScalar(20)
     }
 
-    if (name === "sun") {
-    }
 
     mesh.orderTime = orderTime
     mesh.name = name
@@ -363,11 +358,11 @@ async function createMeshAroundMe(name, orderTime, size, type) {
         })
     }
 
-    if (name === "/assets/me2.jpg")
+    if (name === "/assets/me2.png")
         mesh.translateX(50)
     mesh.name = name
     mesh.orderTime = orderTime
-    if (name === "/assets/me.png" || name === "/assets/me2.jpg")
+    if (name === "/assets/me.png" || name === "/assets/me2.png")
         scene2.add(mesh)
     else
         scene.add(mesh)
