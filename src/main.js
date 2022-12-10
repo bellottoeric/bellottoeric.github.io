@@ -26,7 +26,7 @@ async function start(e) {
   return (new Promise(async (resolve, reject) => {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = await init()
-      utils(pointer, camera, renderer, scene, scene2, controls)
+      utils(pointer, camera, renderer, controls)
       setupVideoPlayer()
     } catch (e) {
       console.log('Error in function', e)
@@ -118,6 +118,14 @@ function clickDetection() {
   }
 }
 
+let direction = 1
+let ccDirection = 0
+let maxTime = 350
+let speed = 0.01
+if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  speed = 0.05
+  maxTime = 250
+}
 function animateAboutMe(time) {
   for (let i of aboutMeMesh) {
     if (aboutMe)
@@ -126,6 +134,13 @@ function animateAboutMe(time) {
       i.visible = false
     i.rotation.y += 0.01
   }
+  ccDirection++
+  if (ccDirection > maxTime) {
+    ccDirection = 0
+    direction *= -1
+  }
+  aboutMeMesh[1].position.x += (speed * direction)
+  aboutMeMesh[2].position.x += (speed * direction * -1)
 }
 
 async function planetInfo(name) {
@@ -215,6 +230,7 @@ function animatePlanet(time) {
 
       i.position.z = Math.cos(newTime * speedPlanet[i.name]) * distancePlanet[i.name]
       i.position.x = Math.sin(newTime * speedPlanet[i.name]) * distancePlanet[i.name]
+      i.position.y = Math.cos(newTime * speedPlanet[i.name]) * distancePlanet[i.name] / 1.5
     }
 
     let rotateSpeedPlanet = []
@@ -394,6 +410,7 @@ function openHTMLView(name) {
 }
 
 window.cinematic = async function () {
+  document.getElementById("lineLoader").style.display = "block"
   if (document.location.href.includes('/en')) {
     document.getElementById('audioSource').src = "/assets/introen.mp3"
   } else {
@@ -412,14 +429,10 @@ window.cinematic = async function () {
   scene3.add((new THREE.AmbientLight(0xffffff, 1)))
   renderer.render(scene3, camera)
 
-  let sunPos
   let copy = listPlanetMesh.constructor()
   let index = 0
   for (let attr in listPlanetMesh) {
     if (listPlanetMesh.hasOwnProperty(attr)) {
-      if (listPlanetMesh[attr].name === "sun") {
-        sunPos = listPlanetMesh[attr].position
-      }
       if (listPlanetMesh[attr].name === "ring" || listPlanetMesh[attr].name === "moon" || listPlanetMesh[attr].isText || listPlanetMesh[attr].name === "sun")
         continue
       copy[index] = listPlanetMesh[attr]
@@ -428,9 +441,8 @@ window.cinematic = async function () {
   }
 
   const timeline = gsap.timeline()
-  //await timeline.to(camera.position, { duration: 0.5, x: (sunPos.x * -1) / 2, y: sunPos.y * -1, z: (sunPos.z * -1) / 2, ease: "none" })
   for (let i of copy) {
-    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 10, y: i.position.y * -1, z: (i.position.z * -1) / 10 })
+    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 10, y: (i.position.y * -1) / 10, z: (i.position.z * -1) / 10 })
     for (let j of listPlanetMesh) {
       if (j.isText && j.name === i.name && !j.isDescription) {
         scene3.add(j)
@@ -448,7 +460,7 @@ window.cinematic = async function () {
       i.children[0].visible = true
       TweenMax.to(i.children[0].material, 2, { opacity: 1 })
     }
-    await timeline.to(camera.position, { duration: 1, x: (i.position.x * -1) / 10, y: i.position.y * -1, z: (i.position.z * -1) / 10, ease: "none" })
+    await timeline.to(camera.position, { duration: 1, x: (i.position.x * -1) / 10, y: (i.position.y * -1) / 10, z: (i.position.z * -1) / 10, ease: "none" })
   }
   scene3 = null
   scene.visible = true
@@ -479,5 +491,6 @@ window.cinematic = async function () {
   controls.enabled = true
   document.exitFullscreen().then(function () { }).catch(function (error) { })
   cinematicOn = 0
+  document.getElementById("lineLoader").style.display = "none"
 }
 

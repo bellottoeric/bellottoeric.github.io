@@ -1,4 +1,4 @@
-export function utils(pointer, camera, renderer, scene, scene2, controls) {
+export function utils(pointer, camera, renderer, controls) {
     document.getElementById("goHome").addEventListener('click', async function (event) {
         window.selectedPlanet = ""
         document.getElementById("presentation").classList.add("hidden")
@@ -75,8 +75,9 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
     let saveMaxWidth = window.innerWidth
     let saveMaxHeight = window.innerHeight
 
-    let ready = 0
     let loaded = 0
+    removeLoader()
+
     window.addEventListener("load", async function (event) {
         document.getElementsByTagName("h2")[0].style.opacity = '0';
         document.getElementsByTagName("h3")[0].style.opacity = '0';
@@ -94,7 +95,6 @@ export function utils(pointer, camera, renderer, scene, scene2, controls) {
             await (new Promise(res => setTimeout(res, 10)))
         }
         await (new Promise(res => setTimeout(res, 500)))
-        removeLoader()
     });
 
     // PROJECTS
@@ -143,6 +143,11 @@ window.toggleProjects = function () {
 }
 
 function removeLoader() {
+    document.getElementById("lineLoader").style.display = "none"
+    document.getElementById("lineLoader").classList.add("cinematicLineLoader")
+    document.getElementById("lineLoader").classList.remove("lineLoader")
+    document.getElementById("lineLoader").style.backgroundColor = "black";
+
     if (!cinematicOn)
         document.getElementById("goHome").classList.remove("hidden")
     document.getElementById("parentLoader").classList.add("hidden")

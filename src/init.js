@@ -392,7 +392,7 @@ function getNeonMaterial(name, cc) {
     listColors['gym'] = [0x222831, 0xf05924, 0xf05924, 0xf05924, 0x393E46]
     listColors['chess'] = [0x222831, 0xf05924, 0xf05924, 0xf05924, 0x393E46]
     listColors['mobile'] = [0x222831, 0xf05924, 0xf05924, 0xf05924, 0x393E46]
-    listColors['eth'] = [0x393E46, 0xf05924, 0xf05924, 0xf05924, 0x393E46]
+    listColors['eth'] = [0x393E46, 0xf05924, 0xf05924, 0xf05924, 0xf05924]
 
     listColors['pallete'] = [0x393E46, 0xf05924, 0xf05924, 0xf05924, 0x393E46]
     listColors['tea'] = [0x393E46, 0xf05924, 0x393E46, 0x222831, 0x393E46]
@@ -407,7 +407,7 @@ function getNeonMaterial(name, cc) {
     {
         vec3 vNormal = normalize( normalMatrix * normal );
         vec3 vNormel = normalize( normalMatrix * viewVector );
-        intensity = pow( c - dot(vNormal, vNormel), p );
+        intensity = pow( c - dot(vNormal, vNormel), p ) + 0.5;
 
         gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
     }`

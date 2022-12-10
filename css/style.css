@@ -210,3 +210,41 @@ audio {
   opacity: 0;
   transition: 2.5s opacity;
 }
+
+/*//////////////////////////////////////////////////////////////////////////////*/
+/* Line loader */
+#lineLoader {
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  height: 20px;
+  width: 100%;
+  background: #232b2b;
+}
+
+#lineLoader:before {
+  content: "";
+  display: block;
+  background-image: linear-gradient(45deg, #d5135a, #f05924);
+  height: 30px;
+  width: 0;
+}
+
+.lineLoader:before {
+  animation: getWidth 20s ease-in infinite;
+}
+
+.cinematicLineLoader:before {
+  animation: getWidth 62s ease-in infinite;
+  background-color: black !important;
+  background-image: linear-gradient(45deg, #d5135a, #f05924) !important;
+}
+
+@keyframes getWidth {
+  50% {
+    width: 100%;
+  }
+  100% {
+    width: 100%;
+  }
+}
