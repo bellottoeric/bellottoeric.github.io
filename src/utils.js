@@ -122,7 +122,7 @@ export function utils(pointer, camera, renderer, controls) {
 
     buttons.forEach((btn) => {
         btn.addEventListener("click", handleButtonClick);
-    });
+    })
 }
 
 window.toggleProjects = function () {
@@ -156,4 +156,22 @@ function removeLoader() {
         localStorage.setItem('cinematicated', 1)
         cinematic()
     }
+
+    // INACTIVITY
+    document.addEventListener('mousedown', viewEvent)
+    document.addEventListener('mousemove', viewEvent)
+    document.addEventListener('touchstart', viewEvent)
+    document.addEventListener('scroll', viewEvent)
+    document.addEventListener('DOMMouseScroll', viewEvent)
+    document.addEventListener('mousewheel', viewEvent)
+    document.addEventListener('keydown', viewEvent)
+
+
+    function viewEvent(evt) {
+        inactivity = Math.floor((new Date()).getTime() / 1000)
+    }
+    setInterval(() => {
+        if (Math.floor((new Date()).getTime() / 1000) - inactivity > 5)
+            inactivity = Math.floor((new Date()).getTime() / 1000) - inactivity > 5
+    }, 1000)
 }

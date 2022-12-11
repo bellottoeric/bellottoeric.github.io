@@ -163,6 +163,18 @@ canvas {
   height: 75px;
   cursor: pointer;
 }
+@media screen and (max-width: 660px) {
+  #goHome {
+    width: 60px;
+    height: 60px;
+  }
+}
+@media (max-width: 321px) {
+  #goHome {
+    width: 40px;
+    height: 40px;
+  }
+}
 
 .hidden {
   display: none !important;

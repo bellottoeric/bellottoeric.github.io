@@ -11,6 +11,7 @@ window.selectedPlanet = ""
 window.clickOne = 0
 window.clickTwo = ""
 window.aboutMe = 0
+window.inactivity = 0
 
 let point = 0.075
 let sign = 1
@@ -50,6 +51,16 @@ window.animate = function () {
   requestAnimationFrame(animate)
 
   let time = performance.now() * 0.0005 + 22000
+
+  if (inactivity === true && !cinematicOn && selectedPlanet.length === 0) {
+
+    let vec = new Vector(Math.cos(time * 0.1) * 250 + camera.position.z, Math.sin(time * 0.1) * 250 + camera.position.x, 0 + camera.position.y);
+    vec = vec.map((e, i) => e + vec[i])
+
+    camera.position.z -= vec[0] / 100
+    camera.position.x -= vec[1] / 100
+    camera.position.y -= vec[2] / 100
+  }
 
   clickDetection()
   animateAroundMe(time)
@@ -120,8 +131,8 @@ function clickDetection() {
 
 let direction = 1
 let ccDirection = 0
-let maxTime = 350
-let speed = 0.01
+let maxTime = 450
+let speed = 0.04
 if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
   speed = 0.05
   maxTime = 250
@@ -144,12 +155,6 @@ function animateAboutMe(time) {
 }
 
 async function planetInfo(name) {
-  class Vector extends Array {
-    add(other) {
-      return this.map((e, i) => e + other[i]);
-    }
-  }
-  console.log(name)
   if (name === "ring")
     name = "saturn"
   if (name === "moon")
@@ -177,7 +182,10 @@ async function planetInfo(name) {
         vectorMutiplier = 0.8
       if (vec[0] === 0) // sun
         vec = [425, 425]
-      gsap.to(camera.position, { duration: 2, x: vec[0] * vectorMutiplier, y: -400, z: vec[1] * vectorMutiplier })
+      let yFix = 400
+      if (i.position.y > 100)
+        yFix = 0
+      gsap.to(camera.position, { duration: 2, x: vec[0] * vectorMutiplier, y: i.position.y - yFix, z: vec[1] * vectorMutiplier })
       setTimeout(() => {
         movingCamera = 0
         controls.enabled = true
@@ -374,8 +382,10 @@ function animateAroundMe(time) {
       if (i.dicons)
         i.rotation.x = 0
       i.position.y = (Math.cos(newTime * 0.15) * 50)
-      if (i.name === "/assets/me2.png")
+      if (i.name === "/assets/me.png") {
+        i.lookAt(camera.position)
         i.position.x = i.position.x + 0.1
+      }
     }
   }
 }
@@ -494,3 +504,8 @@ window.cinematic = async function () {
   document.getElementById("lineLoader").style.display = "none"
 }
 
+class Vector extends Array {
+  add(other) {
+    return this.map((e, i) => e + other[i]);
+  }
+}

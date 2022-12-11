@@ -334,8 +334,8 @@
     width: 80%;
   }
   .card-avatar {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     transform: translateX(-50%) translateY(0px);
   }
   .card-header {
@@ -343,5 +343,15 @@
   }
   .card-content {
     padding: 8px;
+  }
+}
+@media (max-width: 321px) {
+  .card-avatar {
+    width: 85px;
+    height: 85px;
+    transform: translateX(-50%) translateY(0px);
+  }
+  .card-desc {
+    font-size: 10px;
   }
 }

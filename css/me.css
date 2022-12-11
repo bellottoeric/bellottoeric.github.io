@@ -41,7 +41,6 @@ a:hover {
 }
 .wrapper {
   display: flex;
-  margin-top: 5%;
 }
 
 .profile-card {
@@ -56,12 +55,20 @@ a:hover {
 }
 @media screen and (max-width: 768px) {
   .wrapper {
+    scale: 0.8;
     height: auto;
-    margin-top: 20% !important;
     padding: 10px;
   }
   .profile-card {
     padding: 8px;
+  }
+}
+@media (max-width: 321px) {
+  .wrapper {
+    scale: 0.7;
+    height: auto;
+    margin-top: -5% !important;
+    padding: 10px;
   }
 }
 .profile-card.active .profile-card__cnt {
@@ -102,8 +109,13 @@ a:hover {
   object-fit: cover;
   border-radius: 50%;
 }
+@media (max-width: 321px) {
+  #childLinkedin {
+    scale: 0.8;
+  }
+}
+
 .profile-card__cnt {
-  margin-top: -35px;
   text-align: center;
   padding: 0 20px;
   padding-bottom: 10px;
@@ -121,7 +133,7 @@ a:hover {
   margin-bottom: 15px;
 }
 .profile-card__txt {
-  font-size: 18px;
+  font-size: 18px !important;
   font-weight: 500;
   color: black;
   margin-bottom: 15px;
@@ -190,7 +202,7 @@ a:hover {
   border-radius: 50%;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #fff !important;
   background: #405de6;
   box-shadow: 0px 7px 30px rgba(43, 98, 169, 0.5);
   position: relative;
@@ -289,6 +301,7 @@ a:hover {
   .profile-card__button {
     min-width: 170px;
     margin: 15px 25px;
+    font-size: 17px;
   }
 }
 @media screen and (max-width: 576px) {

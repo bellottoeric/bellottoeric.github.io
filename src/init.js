@@ -48,6 +48,15 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
+            var geometry = new THREE.BoxBufferGeometry(0.1, 850, 1332)
+            var texture = new THREE.TextureLoader().load("/galaxies/spiral.jpg",)
+            var material = new THREE.MeshBasicMaterial({ map: texture })
+            var mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(-3500, 200, 0)
+            mesh.name = "ok"
+
+            scene.add(mesh)
+
             let index = 1
             let nbrObjects = 7
             let max = 42
@@ -61,7 +70,6 @@ export async function init() {
                 createMeshAroundMe("tea.fbx", max / nbrObjects * index)
             }
             index++
-            createMeshAroundMe("/assets/me2.png", max / nbrObjects * index, [5, 32], "circle")
             createMeshAroundMe("/assets/me.png", max / nbrObjects * index, [5, 32], "circle")
             index++
             createMeshAroundMe("parcours.fbx", max / nbrObjects * index)
@@ -374,8 +382,9 @@ async function createMeshAroundMe(name, orderTime, size, type) {
         mesh.translateX(50)
     mesh.name = name
     mesh.orderTime = orderTime
-    if (name === "/assets/me.png" || name === "/assets/me2.png")
+    if (name === "/assets/me.png") {
         scene2.add(mesh)
+    }
     else
         scene.add(mesh)
     meshAroundMe.push(mesh)
@@ -457,12 +466,12 @@ async function createAsteroidsLine(scene) {
         }
     })
 
-    object1.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
+    object1.scale.multiplyScalar(getRandomArbitrary(0.08, 0.12))
 
-    object2.scale.multiplyScalar(getRandomArbitrary(0.02, 0.04))
+    object2.scale.multiplyScalar(getRandomArbitrary(0.08, 0.12))
 
     await timer(1000 * 5)
-    for (let z = 0; z < 150; z++) {
+    for (let z = 0; z < 40; z++) {
         const angle = Math.random() * Math.PI * 2;
         let ast
         let randomAst = Math.floor(getRandomArbitrary(1, 3))
