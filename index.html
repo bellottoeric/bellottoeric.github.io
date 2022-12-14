@@ -46,7 +46,7 @@
 
 <body style="background-color: #232b2b !important;">
   <main>
-    <audio id="music" controls>
+    <audio id="music" controls loop>
       <source src="/assets/music.mp3" type="audio/mpeg">
     </audio>
     <audio id="intro" >
@@ -58,18 +58,14 @@
     <div id="parentLoader">
       <div id="loader" class="loader">
       </div>
-      <h2>Chargement...</h2>
       <div id="divCV">
         <img id="imgCV" src="CV.svg" fetchpriority="high" alt="Monkey face" style="height: 100%;">
-      <button id="downloadCV" type="button" data-dl>
-        <span class="dl-icon"></span><span>Télécharger le CV</span>
-      </button>
+        <button id="downloadCV" type="button" data-dl>
+          <span class="dl-icon"></span><span>Télécharger le CV</span>
+        </button>
       </div>
-     
-
       <div id="inLoader" style="background-image: url('assets/overview.png'); background-position: center;"></div>
-      <h3>Astuces:<br> Tous les éléments sont cliquables.<br>Cliquez sur la lune en bas de l'écran pour revenir au menu.
-      </h3>
+      <!--<h3>Astuces:<br> Tous les éléments sont cliquables.<br>Cliquez sur la lune en bas de l'écran pour revenir au menu. </h3>-->
     </div>
     <canvas id="bg" class="hidden"></canvas>
     <div id="presentation" class="hidden">

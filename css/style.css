@@ -302,6 +302,7 @@ audio {
   animation: glowing 20s linear infinite;
   transition: opacity 0.3s ease-in-out;
   background-size: 400%;
+  font-size: 17px;
 }
 
 .glow-on-hover:before {
@@ -352,7 +353,7 @@ audio {
     transform: translate(-50%, 0px);
   }
   50% {
-    transform: translate(-50%, 10px);
+    transform: translate(-50%, 8px);
   }
   100% {
     transform: translate(-50%, 0px);
@@ -394,7 +395,7 @@ audio {
     top: unset !important;
   }
   .floating {
-    bottom: 50px;
+    bottom: 30px;
     top: unset !important;
   }
   .glow-on-hover:after {
@@ -450,6 +451,7 @@ audio {
 }
 
 #downloadCV {
+  border: none;
   top: 0;
   left: 0;
   right: 0;
@@ -461,18 +463,21 @@ audio {
   cursor: pointer;
   display: flex;
   margin: 10px;
-  padding: 0.5em 1em;
+  padding: 15px;
   transition: background 0.15s linear;
-  width: 225px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   -webkit-tap-highlight-color: transparent;
+  font-size: 20px;
+  width: 260px;
 }
 
 @media (max-width: 569px) {
   #downloadCV {
     position: relative !important;
+    font-size: 14px !important;
+    width: 200px;
   }
 }
 

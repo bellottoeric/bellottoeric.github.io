@@ -51,7 +51,7 @@ window.animate = function () {
 
   let time = performance.now() * 0.0005 + 22000
 
-  if (inactivity === true && !cinematicOn) {
+  if (inactivity === true && !cinematicOn && controls.maxDistance !== 3000) {
 
     let vec = new Vector(Math.cos(time * 0.1) * 250 + camera.position.z, Math.sin(time * 0.1) * 250 + camera.position.x, 0 + camera.position.y);
     vec = vec.map((e, i) => e + vec[i])

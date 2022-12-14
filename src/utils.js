@@ -88,7 +88,7 @@ export function utils(pointer, camera, renderer, controls) {
         let saveMaxHeight = window.innerHeight
 
         document.getElementsByTagName("h2")[0].style.opacity = '0';
-        document.getElementsByTagName("h3")[0].style.opacity = '0';
+        //document.getElementsByTagName("h3")[0].style.opacity = '0';
         let stop = saveMaxHeight + saveMaxWidth
         let waitDuringCircleLoader = 10
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
