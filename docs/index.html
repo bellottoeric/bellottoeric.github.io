@@ -41,8 +41,8 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
   <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
-  <script type="module" crossorigin src="/assets/index.e017e065.js"></script>
-  <link rel="stylesheet" href="/assets/index.29ef82e4.css">
+  <script type="module" crossorigin src="/assets/index.d7f56fc1.js"></script>
+  <link rel="stylesheet" href="/assets/index.16e1d439.css">
 </head>
 
 <body style="background-color: #232b2b !important;">
@@ -54,11 +54,20 @@
       <source id="audioSource" type="audio/mpeg">
     </audio>
     <div id="lineLoader" class="lineLoader"></div>
+    <button id="launch3D" style="display:none; opacity: 0;" class="glow-on-hover floating" type="button">Démarrer l'expérience 3D</button>
     <div id="player" class="hidden"></div>
     <div id="parentLoader">
       <div id="loader" class="loader">
       </div>
       <h2>Chargement...</h2>
+      <div id="divCV">
+        <img id="imgCV" src="CV.svg" alt="Monkey face" style="height: 100%;">
+      <button id="downloadCV" type="button" data-dl>
+        <span class="dl-icon"></span><span>Télécharger le CV</span>
+      </button>
+      </div>
+     
+
       <div id="inLoader" style="background-image: url('assets/overview.png'); background-position: center;"></div>
       <h3>Astuces:<br> Tous les éléments sont cliquables.<br>Cliquez sur la lune en bas de l'écran pour revenir au menu.
       </h3>

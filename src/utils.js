@@ -1,3 +1,5 @@
+import { setupVideoPlayer } from './videoPlayer'
+
 export function utils(pointer, camera, renderer, controls) {
     document.getElementById("goHome").addEventListener('click', async function (event) {
         window.selectedPlanet = ""
@@ -72,20 +74,28 @@ export function utils(pointer, camera, renderer, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     })
 
-    let saveMaxWidth = window.innerWidth
-    let saveMaxHeight = window.innerHeight
 
     let loaded = 0
-    removeLoader()
+    setTimeout(() => {
+        unfade(document.getElementById("launch3D"))
 
-    window.addEventListener("load", async function (event) {
+    }, 1000 * 8)
+
+    document.getElementById("launch3D").addEventListener('click', async function (event) {
+        fade(document.getElementById("divCV"))
+        document.getElementById("launch3D").style.display = "none"
+        let saveMaxWidth = window.innerWidth
+        let saveMaxHeight = window.innerHeight
+
         document.getElementsByTagName("h2")[0].style.opacity = '0';
         document.getElementsByTagName("h3")[0].style.opacity = '0';
         let stop = saveMaxHeight + saveMaxWidth
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+        let waitDuringCircleLoader = 10
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            waitDuringCircleLoader = 1.5
             stop = stop / 3
-        animate()
-        for (let i = 0; i < stop; i = i + 10) {
+        }
+        for (let i = 0; i < stop; i = i + waitDuringCircleLoader) {
             if ((i > saveMaxWidth && i > saveMaxHeight) || loaded)
                 continue
             document.getElementById("inLoader").style.height = i + "px"
@@ -94,8 +104,11 @@ export function utils(pointer, camera, renderer, controls) {
             document.getElementById("loader").style.width = i + "px"
             await (new Promise(res => setTimeout(res, 10)))
         }
-        await (new Promise(res => setTimeout(res, 500)))
-    });
+        animate()
+        //await (new Promise(res => setTimeout(res, 500)))
+        removeLoader()
+    }, false)
+
 
     // PROJECTS
     document.getElementById("buttonProjects").addEventListener('click', function (event) {
@@ -143,6 +156,7 @@ window.toggleProjects = function () {
 }
 
 function removeLoader() {
+    setupVideoPlayer()
     document.getElementById("lineLoader").style.display = "none"
     document.getElementById("lineLoader").classList.add("cinematicLineLoader")
     document.getElementById("lineLoader").classList.remove("lineLoader")
@@ -158,13 +172,16 @@ function removeLoader() {
     }
 
     // INACTIVITY
-    document.addEventListener('mousedown', viewEvent)
-    document.addEventListener('mousemove', viewEvent)
-    document.addEventListener('touchstart', viewEvent)
-    document.addEventListener('scroll', viewEvent)
-    document.addEventListener('DOMMouseScroll', viewEvent)
-    document.addEventListener('mousewheel', viewEvent)
-    document.addEventListener('keydown', viewEvent)
+    inactivity = Math.floor((new Date()).getTime() / 1000) + 10
+    setTimeout(() => {
+        document.addEventListener('mousedown', viewEvent)
+        document.addEventListener('mousemove', viewEvent)
+        document.addEventListener('touchstart', viewEvent)
+        document.addEventListener('scroll', viewEvent)
+        document.addEventListener('DOMMouseScroll', viewEvent)
+        document.addEventListener('mousewheel', viewEvent)
+        document.addEventListener('keydown', viewEvent)
+    }, 1000 * 10)
 
 
     function viewEvent(evt) {
@@ -174,4 +191,81 @@ function removeLoader() {
         if (Math.floor((new Date()).getTime() / 1000) - inactivity > 5)
             inactivity = Math.floor((new Date()).getTime() / 1000) - inactivity > 5
     }, 1000)
+}
+
+function fade(element) {
+    var op = 1;
+    var timer = setInterval(function () {
+        if (op <= 0.1) {
+            clearInterval(timer);
+            element.style.display = 'none';
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op -= op * 0.1;
+    }, 50);
+}
+
+function unfade(element) {
+    element.style.display = "block"
+    var op = 0.1;
+    element.style.display = 'block';
+    var timer = setInterval(function () {
+        if (op >= 1) {
+            clearInterval(timer);
+        }
+        element.style.opacity = op;
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
+        op += op * 0.03;
+    }, 10);
+}
+
+/* DOWNLOAD CV BUTTON */
+document.addEventListener("DOMContentLoaded", function () {
+    this.addEventListener("click", e => {
+        let tar = e.target;
+        if (tar.hasAttribute("data-dl")) {
+            var element = document.createElement('a');
+            element.setAttribute('href', "/CV.png");
+            element.setAttribute('download', "CV - Bellotto Eric - FULLSTACK JS DEVELOPPER.png");
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+            let dlClass = "dl-working";
+            if (!tar.classList.contains(dlClass)) {
+                let lastSpan = tar.querySelector("span:last-child"),
+                    lastSpanText = lastSpan.textContent,
+                    timeout = getMSFromProperty("--dur", ":root");
+
+                tar.classList.add(dlClass);
+                lastSpan.textContent = "Downloading…";
+                tar.disabled = true;
+
+                setTimeout(() => {
+                    lastSpan.textContent = "Completed!";
+                }, timeout * 0.9);
+
+                setTimeout(() => {
+                    tar.classList.remove(dlClass);
+                    lastSpan.textContent = lastSpanText;
+                    tar.disabled = false;
+                }, timeout + 1e3);
+            }
+        }
+    });
+});
+function getMSFromProperty(property, selector) {
+    let cs = window.getComputedStyle(document.querySelector(selector)),
+        transDur = cs.getPropertyValue(property),
+        msLabelPos = transDur.indexOf("ms"),
+        sLabelPos = transDur.indexOf("s");
+
+    if (msLabelPos > -1)
+        return transDur.substr(0, msLabelPos);
+    else if (sLabelPos > -1)
+        return transDur.substr(0, sLabelPos) * 1e3;
 }

@@ -75,6 +75,20 @@ h3 {
   transition: 2s;
 }
 
+@media (max-width: 321px) {
+  .loader {
+    width: 200px !important;
+    height: 200px !important;
+  }
+}
+
+@media (max-width: 569px) {
+  .loader {
+    width: 225px;
+    height: 225px;
+  }
+}
+
 #inLoader {
   position: absolute;
   left: 50%;
@@ -229,21 +243,22 @@ audio {
   position: fixed;
   bottom: 0px;
   left: 0px;
-  height: 20px;
+  height: 35px;
   width: 100%;
   background: #232b2b;
+  z-index: 56;
 }
 
 #lineLoader:before {
   content: "";
   display: block;
   background-image: linear-gradient(45deg, #d5135a, #f05924);
-  height: 30px;
+  height: 35px;
   width: 0;
 }
 
 .lineLoader:before {
-  animation: getWidth 20s ease-in infinite;
+  animation: getWidthLine 100s ease-in infinite;
 }
 
 .cinematicLineLoader:before {
@@ -252,11 +267,436 @@ audio {
   background-image: linear-gradient(45deg, #d5135a, #f05924) !important;
 }
 
+@keyframes getWidthLine {
+  10% {
+    width: 100%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 @keyframes getWidth {
   50% {
     width: 100%;
   }
   100% {
     width: 100%;
+  }
+}
+
+/* CV */
+
+.glow-on-hover {
+  margin: 0 auto;
+  width: 250px;
+  height: 50px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: #111;
+  cursor: pointer;
+  z-index: 0;
+  border-radius: 10px;
+  z-index: 999;
+  animation: glowing 20s linear infinite;
+  transition: opacity 0.3s ease-in-out;
+  background-size: 400%;
+}
+
+.glow-on-hover:before {
+  content: "";
+  background: linear-gradient(45deg, #d5135a, #f05924);
+
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 9s linear infinite;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 0;
+  border-radius: 10px;
+}
+
+.glow-on-hover:active {
+  color: #000;
+}
+
+.glow-on-hover:active:after {
+  background: transparent;
+}
+
+.glow-on-hover:hover:before {
+  opacity: 1;
+}
+
+.floating {
+  padding: 10px;
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translate(-50%, 0%);
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+  z-index: 999;
+}
+
+@keyframes floating {
+  0% {
+    transform: translate(-50%, 0px);
+  }
+  50% {
+    transform: translate(-50%, 10px);
+  }
+  100% {
+    transform: translate(-50%, 0px);
+  }
+}
+
+.glow-on-hover:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #232b2b;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+@keyframes glowing {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+@media (max-width: 668px) {
+  #imgCV {
+    width: 100%;
+    height: auto !important;
+  }
+
+  .glow-on-hover:before {
+    bottom: -2px;
+    top: unset !important;
+  }
+  .floating {
+    bottom: 50px;
+    top: unset !important;
+  }
+  .glow-on-hover:after {
+    bottom: 0;
+    top: unset !important;
+  }
+}
+
+/* DOWNLOAD CV BUTTON */
+
+:root {
+  --dur: 3s;
+  --arrowA: polygon(
+    33% 0%,
+    67% 0%,
+    67% 60%,
+    100% 60%,
+    50% 100%,
+    0% 60%,
+    33% 60%
+  );
+  --arrowB: polygon(
+    0% 37.5%,
+    100% 37.5%,
+    100% 62.5%,
+    100% 62.5%,
+    50% 62.5%,
+    0% 62.5%,
+    0% 62.5%
+  );
+}
+
+#divCV {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #232b2b;
+  width: 100%;
+  height: 100vh;
+  background-size: contain;
+  z-index: 55;
+}
+
+@media (max-width: 569px) {
+  #divCV {
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-direction: column;
+  }
+}
+
+#downloadCV {
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  position: absolute;
+  background: linear-gradient(45deg, #d5135a, #f05924);
+  border-radius: 0.2em;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  margin: 10px;
+  padding: 0.5em 1em;
+  transition: background 0.15s linear;
+  width: 225px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 569px) {
+  #downloadCV {
+    position: relative !important;
+  }
+}
+
+#downloadCV:focus {
+  outline: transparent;
+}
+#downloadCV::-moz-focus-inner {
+  border: 0;
+}
+#downloadCV:not(:disabled):focus,
+#downloadCV:not(:disabled):hover {
+  background: linear-gradient(45deg, #d5135a, #f05924);
+}
+#downloadCV:not(:disabled):active {
+  transform: translateY(1px);
+}
+#downloadCV:disabled {
+  cursor: not-allowed;
+}
+#downloadCV span,
+#downloadCV:before,
+#downloadCV:after {
+  display: inline-block;
+  pointer-events: none;
+}
+#downloadCV:before,
+#downloadCV:after {
+  border-radius: 0.25em;
+  opacity: 0;
+  top: 1em;
+  left: 1.3em;
+  height: 0.5em;
+  transform-origin: 0.25em 50%;
+  z-index: 2;
+}
+#downloadCV:before {
+  transform: rotate(-180deg);
+  width: 0.8em;
+}
+#downloadCV:after {
+  width: 1.2em;
+}
+#downloadCV:before,
+#downloadCV:after,
+.dl-icon:before,
+.dl-icon:after {
+  content: "";
+  display: block;
+  position: absolute;
+}
+#downloadCV:before,
+#downloadCV:after,
+.dl-icon:before {
+  background: currentColor;
+}
+#downloadCV span + span {
+  margin: auto;
+}
+.dl-icon {
+  margin-right: 0.5em;
+  position: relative;
+  width: 1.5em;
+  height: 1.5em;
+}
+.dl-icon:before {
+  clip-path: var(--arrowA);
+  -webkit-clip-path: var(--arrowA);
+  top: 0;
+  left: calc(50% - 0.55em);
+  transform-origin: 50% 100%;
+  width: 1.1em;
+  height: 1em;
+  z-index: 1;
+}
+.dl-icon:after {
+  background-image: linear-gradient(45deg, #d5135a, #f05924);
+  background-position: -1.5em 0;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  box-shadow: 0.25em 0 0 inset, -0.25em 0 0 inset, 0 -0.25em 0 inset;
+  bottom: 0;
+  width: 100%;
+  height: 0.5em;
+}
+.dl-working:before {
+  animation: checkOutA var(--dur) linear forwards;
+}
+.dl-working:after {
+  animation: checkOutB var(--dur) linear forwards;
+}
+.dl-working .dl-icon {
+  animation: impact var(--dur) linear forwards;
+}
+.dl-working .dl-icon:before {
+  animation: arrowToBar var(--dur) linear forwards;
+}
+.dl-working .dl-icon:after {
+  animation: trayToBar var(--dur) linear forwards;
+}
+
+/* Animation DOWNLOAD */
+@keyframes impact {
+  from,
+  15% {
+    transform: translateY(0);
+  }
+  17.5% {
+    transform: translateY(0.25em);
+  }
+  20%,
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes arrowToBar {
+  from {
+    clip-path: var(--arrowA);
+    -webkit-clip-path: var(--arrowA);
+  }
+  10% {
+    clip-path: var(--arrowB);
+    -webkit-clip-path: var(--arrowB);
+    transform: translateY(0);
+  }
+  15% {
+    clip-path: var(--arrowB);
+    -webkit-clip-path: var(--arrowB);
+    transform: translateY(0.625em);
+  }
+  30% {
+    clip-path: var(--arrowB);
+    -webkit-clip-path: var(--arrowB);
+    opacity: 1;
+    transform: translateY(0.125em);
+  }
+  35%,
+  to {
+    clip-path: var(--arrowB);
+    -webkit-clip-path: var(--arrowB);
+    opacity: 0;
+    transform: translateY(0.125em);
+  }
+}
+@keyframes trayToBar {
+  from,
+  15% {
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: 0.25em 0 0 inset, -0.25em 0 0 inset, 0 -0.25em 0 inset;
+    transform: translateY(0);
+  }
+  15.1% {
+    background-color: currentColor;
+    border-radius: 0;
+    box-shadow: 0 0 0 inset, 0 0 0 inset, 0 0 0 0.1em inset;
+    transform: translateY(0);
+  }
+  30% {
+    background-color: currentColor;
+    background-position: -1.5em 0;
+    border-radius: 0.25em;
+    box-shadow: 0 0 0 inset, 0 0 0 inset, 0 0 0 0.1em inset;
+    transform: translateY(-0.5em);
+  }
+  90% {
+    background-color: currentColor;
+    background-position: 0 0;
+    border-radius: 0.25em;
+    box-shadow: 0 0 0 inset, 0 0 0 inset, 0 0 0 0.1em inset;
+    opacity: 1;
+    transform: translateY(-0.5em);
+  }
+  90.1%,
+  to {
+    background-color: currentColor;
+    background-position: 0 0;
+    border-radius: 0.25em;
+    box-shadow: 0 0 0 inset, 0 0 0 inset, 0 0 0 0.1em inset;
+    opacity: 0;
+    transform: translateY(-0.5em);
+  }
+}
+@keyframes checkOutA {
+  from,
+  90% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(-180deg);
+  }
+  90.1% {
+    opacity: 1;
+    width: 0.8em;
+    transform: translate(0, 0) rotate(-180deg);
+  }
+  92.5% {
+    opacity: 1;
+    width: 1em;
+    transform: translate(0, 0.5em) rotate(-120deg);
+  }
+  95%,
+  to {
+    opacity: 1;
+    width: 1em;
+    transform: translate(0, 0.375em) rotate(-135deg);
+  }
+}
+@keyframes checkOutB {
+  from,
+  90% {
+    opacity: 0;
+    transform: translate(0, 0) rotate(0);
+  }
+  90.1% {
+    opacity: 1;
+    width: 1.2em;
+    transform: translate(0, 0) rotate(0);
+  }
+  92.5% {
+    opacity: 1;
+    width: 1.6em;
+    transform: translate(0, 0.5em) rotate(-60deg);
+  }
+  95%,
+  to {
+    opacity: 1;
+    width: 1.6em;
+    transform: translate(0, 0.375em) rotate(-45deg);
   }
 }

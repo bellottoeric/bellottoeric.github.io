@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import '../css/style.css'
 import { init } from './init'
 import { utils } from './utils'
-import { setupVideoPlayer } from './videoPlayer'
+
 
 window.cinematicOn = 0
 window.clicked = 0
@@ -28,7 +28,6 @@ async function start(e) {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = await init()
       utils(pointer, camera, renderer, controls)
-      setupVideoPlayer()
     } catch (e) {
       console.log('Error in function', e)
     }
@@ -52,7 +51,7 @@ window.animate = function () {
 
   let time = performance.now() * 0.0005 + 22000
 
-  if (inactivity === true && !cinematicOn && selectedPlanet.length === 0) {
+  if (inactivity === true && !cinematicOn) {
 
     let vec = new Vector(Math.cos(time * 0.1) * 250 + camera.position.z, Math.sin(time * 0.1) * 250 + camera.position.x, 0 + camera.position.y);
     vec = vec.map((e, i) => e + vec[i])
