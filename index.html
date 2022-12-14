@@ -24,6 +24,7 @@
   <meta name="twitter:image" content="/assets/me.png">
   <meta name="twitter:url" content="https://bellottoeric.fr">
   <meta name="twitter:description" content="Bellotto Eric - Portfolio spatial en 3D">
+  <link rel="prefetch"    href="CV.svg"    as="image" />
   <link rel="preload" href="assets/overview.png" as="image">
   <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
   <link rel="icon" sizes="192x192" href="/favicon/favicon-192x192.png" />
@@ -59,7 +60,7 @@
       </div>
       <h2>Chargement...</h2>
       <div id="divCV">
-        <img id="imgCV" src="CV.svg" alt="Monkey face" style="height: 100%;">
+        <img id="imgCV" src="CV.svg" fetchpriority="high" alt="Monkey face" style="height: 100%;">
       <button id="downloadCV" type="button" data-dl>
         <span class="dl-icon"></span><span>Télécharger le CV</span>
       </button>

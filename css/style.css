@@ -438,6 +438,7 @@ audio {
   height: 100vh;
   background-size: contain;
   z-index: 55;
+  cursor: default;
 }
 
 @media (max-width: 569px) {
