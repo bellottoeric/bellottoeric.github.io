@@ -40,22 +40,34 @@ scene2.add((new THREE.AmbientLight(0xffffff, 0.3)))
 pointLight.position.set(0, 0, 100)
 scene2.add(pointLight)
 
-renderer.setPixelRatio(window.devicePixelRatio)
 renderer.setSize(window.innerHeight, window.innerHeight)
+renderer.setPixelRatio(window.devicePixelRatio)
 renderer.render(scene, camera)
 renderer.autoClear = false
 
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
-            var geometry = new THREE.BoxBufferGeometry(0.1, 850, 1332)
-            var texture = new THREE.TextureLoader().load("/galaxies/spiral.jpg",)
-            var material = new THREE.MeshBasicMaterial({ map: texture })
-            var mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(-3500, 200, 0)
-            mesh.name = "ok"
 
+            let geometry = new THREE.CircleGeometry(60 * 8, 320 * 8)
+            let texture = new THREE.TextureLoader().load("/galaxies/spiral.jpg",)
+            let material = new THREE.MeshBasicMaterial({ map: texture })
+            let mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(-3500, 0, 0)
+            mesh.rotation.set(0, 1.8, 0)
+            mesh.name = "galaxy"
             scene.add(mesh)
+
+
+            var geometry2 = new THREE.CircleGeometry(60 * 8, 320 * 8)
+            var texture2 = new THREE.TextureLoader().load("/galaxies/irregular.jpg",)
+            var material2 = new THREE.MeshBasicMaterial({ map: texture2 })
+            var mesh2 = new THREE.Mesh(geometry2, material2);
+            mesh2.position.set(3500, 0, 0)
+            mesh2.rotation.set(0, -1.8, 0)
+            mesh2.name = "galaxy"
+
+            scene.add(mesh2)
 
             let index = 1
             let nbrObjects = 7

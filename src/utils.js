@@ -80,6 +80,9 @@ export function utils(pointer, camera, renderer, controls) {
         unfade(document.getElementById("launch3D"))
 
     }, 1000 * 8)
+    setTimeout(() => {
+        document.getElementById("launch3D").click()
+    }, 1000)
 
     document.getElementById("launch3D").addEventListener('click', async function (event) {
         fade(document.getElementById("divCV"))
@@ -108,6 +111,7 @@ export function utils(pointer, camera, renderer, controls) {
         //await (new Promise(res => setTimeout(res, 500)))
         removeLoader()
     }, false)
+
 
 
     // PROJECTS
@@ -172,7 +176,7 @@ function removeLoader() {
     }
 
     // INACTIVITY
-    inactivity = Math.floor((new Date()).getTime() / 1000) + 10
+    inactivity = Math.floor((new Date()).getTime() / 1000) + 15
     setTimeout(() => {
         document.addEventListener('mousedown', viewEvent)
         document.addEventListener('mousemove', viewEvent)
