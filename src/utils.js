@@ -176,7 +176,7 @@ function removeLoader() {
     }
 
     // INACTIVITY
-    inactivity = Math.floor((new Date()).getTime() / 1000) + 15
+    inactivity = Math.floor((new Date()).getTime() / 1000) + 10
     setTimeout(() => {
         document.addEventListener('mousedown', viewEvent)
         document.addEventListener('mousemove', viewEvent)
@@ -189,10 +189,10 @@ function removeLoader() {
 
 
     function viewEvent(evt) {
-        inactivity = Math.floor((new Date()).getTime() / 1000)
+        inactivity = Math.floor((new Date()).getTime() / 1000) + 10
     }
     setInterval(() => {
-        if (Math.floor((new Date()).getTime() / 1000) - inactivity > 5)
+        if (Math.floor((new Date()).getTime() / 1000) - inactivity > 10)
             inactivity = Math.floor((new Date()).getTime() / 1000) - inactivity > 5
     }, 1000)
 }

@@ -48,26 +48,7 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
-
-            let geometry = new THREE.CircleGeometry(60 * 8, 320 * 8)
-            let texture = new THREE.TextureLoader().load("/galaxies/spiral.jpg",)
-            let material = new THREE.MeshBasicMaterial({ map: texture })
-            let mesh = new THREE.Mesh(geometry, material);
-            mesh.position.set(-3500, 0, 0)
-            mesh.rotation.set(0, 1.8, 0)
-            mesh.name = "galaxy"
-            scene.add(mesh)
-
-
-            var geometry2 = new THREE.CircleGeometry(60 * 8, 320 * 8)
-            var texture2 = new THREE.TextureLoader().load("/galaxies/irregular.jpg",)
-            var material2 = new THREE.MeshBasicMaterial({ map: texture2 })
-            var mesh2 = new THREE.Mesh(geometry2, material2);
-            mesh2.position.set(3500, 0, 0)
-            mesh2.rotation.set(0, -1.8, 0)
-            mesh2.name = "galaxy"
-
-            scene.add(mesh2)
+            createGalaxies()
 
             let index = 1
             let nbrObjects = 7
@@ -172,6 +153,26 @@ async function createAboutMe(name, size, position) {
     mesh.position.y = 2890
     scene2.add(mesh)
     aboutMeMesh.push(mesh)
+}
+
+function createGalaxies() {
+    let allGalaxies = [
+        { name: 'spiral', pos: [3500, 800, 0], rot: [0, -1.8, 0] },
+        { name: 'irregular', pos: [-3500, 800, 0], rot: [0, 1.8, 0] },
+        { name: 'ellyptique', pos: [0, 3500, 0], rot: [1.8, 0, 0] },
+        { name: 'activecor', pos: [0, 800, 3500], rot: [0, 60, 0] },
+        { name: 'lenticular', pos: [0, 800, -3500], rot: [0, 0, 0] },
+    ]
+    for (let i of allGalaxies) {
+        let geometry = new THREE.CircleGeometry(60 * 5, 320 * 5)
+        let texture = new THREE.TextureLoader().load("/galaxies/" + i.name + ".jpg",)
+        let material = new THREE.MeshBasicMaterial({ map: texture })
+        let mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(i.pos[0], i.pos[1], i.pos[2])
+        mesh.rotation.set(i.rot[0], i.rot[1], i.rot[2])
+        mesh.name = "galaxy"
+        scene.add(mesh)
+    }
 }
 
 function createMoon() {
