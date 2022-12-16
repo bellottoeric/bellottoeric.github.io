@@ -5,6 +5,7 @@ import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { descriptions } from '../lang/planet'
 import { sunVertex, sunFragment } from './sunShaders'
+import { generateGalaxy } from './blackhole'
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
@@ -48,6 +49,9 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
+            generateGalaxy(textureLoader, scene, renderer)
+
+
             createGalaxies()
 
             let index = 1
@@ -170,7 +174,7 @@ function createGalaxies() {
         let mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(i.pos[0], i.pos[1], i.pos[2])
         mesh.rotation.set(i.rot[0], i.rot[1], i.rot[2])
-        mesh.name = "galaxy"
+        mesh.name = "galaxy-" + i
         scene.add(mesh)
     }
 }
