@@ -161,11 +161,11 @@ async function createAboutMe(name, size, position) {
 
 function createGalaxies() {
     let allGalaxies = [
-        { name: 'spiral', pos: [3500, 800, 0], rot: [0, -1.8, 0] },
-        { name: 'irregular', pos: [-3500, 800, 0], rot: [0, 1.8, 0] },
-        { name: 'ellyptique', pos: [0, 3500, 0], rot: [1.8, 0, 0] },
-        { name: 'activecor', pos: [0, 800, 3500], rot: [0, 60, 0] },
-        { name: 'lenticular', pos: [0, 800, -3500], rot: [0, 0, 0] },
+        { name: 'spiral', pos: [3200, 200, 0], rot: [0, -1.8, 0] },
+        { name: 'irregular', pos: [-3200, 200, 0], rot: [0, 1.8, 0] },
+        //{ name: 'ellyptique', pos: [0, 3500, 0], rot: [1.8, 0, 0] },
+        { name: 'activecor', pos: [0, 200, 3200], rot: [0, 60, 0] },
+        { name: 'lenticular', pos: [0, 200, -3200], rot: [0, 0, 0] },
     ]
     for (let i of allGalaxies) {
         let geometry = new THREE.CircleGeometry(60 * 5, 320 * 5)
@@ -278,7 +278,7 @@ async function createPlanet(name, orderTime, size, font) {
     })
 
     let meshText
-    let shapes = font.generateShapes(name, 25)
+    let shapes = font.generateShapes(name === "sun" ? "Blackhole" : name, 25)
     let geometry = new THREE.ShapeGeometry(shapes)
     geometry.computeBoundingBox()
     let xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)

@@ -1,16 +1,13 @@
 import * as THREE from 'three'
-
 const parameters = {
     count: 550000,
-    radius: 100,
-    branches: 5,
-    spin: 1,
-    randomness: 1.8,
-    randomnessPower: 8,
-    insideColor: "#ec5300",
-    outsideColor: "#2fb4fc"
+    radius: 200,
+    branches: 4,
+    randomness: 0.5,
+    randomnessPower: 40,
+    insideColor: "#FFFFFF",
+    outsideColor: "#FFFFFF"
 };
-
 
 let geometry = null;
 let material = null;
@@ -29,9 +26,6 @@ const generateGalaxyF = (textureLoader, scene, renderer) => {
         scene.remove(points);
     }
 
-    /**
-     * Geometry
-     */
     geometry = new THREE.BufferGeometry();
 
     const positions = new Float32Array(parameters.count * 3);
@@ -44,7 +38,6 @@ const generateGalaxyF = (textureLoader, scene, renderer) => {
     for (let i = 0; i < parameters.count; i++) {
         const i3 = i * 3;
 
-        // Position
         const radius = Math.random() * parameters.radius;
 
         const branchAngle =
@@ -70,12 +63,10 @@ const generateGalaxyF = (textureLoader, scene, renderer) => {
         positions[i3 + 1] = 0;
         positions[i3 + 2] = Math.sin(branchAngle) * radius;
 
-        // Randomness
         randomness[i3] = randomX;
-        randomness[i3 + 1] = randomY - 250;
+        randomness[i3 + 1] = randomY - 100;
         randomness[i3 + 2] = randomZ;
 
-        // Color
         const mixedColor = insideColor.clone();
         mixedColor.lerp(outsideColor, radius / parameters.radius);
 
@@ -83,7 +74,6 @@ const generateGalaxyF = (textureLoader, scene, renderer) => {
         colors[i3 + 1] = mixedColor.g;
         colors[i3 + 2] = mixedColor.b;
 
-        // Scales
         scales[i] = Math.random();
     }
 
@@ -105,24 +95,27 @@ const generateGalaxyF = (textureLoader, scene, renderer) => {
         uniforms: {
             uTime: { value: 0 },
             uSize: { value: 100 * renderer.getPixelRatio() },
-            uHoleSize: { value: 5.15 },
+            uHoleSize: { value: 40 },
             uTexture: { value: starTexture },
-            size: { value: 6.0 }
+            size: { value: 15.0 }
         }
     });
 
     points = new THREE.Points(geometry, material);
-    points.scale.multiplyScalar(5)
+    points.scale.multiplyScalar(15)
+    points.rotation.set(0, 25.03, 0)
     scene.add(points);
 };
 
 const clock = new THREE.Clock();
 
 const tick = () => {
-    const elapsedTime = clock.getElapsedTime() * 100
+    const elapsedTime = clock.getElapsedTime() * 10
     if (material) {
         material.uniforms.uTime.value = elapsedTime;
     }
+    if (points)
+        points.rotation.set(0, 25.03, 0)
     window.requestAnimationFrame(tick);
 };
 
