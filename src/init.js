@@ -4,8 +4,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { descriptions } from '../lang/planet'
-import { sunVertex, sunFragment } from './sunShaders'
-import { generateGalaxy } from './blackhole'
+import { sunVertex, sunFragment } from './shaders/sunShaders'
+import { generateBlackhole } from './blackhole'
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
@@ -29,7 +29,7 @@ const raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
 
 controls.minDistance = 50
-controls.maxDistance = 2600
+controls.maxDistance = 2499
 controls.enableDamping = true
 controls.dampingFactor = 0.25
 controls.touches = {
@@ -49,8 +49,7 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
-            generateGalaxy(textureLoader, scene, renderer)
-
+            let blackhole = await generateBlackhole(textureLoader, scene, renderer)
 
             createGalaxies()
 
@@ -116,7 +115,6 @@ export async function init() {
                 index++
                 createTextAroundMe(font, "Contact", max / nbrObjects * index)
 
-
                 createPlanet("sun", 0, [0.75, 64, 32], font)
                 createPlanet("mercury", 21, [12, 12, 12], font)
                 createPlanet("venus", 42, [22, 22, 22], font)
@@ -126,9 +124,8 @@ export async function init() {
                 createPlanet("saturn", 126, [90, 90, 90], font)
                 createPlanet("uranus", 147, [62, 62, 62], font)
                 createPlanet("neptune", 168, [60, 60, 60], font)
-
             })
-            resolve([scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh])
+            resolve([scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh, blackhole])
         } catch (e) {
             console.log('Error in function', e)
         }
@@ -161,11 +158,11 @@ async function createAboutMe(name, size, position) {
 
 function createGalaxies() {
     let allGalaxies = [
-        { name: 'spiral', pos: [3200, 200, 0], rot: [0, -1.8, 0] },
-        { name: 'irregular', pos: [-3200, 200, 0], rot: [0, 1.8, 0] },
+        { name: 'spiral', pos: [2450, -700, 0], rot: [0, -1.8, 0] },
+        { name: 'irregular', pos: [-2450, -700, 0], rot: [0, 1.8, 0] },
         //{ name: 'ellyptique', pos: [0, 3500, 0], rot: [1.8, 0, 0] },
-        { name: 'activecor', pos: [0, 200, 3200], rot: [0, 60, 0] },
-        { name: 'lenticular', pos: [0, 200, -3200], rot: [0, 0, 0] },
+        { name: 'activecor', pos: [0, -700, 2450], rot: [0, 60, 0] },
+        { name: 'lenticular', pos: [0, -700, -2450], rot: [0, 0, 0] },
     ]
     for (let i of allGalaxies) {
         let geometry = new THREE.CircleGeometry(60 * 5, 320 * 5)
@@ -214,8 +211,6 @@ function createRing() {
 }
 
 async function createPlanet(name, orderTime, size, font) {
-
-
     const meshTexture = new THREE.TextureLoader().load("/planetTexture/" + name + '.jpg')
     const s_Geometry = new THREE.SphereGeometry(size[0], size[1], size[2])
     let s_materials = new THREE.MeshStandardMaterial({ color: 0xffffff, map: meshTexture })
@@ -244,9 +239,7 @@ async function createPlanet(name, orderTime, size, font) {
             mesh.scale.multiplyScalar(10)
         else
             mesh.scale.multiplyScalar(20)
-
     }
-
 
     mesh.orderTime = orderTime
     mesh.name = name
@@ -278,7 +271,7 @@ async function createPlanet(name, orderTime, size, font) {
     })
 
     let meshText
-    let shapes = font.generateShapes(name === "sun" ? "Blackhole" : name, 25)
+    let shapes = font.generateShapes(name === "sun" ? " " : name, name === "sun" ? 5 : 25)
     let geometry = new THREE.ShapeGeometry(shapes)
     geometry.computeBoundingBox()
     let xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)

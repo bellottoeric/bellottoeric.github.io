@@ -19,14 +19,16 @@ let blockPlanetMovement = 0
 let movingCamera = 0
 
 var scene3
-var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = ""
+var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh, blackhole] = ""
+
+const blackHoleClock = new THREE.Clock()
 
 start()
 
 async function start(e) {
   return (new Promise(async (resolve, reject) => {
     try {
-      [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh] = await init()
+      [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh, blackhole] = await init()
       utils(pointer, camera, renderer, controls)
     } catch (e) {
       console.log('Error in function', e)
@@ -65,6 +67,7 @@ window.animate = function () {
   animateAroundMe(time)
   animatePlanet(time)
   animateAboutMe(time)
+  animateBlackhole()
 
   controls.update()
   renderer.clear()
@@ -72,6 +75,17 @@ window.animate = function () {
   renderer.render(scene2, camera)
   if (scene3)
     renderer.render(scene3, camera)
+}
+
+function animateBlackhole() {
+  const elapsedTime = blackHoleClock.getElapsedTime() * 10
+  if (blackhole.material)
+    blackhole.material.uniforms.uTime.value = elapsedTime;
+
+  if (blackhole.points) {
+    blackhole.points.position.set(0, 0, 0)
+    blackhole.points.rotation.set(0, 25.03, 0)
+  }
 }
 
 function clickDetection() {

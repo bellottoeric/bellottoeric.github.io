@@ -10,7 +10,7 @@ export function utils(pointer, camera, renderer, controls) {
         document.getElementById("aboutMe").classList.add("hidden")
         aboutMe = 0
         controls.enabled = false
-        controls.maxDistance = 2600
+        controls.maxDistance = 2499
         await gsap.to(camera.position, { duration: 3, y: 0, z: 150, x: 0 })
         controls.enabled = true
     }, false)
