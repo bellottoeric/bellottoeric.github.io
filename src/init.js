@@ -81,8 +81,11 @@ export async function init() {
 
             setTimeout(() => {
                 createStars(scene)
-                createAsteroidsLine(scene)
+
             }, 2000)
+            //createAsteroidsLine(scene, "1")
+            //createAsteroidsLine(scene, "2")
+            createAsteroidsLine(scene, "3")
 
             let ring = createRing()
             scene.add(ring)
@@ -133,7 +136,7 @@ export async function init() {
 }
 
 async function createAboutMe(name, size, position) {
-    let mesh = await fbxLoader.loadAsync("/" + name)
+    let mesh = await fbxLoader.loadAsync("/aboutMeFBX/" + name)
     mesh.scale.multiplyScalar(size)
     name = name.replace('.fbx', "")
     let cc = 0
@@ -455,49 +458,38 @@ function getNeonMaterial(name, cc) {
     return (neonMaterial)
 }
 
-async function createAsteroidsLine(scene) {
-    const [texture, object1, texture2, object2] = await Promise.all([
-        textureLoader.loadAsync('https://assets-495.pages.dev/1.jpg'),
-        objLoader.loadAsync('https://assets-495.pages.dev/1.obj'),
-        textureLoader.loadAsync('https://assets-495.pages.dev/2.jpg'),
-        objLoader.loadAsync('https://assets-495.pages.dev/2.obj'),
+async function createAsteroidsLine(scene, name) {
+    const [texture, asteroidMesh] = await Promise.all([
+        textureLoader.loadAsync('asteroids/' + name + '.jpg'),
+        objLoader.loadAsync('asteroids/' + name + '.obj'),
     ])
-    object1.traverse(function (child) {
+    asteroidMesh.traverse(function (child) {
         if (child.isMesh) {
             child.material.map = texture
             child.geometry.computeVertexNormals()
         }
     })
-    object1.scale.multiplyScalar(0.1)
-    object2.traverse(function (child) {
-        if (child.isMesh) {
-            child.material.map = texture2
-            child.geometry.computeVertexNormals()
-        }
-    })
+    if (name === "1")
+        asteroidMesh.scale.multiplyScalar(0.1)
+    if (name === "3")
+        asteroidMesh.scale.multiplyScalar(4)
 
-    object1.scale.multiplyScalar(getRandomArbitrary(0.08, 0.12))
+    let asteroidInstanced = new THREE.InstancedMesh(asteroidMesh.children[0].geometry, asteroidMesh.children[0].material, 100)
+    scene.add(asteroidInstanced)
 
-    object2.scale.multiplyScalar(getRandomArbitrary(0.08, 0.12))
-
-    await timer(1000 * 5)
-    for (let z = 0; z < 40; z++) {
-        const angle = Math.random() * Math.PI * 2;
-        let ast
-        let randomAst = Math.floor(getRandomArbitrary(1, 3))
-        if (randomAst === 1) {
-            ast = object1.clone()
-        } else if (randomAst === 2) {
-            ast = object2.clone()
-        }
-
-        ast.rotation.y = getRandomArbitrary(1, 360)
-        ast.rotation.x = getRandomArbitrary(1, 360)
-        ast.position.z = Math.sin(angle) * getRandomArbitrary(825, 875)
-        ast.position.x = Math.cos(angle) * getRandomArbitrary(825, 875)
-        await timer(100)
-        scene.add(ast)
+    for (var i = 0; i < asteroidInstanced.count; i++) {
+        const angle = Math.random() * Math.PI * 2
+        let randomSize = getRandomArbitrary(0.01, 0.05)
+        asteroidMesh.scale.multiplyScalar(randomSize)
+        asteroidMesh.rotation.y = getRandomArbitrary(1, 360)
+        asteroidMesh.rotation.x = getRandomArbitrary(1, 360)
+        asteroidMesh.position.z = Math.sin(angle) * getRandomArbitrary(800, 875)
+        asteroidMesh.position.x = Math.cos(angle) * getRandomArbitrary(800, 875)
+        asteroidMesh.updateMatrix()
+        asteroidInstanced.setMatrixAt(i, asteroidMesh.matrix)
+        asteroidMesh.scale.multiplyScalar(1 / randomSize)
     }
+    asteroidInstanced.instanceMatrix.needsUpdate = true;
 }
 
 async function createStars(scene) {

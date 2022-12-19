@@ -15,21 +15,19 @@ const parameters = {
 }
 
 const startBlackhole = async (textureLoader, scene, renderer) => {
-    let sphere = await gltfLoader.loadAsync('blackholeSphere.gltf')
-    sphere = sphere.scene.children[0]
+    const sphere = (await gltfLoader.loadAsync('/blackhole/blackholeSphere.gltf')).scene.children[0]
     sphere.position.set(0, -1000, 0)
     sphere.rotation.set(105.25, 0, 0)
-    sphere.scale.multiplyScalar(4)
+    sphere.scale.multiplyScalar(2.5)
     scene.add(sphere)
 
     let geometry = null
     let material = null
     let points = null
 
-    const starTexture = textureLoader.load("/blackholeStar.png")
+    const starTexture = textureLoader.load("/blackhole/blackholeStar.png")
 
     if (points !== null) {
-        console.log("dispose")
         geometry.dispose();
         material.dispose();
         scene.remove(points);
@@ -87,10 +85,7 @@ const startBlackhole = async (textureLoader, scene, renderer) => {
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3))
     geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3))
     geometry.setAttribute("aScale", new THREE.BufferAttribute(scales, 1))
-    geometry.setAttribute(
-        "aRandomness",
-        new THREE.BufferAttribute(randomness, 3)
-    )
+    geometry.setAttribute("aRandomness", new THREE.BufferAttribute(randomness, 3))
     material = new THREE.ShaderMaterial({
         depthWrite: false,
         blending: THREE.AdditiveBlending,
@@ -111,7 +106,7 @@ const startBlackhole = async (textureLoader, scene, renderer) => {
     points.scale.multiplyScalar(15)
     points.rotation.set(0, 25.03, 0)
     scene.add(points)
-    return ({ material: material, points: points })
+    return ({ material: material, points: points, blackholeSphere: sphere })
 }
 
 export const generateBlackhole = startBlackhole

@@ -83,9 +83,9 @@ function animateBlackhole() {
     blackhole.material.uniforms.uTime.value = elapsedTime;
 
   if (blackhole.points) {
-    blackhole.points.position.set(0, 0, 0)
     blackhole.points.rotation.set(0, 25.03, 0)
   }
+  blackhole.blackholeSphere.rotation.z += 0.03
 }
 
 function clickDetection() {
@@ -435,9 +435,9 @@ function openHTMLView(name) {
 window.cinematic = async function () {
   document.getElementById("lineLoader").style.display = "block"
   if (document.location.href.includes('/en')) {
-    document.getElementById('audioSource').src = "/assets/introen.mp3"
+    document.getElementById('audioSource').src = "/audio/introen.mp3"
   } else {
-    document.getElementById('audioSource').src = "/assets/introfr.mp3"
+    document.getElementById('audioSource').src = "/audio/introfr.mp3"
   }
   document.getElementById("intro").load()
   document.getElementById("intro").play()
