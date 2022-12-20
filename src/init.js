@@ -51,7 +51,6 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
-            createConstellation()
             let blackhole = await generateBlackhole(textureLoader, scene, renderer)
 
             createGalaxies()
@@ -104,6 +103,7 @@ export async function init() {
                     i.add(moon)
 
             fontLoader.load('/fonts/nazalisation.json', function (font) {
+                createConstellation(font)
                 createTextAroundMe(font, "Cinematic", max / nbrObjects * index)
                 index++
                 createTextAroundMe(font, "Sound on/off", max / nbrObjects * index)
@@ -139,12 +139,12 @@ export async function init() {
     })
 }
 
-function createConstellation() {
+function createConstellation(font) {
     const allConstellations = ["aquarius", "aries", "cancer", "capricorn", "gemini", "leo", "libra", "pisces", "sagittarius", "scorpio", "taurus", "virgo",]
-    const centerX = -150
-    const centerY = -150
+    const centerX = -300
+    const centerY = -300
     const numPoints = 12
-    const radius = 2500
+    const radius = 2000
     const points = []
 
     const angleStep = 2 * Math.PI / numPoints
@@ -152,7 +152,9 @@ function createConstellation() {
         const x = centerX + radius * Math.cos(angle)
         const z = centerY + radius * Math.sin(angle)
         const y = 3100
-        points.push({ x, y, z })
+        const xText = (centerX + (radius - 750) * Math.cos(angle)) + 300
+        const zText = (centerY + (radius - 750) * Math.sin(angle)) + 300
+        points.push({ x, y, z, xText, zText })
     }
 
     let cc = 0
@@ -184,9 +186,33 @@ function createConstellation() {
                 group.position.set(points[cc].x, points[cc].y, points[cc].z)
                 group.name = "galaxy-"
                 scene.add(group)
+
+                const matLite = new THREE.MeshBasicMaterial({
+                    color: "#ffffff",
+                    transparent: false,
+                    opacity: 1,
+                    side: THREE.DoubleSide
+                })
+                let meshText
+                let shapes = font.generateShapes(i, 75)
+                let geometry = new THREE.ShapeGeometry(shapes)
+                geometry.computeBoundingBox()
+                let xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
+                geometry.translate(xMid, 0, 0)
+                meshText = new THREE.Mesh(geometry, matLite)
+                console.log(points[cc])
+                meshText.position.x = points[cc].xText
+                meshText.position.y = points[cc].y
+                meshText.position.z = points[cc].zText
+                meshText.rotation.set(1.60, 0, 0)
+                meshText.lookAtMe = 1
+                meshText.material.transparent = true
+                meshText.visible = true
+                scene.add(group, meshText)
+
             },
             function (xhr) { },
-            function (error) { }
+            function (error) { console.log(error) }
         )
     }
 
@@ -194,6 +220,8 @@ function createConstellation() {
         loadAndCreate(i, cc)
         cc++
     }
+
+
 }
 
 async function createAboutMe(name, size, position) {
