@@ -84,6 +84,7 @@ export function utils(pointer, camera, renderer, controls) {
         document.getElementById("launch3D").click()
     }, 1000)
 
+
     document.getElementById("launch3D").addEventListener('click', async function (event) {
         fade(document.getElementById("divCV"))
         document.getElementById("launch3D").style.display = "none"

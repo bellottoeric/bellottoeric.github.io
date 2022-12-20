@@ -3,6 +3,7 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
 import { descriptions } from '../lang/planet'
 import { sunVertex, sunFragment } from './shaders/sunShaders'
 import { generateBlackhole } from './blackhole'
@@ -17,6 +18,7 @@ const renderer = new THREE.WebGL1Renderer({
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000)
 const fontLoader = new FontLoader()
 const fbxLoader = new FBXLoader()
+const svgLoader = new SVGLoader()
 const textureLoader = new THREE.TextureLoader()
 const objLoader = new OBJLoader()
 
@@ -49,6 +51,7 @@ renderer.autoClear = false
 export async function init() {
     return new Promise(async (resolve, reject) => {
         try {
+            createConstellation()
             let blackhole = await generateBlackhole(textureLoader, scene, renderer)
 
             createGalaxies()
@@ -83,9 +86,10 @@ export async function init() {
                 createStars(scene)
 
             }, 2000)
-            //createAsteroidsLine(scene, "1")
-            //createAsteroidsLine(scene, "2")
+            createAsteroidsLine(scene, "1")
+            createAsteroidsLine(scene, "2")
             createAsteroidsLine(scene, "3")
+            createAsteroidsLine(scene, "4")
 
             let ring = createRing()
             scene.add(ring)
@@ -133,6 +137,63 @@ export async function init() {
             console.log('Error in function', e)
         }
     })
+}
+
+function createConstellation() {
+    const allConstellations = ["aquarius", "aries", "cancer", "capricorn", "gemini", "leo", "libra", "pisces", "sagittarius", "scorpio", "taurus", "virgo",]
+    const centerX = -150
+    const centerY = -150
+    const numPoints = 12
+    const radius = 2500
+    const points = []
+
+    const angleStep = 2 * Math.PI / numPoints
+    for (let angle = 0; angle < 2 * Math.PI; angle += angleStep) {
+        const x = centerX + radius * Math.cos(angle)
+        const z = centerY + radius * Math.sin(angle)
+        const y = 3100
+        points.push({ x, y, z })
+    }
+
+    let cc = 0
+
+    function loadAndCreate(i, cc) {
+        svgLoader.load(
+            '/constellations/' + i + '.svg',
+            function (data) {
+                const paths = data.paths
+                const group = new THREE.Group()
+                for (let i = 0; i < paths.length; i++) {
+                    const path = paths[i]
+                    const material = new THREE.MeshBasicMaterial({
+                        color: path.color,
+                        side: THREE.DoubleSide,
+                        depthWrite: false
+                    })
+                    const shapes = SVGLoader.createShapes(path)
+                    for (let j = 0; j < shapes.length; j++) {
+
+                        const shape = shapes[j]
+                        const geometry = new THREE.ShapeGeometry(shape)
+                        const mesh = new THREE.Mesh(geometry, material)
+                        group.add(mesh)
+                    }
+                }
+                group.scale.multiplyScalar(6)
+                group.rotation.set(1.60, 0, 0)
+                group.position.set(points[cc].x, points[cc].y, points[cc].z)
+                group.name = "galaxy-"
+                scene.add(group)
+            },
+            function (xhr) { },
+            function (error) { }
+        )
+    }
+
+    for (let i of allConstellations) {
+        loadAndCreate(i, cc)
+        cc++
+    }
 }
 
 async function createAboutMe(name, size, position) {
@@ -471,7 +532,7 @@ async function createAsteroidsLine(scene, name) {
     })
     if (name === "1")
         asteroidMesh.scale.multiplyScalar(0.1)
-    if (name === "3")
+    if (name === "3" || name === "4")
         asteroidMesh.scale.multiplyScalar(4)
 
     let asteroidInstanced = new THREE.InstancedMesh(asteroidMesh.children[0].geometry, asteroidMesh.children[0].material, 100)
