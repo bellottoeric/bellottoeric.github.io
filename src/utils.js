@@ -199,8 +199,8 @@ function removeLoader() {
 }
 
 function fade(element) {
-    var op = 1;
-    var timer = setInterval(function () {
+    let op = 1;
+    const timer = setInterval(function () {
         if (op <= 0.1) {
             clearInterval(timer);
             element.style.display = 'none';
@@ -213,9 +213,9 @@ function fade(element) {
 
 function unfade(element) {
     element.style.display = "block"
-    var op = 0.1;
+    let op = 0.1;
     element.style.display = 'block';
-    var timer = setInterval(function () {
+    const timer = setInterval(function () {
         if (op >= 1) {
             clearInterval(timer);
         }
@@ -230,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
     this.addEventListener("click", e => {
         let tar = e.target;
         if (tar.hasAttribute("data-dl")) {
-            var element = document.createElement('a');
+            const element = document.createElement('a');
             element.setAttribute('href', "/CV.png");
             element.setAttribute('download', "CV - Bellotto Eric - FULLSTACK JS DEVELOPPER.png");
 
@@ -273,4 +273,9 @@ function getMSFromProperty(property, selector) {
         return transDur.substr(0, msLabelPos);
     else if (sLabelPos > -1)
         return transDur.substr(0, sLabelPos) * 1e3;
+}
+
+
+export function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min
 }

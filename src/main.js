@@ -2,8 +2,7 @@ import * as THREE from 'three'
 
 import '../css/style.css'
 import { init } from './init'
-import { utils } from './utils'
-
+import { utils, getRandomArbitrary } from './utils'
 
 window.cinematicOn = 0
 window.clicked = 0
@@ -507,10 +506,10 @@ window.cinematic = async function () {
       }
     }
   }
-  await timeline.to(camera.position, { duration: 3, y: 500, z: 1200, x: 500, ease: "none" })
-  await timeline.to(camera.position, { duration: 3, y: 0, z: -1600, x: 0, ease: "none" })
-  await timeline.to(camera.position, { duration: 3, y: -500, z: 1200, x: -500, ease: "none" })
+  await timeline.to(camera.position, { duration: 4.5, y: -1500, z: 0, x: 0, ease: "none" })
+  await timeline.to(camera.position, { duration: 4.5, y: 1000, z: 0, x: 0, ease: "none" })
   await timeline.to(camera.position, { duration: 3, y: 0, z: 150, x: 0, ease: "none" })
+
   controls.enabled = true
   document.exitFullscreen().then(function () { }).catch(function (error) { })
   cinematicOn = 0

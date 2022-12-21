@@ -7,15 +7,14 @@ import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
 import { descriptions } from '../lang/planet'
 import { sunVertex, sunFragment } from './shaders/sunShaders'
 import { generateBlackhole } from './blackhole'
-
-const timer = ms => new Promise(res => setTimeout(res, ms))
+import { getRandomArbitrary } from './utils'
 
 const scene = new THREE.Scene()
 const scene2 = new THREE.Scene()
 const renderer = new THREE.WebGL1Renderer({
     canvas: document.querySelector("#bg")
 })
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 5000)
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 6000)
 const fontLoader = new FontLoader()
 const fbxLoader = new FBXLoader()
 const svgLoader = new SVGLoader()
@@ -54,7 +53,6 @@ export async function init() {
             let blackhole = await generateBlackhole(textureLoader, scene, renderer)
 
             createGalaxies()
-
             let index = 1
             let nbrObjects = 7
             let max = 42
@@ -81,14 +79,11 @@ export async function init() {
             createAboutMe("chess.fbx", 0.08, [0, 50])
             createAboutMe("eth.fbx", 0.08, [25, 50])
 
-            setTimeout(() => {
-                createStars(scene)
-
-            }, 2000)
-            createAsteroidsLine(scene, "1")
-            createAsteroidsLine(scene, "2")
-            createAsteroidsLine(scene, "3")
-            createAsteroidsLine(scene, "4")
+            createStars()
+            createAsteroidsLine("1")
+            createAsteroidsLine("2")
+            createAsteroidsLine("3")
+            createAsteroidsLine("4")
 
             let ring = createRing()
             scene.add(ring)
@@ -200,7 +195,6 @@ function createConstellation(font) {
                 let xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
                 geometry.translate(xMid, 0, 0)
                 meshText = new THREE.Mesh(geometry, matLite)
-                console.log(points[cc])
                 meshText.position.x = points[cc].xText
                 meshText.position.y = points[cc].y
                 meshText.position.z = points[cc].zText
@@ -212,7 +206,7 @@ function createConstellation(font) {
 
             },
             function (xhr) { },
-            function (error) { console.log(error) }
+            function (error) { }
         )
     }
 
@@ -547,7 +541,7 @@ function getNeonMaterial(name, cc) {
     return (neonMaterial)
 }
 
-async function createAsteroidsLine(scene, name) {
+async function createAsteroidsLine(name) {
     const [texture, asteroidMesh] = await Promise.all([
         textureLoader.loadAsync('asteroids/' + name + '.jpg'),
         objLoader.loadAsync('asteroids/' + name + '.obj'),
@@ -566,7 +560,7 @@ async function createAsteroidsLine(scene, name) {
     let asteroidInstanced = new THREE.InstancedMesh(asteroidMesh.children[0].geometry, asteroidMesh.children[0].material, 100)
     scene.add(asteroidInstanced)
 
-    for (var i = 0; i < asteroidInstanced.count; i++) {
+    for (let i = 0; i < asteroidInstanced.count; i++) {
         const angle = Math.random() * Math.PI * 2
         let randomSize = getRandomArbitrary(0.01, 0.05)
         asteroidMesh.scale.multiplyScalar(randomSize)
@@ -578,30 +572,29 @@ async function createAsteroidsLine(scene, name) {
         asteroidInstanced.setMatrixAt(i, asteroidMesh.matrix)
         asteroidMesh.scale.multiplyScalar(1 / randomSize)
     }
-    asteroidInstanced.instanceMatrix.needsUpdate = true;
+    asteroidInstanced.instanceMatrix.needsUpdate = true
 }
 
-async function createStars(scene) {
-    let stars = []
-    for (let z = 0; z < 250; z++) {
-        let geometry = new THREE.SphereGeometry(0.5, 32, 32)
-        let material = new THREE.MeshBasicMaterial({ color: 0xffffff })
-        let sphere = new THREE.Mesh(geometry, material)
-        sphere.position.x = getRandomArbitrary(-4000, 4000)
-        sphere.position.y = getRandomArbitrary(-4000, 4000)
-        sphere.position.z = getRandomArbitrary(-4000, 4000)
-        sphere.scale.x = sphere.scale.y = getRandomArbitrary(8, 16)
+async function createStars() {
+    let geometry = new THREE.SphereGeometry(0.5, 32, 32)
+    let material = new THREE.MeshBasicMaterial({ color: 0xffffff })
+    let star = new THREE.Mesh(geometry, material, 250)
+    let instancedStar = new THREE.InstancedMesh(geometry, material, 250)
+    scene.add(instancedStar)
+    for (let z = 0; z < instancedStar.count; z++) {
 
-        let dx = sphere.position.x - 0
-        let dy = sphere.position.y - 0
-        let dz = sphere.position.z - 0
+        star.position.x = getRandomArbitrary(-4000, 4000)
+        star.position.y = getRandomArbitrary(-4000, 4000)
+        star.position.z = getRandomArbitrary(-4000, 4000)
+        star.scale.x = star.scale.y = getRandomArbitrary(8, 16)
+
+        let dx = star.position.x - 0
+        let dy = star.position.y - 0
+        let dz = star.position.z - 0
         if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 2500)
             continue
-        scene.add(sphere)
-        stars.push(sphere)
+        star.updateMatrix()
+        instancedStar.setMatrixAt(z, star.matrix)
     }
-}
-
-function getRandomArbitrary(min, max) {
-    return Math.random() * (max - min) + min
+    instancedStar.instanceMatrix.needsUpdate = true;
 }
