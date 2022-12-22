@@ -2,7 +2,7 @@ import * as THREE from 'three'
 
 import '../css/style.css'
 import { init } from './init'
-import { utils, getRandomArbitrary } from './utils'
+import { utils } from './utils'
 
 window.cinematicOn = 0
 window.clicked = 0
@@ -24,7 +24,7 @@ const blackHoleClock = new THREE.Clock()
 
 start()
 
-async function start(e) {
+async function start() {
   return (new Promise(async (resolve, reject) => {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh, blackhole] = await init()
@@ -34,11 +34,6 @@ async function start(e) {
     }
   }))
 }
-
-window.addEventListener("load", function (event) {
-  if (camera?.position)
-    gsap.to(camera.position, { duration: 1.5, z: 150, y: 0 })
-})
 
 setInterval(() => {
   point = point + (0.00001 * sign)
@@ -117,11 +112,7 @@ function clickDetection() {
     if (name.length && clicked && controls.enabled) {
       window.clicked = 0
       selectedPlanet = ""
-      if (name === "/planetTexture/moon.jpg") {
-        window.open("https://pomatobot.com")
-      } else if (name === "/planetTexture/earth.jpg") {
-        window.open("https://xpert-agro.fr")
-      } else if (name === "play") {
+      if (name === "play") {
         cinematic()
       } else if (name.includes("music")) {
         document.getElementsByTagName("audio")[0].style.opacity = '1';

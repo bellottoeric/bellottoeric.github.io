@@ -2,6 +2,10 @@ import * as THREE from 'three'
 import { blackholeVertex, blackholeFragment } from './shaders/blackholeShaders'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
+let loadURL = "https://public-2e3.pages.dev/"
+if (document.location.href.includes('/localhost'))
+    loadURL = "https://public-2e3.pages.dev/"
+
 const gltfLoader = new GLTFLoader()
 
 const parameters = {
@@ -15,7 +19,7 @@ const parameters = {
 }
 
 const startBlackhole = async (textureLoader, scene, renderer) => {
-    const sphere = (await gltfLoader.loadAsync('/blackhole/blackholeSphere.gltf')).scene.children[0]
+    const sphere = (await gltfLoader.loadAsync(loadURL + 'blackhole/blackholeSphere.gltf')).scene.children[0]
     sphere.position.set(0, -1000, 0)
     sphere.rotation.set(105.25, 0, 0)
     sphere.scale.multiplyScalar(2.5)
@@ -25,7 +29,7 @@ const startBlackhole = async (textureLoader, scene, renderer) => {
     let material = null
     let points = null
 
-    const starTexture = textureLoader.load("/blackhole/blackholeStar.png")
+    const starTexture = textureLoader.load(loadURL + "blackhole/blackholeStar.png")
 
     if (points !== null) {
         geometry.dispose();

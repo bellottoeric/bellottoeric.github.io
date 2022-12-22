@@ -9,6 +9,10 @@ import { sunVertex, sunFragment } from './shaders/sunShaders'
 import { generateBlackhole } from './blackhole'
 import { getRandomArbitrary } from './utils'
 
+let loadURL = "https://public-2e3.pages.dev/"
+if (document.location.href.includes('/localhost'))
+    loadURL = "https://public-2e3.pages.dev/"
+
 const scene = new THREE.Scene()
 const scene2 = new THREE.Scene()
 const renderer = new THREE.WebGL1Renderer({
@@ -155,8 +159,7 @@ function createConstellation(font) {
     let cc = 0
 
     function loadAndCreate(i, cc) {
-        svgLoader.load(
-            '/constellations/' + i + '.svg',
+        svgLoader.load(loadURL + 'constellations/' + i + '.svg',
             function (data) {
                 const paths = data.paths
                 const group = new THREE.Group()
@@ -214,12 +217,10 @@ function createConstellation(font) {
         loadAndCreate(i, cc)
         cc++
     }
-
-
 }
 
 async function createAboutMe(name, size, position) {
-    let mesh = await fbxLoader.loadAsync("/aboutMeFBX/" + name)
+    let mesh = await fbxLoader.loadAsync(loadURL + "aboutMeFBX/" + name)
     mesh.scale.multiplyScalar(size)
     name = name.replace('.fbx', "")
     let cc = 0
@@ -252,7 +253,7 @@ function createGalaxies() {
     ]
     for (let i of allGalaxies) {
         let geometry = new THREE.CircleGeometry(60 * 5, 320 * 5)
-        let texture = new THREE.TextureLoader().load("/galaxies/" + i.name + ".jpg",)
+        let texture = new THREE.TextureLoader().load(loadURL + "galaxies/" + i.name + ".jpg",)
         let material = new THREE.MeshBasicMaterial({ map: texture })
         let mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(i.pos[0], i.pos[1], i.pos[2])
@@ -263,7 +264,7 @@ function createGalaxies() {
 }
 
 function createMoon() {
-    const meshTexture = new THREE.TextureLoader().load("/planetTexture/moon.jpg")
+    const meshTexture = new THREE.TextureLoader().load(loadURL + "planetTexture/moon.jpg")
     const s_Geometry = new THREE.SphereGeometry(12, 64, 32)
     const s_materials = new THREE.MeshStandardMaterial({ map: meshTexture })
     let moon = new THREE.Mesh(s_Geometry, s_materials)
@@ -277,7 +278,7 @@ function createMoon() {
 
 function createRing() {
     let loader = new THREE.TextureLoader()
-    let ringTexture = loader.load("/planetTexture/saturnRing.png")
+    let ringTexture = loader.load(loadURL + "planetTexture/saturnRing.png")
     let saturnRadius = 0.98
     let ringGeometry = new THREE.RingGeometry(45 * saturnRadius, 90 * saturnRadius, 60 * 32, 80, 0, Math.PI * 2)
     let ringMaterial = new THREE.MeshBasicMaterial({
@@ -297,7 +298,7 @@ function createRing() {
 }
 
 async function createPlanet(name, orderTime, size, font) {
-    const meshTexture = new THREE.TextureLoader().load("/planetTexture/" + name + '.jpg')
+    const meshTexture = new THREE.TextureLoader().load(loadURL + "planetTexture/" + name + '.jpg')
     const s_Geometry = new THREE.SphereGeometry(size[0], size[1], size[2])
     let s_materials = new THREE.MeshStandardMaterial({ color: 0xffffff, map: meshTexture })
 
@@ -322,7 +323,7 @@ async function createPlanet(name, orderTime, size, font) {
         });
         mesh = new THREE.Mesh(s_Geometry, neonMaterial)
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-            mesh.scale.multiplyScalar(10)
+            mesh.scale.multiplyScalar(8)
         else
             mesh.scale.multiplyScalar(20)
     }
@@ -456,7 +457,7 @@ async function createMeshAroundMe(name, orderTime, size, type) {
         mesh.material.side = THREE.DoubleSide;
         mesh.dicons = 1
     } else {
-        mesh = await fbxLoader.loadAsync("https://assets-495.pages.dev/" + name)
+        mesh = await fbxLoader.loadAsync(loadURL + "aroundMeFBX/" + name)
         mesh.scale.multiplyScalar(0.085)
         mesh.dicons = 1
         name = name.replace('.fbx', "")
@@ -543,8 +544,8 @@ function getNeonMaterial(name, cc) {
 
 async function createAsteroidsLine(name) {
     const [texture, asteroidMesh] = await Promise.all([
-        textureLoader.loadAsync('asteroids/' + name + '.jpg'),
-        objLoader.loadAsync('asteroids/' + name + '.obj'),
+        textureLoader.loadAsync(loadURL + '/asteroids/' + name + '.jpg'),
+        objLoader.loadAsync(loadURL + '/asteroids/' + name + '.obj'),
     ])
     asteroidMesh.traverse(function (child) {
         if (child.isMesh) {

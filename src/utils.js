@@ -74,15 +74,10 @@ export function utils(pointer, camera, renderer, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     })
 
-
     let loaded = 0
     setTimeout(() => {
         unfade(document.getElementById("launch3D"))
-
     }, 1000 * 8)
-    setTimeout(() => {
-        document.getElementById("launch3D").click()
-    }, 1000)
 
 
     document.getElementById("launch3D").addEventListener('click', async function (event) {
@@ -109,8 +104,8 @@ export function utils(pointer, camera, renderer, controls) {
             await (new Promise(res => setTimeout(res, 10)))
         }
         animate()
-        //await (new Promise(res => setTimeout(res, 500)))
         removeLoader()
+        gsap.to(camera.position, { duration: 1.5, z: 150, y: 0 })
     }, false)
 
 
