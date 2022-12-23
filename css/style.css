@@ -706,3 +706,19 @@ audio {
     transform: translate(0, 0.375em) rotate(-45deg);
   }
 }
+
+/* Animation DOWNLOAD */
+
+/* STAR HELP BUTTON */
+#goHelp {
+  cursor: help;
+  position: absolute;
+  bottom: 2%;
+  right: 2%;
+  width: 10%;
+}
+
+.swal2-popup.swal2-toast .swal2-title {
+  font-size: 1em !important;
+  top: 50%;
+}

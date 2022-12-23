@@ -1,6 +1,13 @@
 import { setupVideoPlayer } from './videoPlayer'
 
 export function utils(pointer, camera, renderer, controls) {
+    document.getElementById("goHelp").addEventListener('click', async function (event) {
+        Swal.fire(
+            document.location.href.includes('/en') ? 'Tips' : 'Astuces',
+            document.location.href.includes('/en') ? 'Click on the moon to return to the menu.<br>All elements are clickable' : 'Cliquez sur la lune pour revenir au menu.<br>Tous les éléments sont cliquables.',
+            'info'
+        )
+    }, false)
     document.getElementById("goHome").addEventListener('click', async function (event) {
         window.selectedPlanet = ""
         document.getElementById("presentation").classList.add("hidden")
@@ -77,12 +84,26 @@ export function utils(pointer, camera, renderer, controls) {
     let loaded = 0
     setTimeout(() => {
         unfade(document.getElementById("launch3D"))
+        Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('click', () => { document.getElementById("launch3D").click() })
+            }
+        }).fire({
+            icon: 'success',
+            title: document.location.href.includes('/en') ? "3D Experience is ready !" : "L'expérience en 3D est prête !"
+        })
     }, 1000 * 8)
     setTimeout(() => {
-        document.getElementById("launch3D").click()
+        // document.getElementById("launch3D").click()
     }, 1000)
 
     document.getElementById("launch3D").addEventListener('click', async function (event) {
+        if (document.getElementsByClassName("swal2-top-end") && document.getElementsByClassName("swal2-top-end")[0])
+            fade(document.getElementsByClassName("swal2-top-end")[0])
         fade(document.getElementById("divCV"))
         document.getElementById("launch3D").style.display = "none"
         let saveMaxWidth = window.innerWidth
@@ -161,8 +182,11 @@ function removeLoader() {
     document.getElementById("lineLoader").classList.remove("lineLoader")
     document.getElementById("lineLoader").style.backgroundColor = "black";
 
-    if (!cinematicOn)
+
+    if (!cinematicOn) {
         document.getElementById("goHome").classList.remove("hidden")
+        document.getElementById("goHelp").classList.remove("hidden")
+    }
     document.getElementById("parentLoader").classList.add("hidden")
     document.getElementById("bg").classList.remove("hidden")
     if (!localStorage.getItem('cinematicated')) {
@@ -220,6 +244,8 @@ function unfade(element) {
 
 /* DOWNLOAD CV BUTTON */
 document.addEventListener("DOMContentLoaded", function () {
+    document.getElementsByTagName("audio")[0].volume = 0.1
+    document.getElementsByTagName("audio")[1].volume = 0.1
     this.addEventListener("click", e => {
         let tar = e.target
         if (tar.hasAttribute("data-dl")) {

@@ -21,15 +21,6 @@ var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer
 
 const blackHoleClock = new THREE.Clock()
 
-
-
-
-function requestAnimFrame() {
-
-
-}
-
-
 start()
 
 async function start() {
@@ -38,7 +29,10 @@ async function start() {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh, blackhole] = await init()
       utils(pointer, camera, renderer, controls)
       renderer.setPixelRatio(window.devicePixelRatio)
-      renderer.setSize(window.innerWidth, window.innerHeight)
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+        renderer.setSize(window.innerWidth / 2, window.innerHeight / 2)
+      else
+        renderer.setSize(window.innerWidth, window.innerHeight)
     } catch (e) {
       console.log('Error in function', e)
     }
@@ -441,6 +435,7 @@ function openHTMLView(name) {
 
 window.cinematic = async function () {
   document.getElementById("lineLoader").style.display = "block"
+  document.getElementById("goHelp").classList.add("hidden")
   if (document.location.href.includes('/en')) {
     document.getElementById('audioSource').src = "/audio/introen.mp3"
   } else {
@@ -522,6 +517,7 @@ window.cinematic = async function () {
   document.exitFullscreen().then(function () { }).catch(function (error) { })
   cinematicOn = 0
   document.getElementById("lineLoader").style.display = "none"
+  document.getElementById("goHelp").classList.remove("hidden")
 }
 
 class Vector extends Array {
