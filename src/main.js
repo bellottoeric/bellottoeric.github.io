@@ -37,6 +37,8 @@ async function start() {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh, blackhole] = await init()
       utils(pointer, camera, renderer, controls)
+      renderer.setPixelRatio(window.devicePixelRatio)
+      renderer.setSize(window.innerWidth, window.innerHeight)
     } catch (e) {
       console.log('Error in function', e)
     }
@@ -50,50 +52,16 @@ setInterval(() => {
   }
 }, 1)
 
-let slow = 0
-let checkSlow = 0
-setTimeout(() => {
-  checkSlow = 1
-}, 1000 * 10)
-let lastCalledTime
-let fps
-
 window.animate = function () {
   requestAnimationFrame(animate)
-
-  if (!lastCalledTime) {
-    lastCalledTime = Date.now();
-    fps = 0;
-  } else {
-
-    let delta = (Date.now() - lastCalledTime) / 1000;
-    lastCalledTime = Date.now();
-    fps = 1 / delta;
-  }
-  if (fps < 10 && slow === 0 && slow === 1) {
-    alert('SLOW')
-    renderer.setSize(window.innerWidth / 2, window.innerHeight / 2)
-    slow = 1
-  }
-
-
   let time = performance.now() * 0.0005 + 22000
-
-  if (inactivity === true && !cinematicOn && controls.maxDistance !== 3000) {
-
-    let vec = new Vector(Math.cos(time * 0.1) * 250 + camera.position.z, Math.sin(time * 0.1) * 250 + camera.position.x, 0 + camera.position.y)
-    vec = vec.map((e, i) => e + vec[i])
-
-    camera.position.z -= vec[0] / 100
-    camera.position.x -= vec[1] / 100
-    camera.position.y -= vec[2] / 100
-  }
 
   clickDetection()
   animateAroundMe(time)
   animatePlanet(time)
   animateAboutMe(time)
   animateBlackhole()
+  calcInactivity(time)
 
   controls.update()
   renderer.clear()
@@ -112,6 +80,17 @@ function animateBlackhole() {
     blackhole.points.rotation.set(0, 25.03, 0)
   }
   blackhole.blackholeSphere.rotation.z += 0.03
+}
+
+function calcInactivity(time) {
+  if (inactivity === true && !cinematicOn && controls.maxDistance !== 3000) {
+    let vec = new Vector(Math.cos(time * 0.1) * 250 + camera.position.z, Math.sin(time * 0.1) * 250 + camera.position.x, 0 + camera.position.y)
+    vec = vec.map((e, i) => e + vec[i])
+
+    camera.position.z -= vec[0] / 100
+    camera.position.x -= vec[1] / 100
+    camera.position.y -= vec[2] / 100
+  }
 }
 
 function clickDetection() {
@@ -158,6 +137,10 @@ function clickDetection() {
         window.open("https://bellottoeric.fr/", "_self")
       } else if (type === "planet") {
         planetInfo(name)
+      } else if (name.includes("Object_")) {
+        gsap.to(camera.position, { duration: 2, x: 0, y: -1190, z: 0 })
+      } else if (name === "constellations") {
+        gsap.to(camera.position, { duration: 2, x: 0, y: -200, z: 0 })
       }
     }
   }
@@ -219,6 +202,9 @@ async function planetInfo(name) {
       let yFix = 400
       if (i.position.y > 100)
         yFix = 0
+
+      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+        vectorMutiplier += 0.1
       gsap.to(camera.position, { duration: 2, x: vec[0] * vectorMutiplier, y: i.position.y - yFix, z: vec[1] * vectorMutiplier })
       setTimeout(() => {
         movingCamera = 0
@@ -258,7 +244,7 @@ function animatePlanet(time) {
       distancePlanet['jupiter'] = 1000
       distancePlanet['saturn'] = 1300
       distancePlanet['uranus'] = 1600
-      distancePlanet['neptune'] = 1900
+      distancePlanet['neptune'] = 1800
       let speedPlanet = []
       speedPlanet['sun'] = 0
       speedPlanet['mercury'] = 0.08727

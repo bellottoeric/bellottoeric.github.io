@@ -46,8 +46,6 @@ scene2.add((new THREE.AmbientLight(0xffffff, 0.3)))
 pointLight.position.set(0, 0, 100)
 scene2.add(pointLight)
 
-renderer.setPixelRatio(window.devicePixelRatio)
-renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.render(scene, camera)
 renderer.autoClear = false
 
@@ -177,18 +175,17 @@ function createConstellation(font) {
                     })
                     const shapes = SVGLoader.createShapes(path)
                     for (let j = 0; j < shapes.length; j++) {
-
                         const shape = shapes[j]
                         const geometry = new THREE.ShapeGeometry(shape)
                         const mesh = new THREE.Mesh(geometry, material)
+                        mesh.name = "constellations"
                         group.add(mesh)
                     }
                 }
                 group.scale.multiplyScalar(6)
                 group.rotation.set(1.60, 0, 0)
                 group.position.set(points[cc].x, points[cc].y, points[cc].z)
-                group.name = "galaxy-"
-                scene.add(group)
+                group.name = "constellations"
 
                 const matLite = new THREE.MeshBasicMaterial({
                     color: "#ffffff",
@@ -210,6 +207,7 @@ function createConstellation(font) {
                 meshText.lookAtMe = 1
                 meshText.material.transparent = true
                 meshText.visible = true
+                meshText.name = "constellations"
                 scene.add(group, meshText)
 
             },
