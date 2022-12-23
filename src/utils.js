@@ -23,11 +23,10 @@ export function utils(pointer, camera, renderer, controls) {
     }, false)
 
     window.addEventListener('resize', ev => {
-        const width = window.innerWidth
-        const height = window.innerHeight
-
-        renderer.setSize(width, height)
-        camera.aspect = width / height
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+            renderer.setSize(window.innerWidth / 4, window.innerHeight / 4)
+        else
+            renderer.setSize(window.innerWidth, window.innerHeight)
         camera.updateProjectionMatrix()
     })
 
