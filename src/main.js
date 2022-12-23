@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-
 import '../css/style.css'
 import { init } from './init'
 import { utils } from './utils'
@@ -49,7 +48,7 @@ window.animate = function () {
 
   if (inactivity === true && !cinematicOn && controls.maxDistance !== 3000) {
 
-    let vec = new Vector(Math.cos(time * 0.1) * 250 + camera.position.z, Math.sin(time * 0.1) * 250 + camera.position.x, 0 + camera.position.y);
+    let vec = new Vector(Math.cos(time * 0.1) * 250 + camera.position.z, Math.sin(time * 0.1) * 250 + camera.position.x, 0 + camera.position.y)
     vec = vec.map((e, i) => e + vec[i])
 
     camera.position.z -= vec[0] / 100
@@ -74,7 +73,7 @@ window.animate = function () {
 function animateBlackhole() {
   const elapsedTime = blackHoleClock.getElapsedTime() * 10
   if (blackhole.material)
-    blackhole.material.uniforms.uTime.value = elapsedTime;
+    blackhole.material.uniforms.uTime.value = elapsedTime
 
   if (blackhole.points) {
     blackhole.points.rotation.set(0, 25.03, 0)
@@ -115,9 +114,9 @@ function clickDetection() {
       if (name === "play") {
         cinematic()
       } else if (name.includes("music")) {
-        document.getElementsByTagName("audio")[0].style.opacity = '1';
+        document.getElementsByTagName("audio")[0].style.opacity = '1'
         setTimeout(() => {
-          document.getElementsByTagName("audio")[0].style.opacity = '0';
+          document.getElementsByTagName("audio")[0].style.opacity = '0'
         }, 5000)
       } else if (name.includes('parcours') || name.includes('projects') || name.includes('contact') || name.includes('assets/me')) {
         openHTMLView(name)
@@ -166,7 +165,7 @@ async function planetInfo(name) {
   selectedPlanet = name
   for (let i of listPlanetMesh) {
     if (i.name === name) {
-      let vec = new Vector(0 + i.position.x, 0 + i.position.z);
+      let vec = new Vector(0 + i.position.x, 0 + i.position.z)
       vec = vec.map((e, i) => e + vec[i])
       if (movingCamera)
         continue
@@ -509,6 +508,6 @@ window.cinematic = async function () {
 
 class Vector extends Array {
   add(other) {
-    return this.map((e, i) => e + other[i]);
+    return this.map((e, i) => e + other[i])
   }
 }

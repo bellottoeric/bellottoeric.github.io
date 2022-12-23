@@ -7,14 +7,14 @@
 </P>
 
 Epitech student graduated in 2023.
-I have been coding for 7 years with the JS ecosystem.
+I have been coding for 8 years with the JS ecosystem.
 All my public project are available on https://bellottoeric.fr
 
 <h3 style="color: #f2f2f2;">  💻 &nbsp; More About Me </h3>
 
 - &nbsp; Freelance developer
 - &nbsp; Blockchain enthusiast
-- &nbsp; Working H24
+- &nbsp; Chess player
 
 <h3 style="color: #f2f2f2;">✋ &nbsp;Connect with Me </h3>
 

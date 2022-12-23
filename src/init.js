@@ -11,7 +11,7 @@ import { getRandomArbitrary } from './utils'
 
 let loadURL = "https://public-2e3.pages.dev/"
 if (document.location.href.includes('/localhost'))
-    loadURL = "https://public-2e3.pages.dev/"
+    loadURL = ""
 
 const scene = new THREE.Scene()
 const scene2 = new THREE.Scene()
@@ -260,7 +260,7 @@ function createGalaxies() {
         let geometry = new THREE.CircleGeometry(60 * 5, 320 * 5)
         let texture = new THREE.TextureLoader().load(loadURL + "galaxies/" + i.name + ".jpg",)
         let material = new THREE.MeshBasicMaterial({ map: texture })
-        let mesh = new THREE.Mesh(geometry, material);
+        let mesh = new THREE.Mesh(geometry, material)
         mesh.position.set(i.pos[0], i.pos[1], i.pos[2])
         mesh.rotation.set(i.rot[0], i.rot[1], i.rot[2])
         mesh.name = "galaxy-" + i
@@ -313,22 +313,22 @@ async function createPlanet(name, orderTime, size, font) {
             time: { type: "f", value: 1 },
             scale: { type: "f", value: 1.5 }
         }
-        let oldTime = new Date().getTime();
+        let oldTime = new Date().getTime()
         setInterval(() => {
-            const time = new Date().getTime();
-            const delta = 0.001 * (time - oldTime);
-            oldTime = time;
-            uniforms.time.value += 0.175 * delta;
+            const time = new Date().getTime()
+            const delta = 0.001 * (time - oldTime)
+            oldTime = time
+            uniforms.time.value += 0.175 * delta
         }, 1000 / 60)
 
         const neonMaterial = new THREE.ShaderMaterial({
             uniforms: uniforms,
             vertexShader: sunVertex(),
             fragmentShader: sunFragment()
-        });
+        })
         mesh = new THREE.Mesh(s_Geometry, neonMaterial)
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-            mesh.scale.multiplyScalar(8)
+            mesh.scale.multiplyScalar(0)
         else
             mesh.scale.multiplyScalar(20)
     }
@@ -459,7 +459,7 @@ async function createMeshAroundMe(name, orderTime, size, type) {
             new THREE.CircleGeometry(size[0], size[1]),
             new THREE.MeshBasicMaterial({ map: meshTexture })
         )
-        mesh.material.side = THREE.DoubleSide;
+        mesh.material.side = THREE.DoubleSide
         mesh.dicons = 1
     } else {
         mesh = await fbxLoader.loadAsync(loadURL + "aroundMeFBX/" + name)
@@ -543,7 +543,7 @@ function getNeonMaterial(name, cc) {
         side: THREE.FrontSide,
         blending: THREE.AdditiveBlending,
         transparent: false
-    });
+    })
     return (neonMaterial)
 }
 
@@ -602,5 +602,5 @@ async function createStars() {
         star.updateMatrix()
         instancedStar.setMatrixAt(z, star.matrix)
     }
-    instancedStar.instanceMatrix.needsUpdate = true;
+    instancedStar.instanceMatrix.needsUpdate = true
 }

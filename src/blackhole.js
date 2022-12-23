@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 let loadURL = "https://public-2e3.pages.dev/"
 if (document.location.href.includes('/localhost'))
-    loadURL = "https://public-2e3.pages.dev/"
+    loadURL = ""
 
 const gltfLoader = new GLTFLoader()
 
@@ -32,9 +32,9 @@ const startBlackhole = async (textureLoader, scene, renderer) => {
     const starTexture = textureLoader.load(loadURL + "blackhole/blackholeStar.png")
 
     if (points !== null) {
-        geometry.dispose();
-        material.dispose();
-        scene.remove(points);
+        geometry.dispose()
+        material.dispose()
+        scene.remove(points)
     }
 
     geometry = new THREE.BufferGeometry()

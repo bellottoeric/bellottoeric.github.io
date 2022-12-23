@@ -79,15 +79,13 @@ export function utils(pointer, camera, renderer, controls) {
         unfade(document.getElementById("launch3D"))
     }, 1000 * 8)
 
-
     document.getElementById("launch3D").addEventListener('click', async function (event) {
         fade(document.getElementById("divCV"))
         document.getElementById("launch3D").style.display = "none"
         let saveMaxWidth = window.innerWidth
         let saveMaxHeight = window.innerHeight
 
-        document.getElementsByTagName("h2")[0].style.opacity = '0';
-        //document.getElementsByTagName("h3")[0].style.opacity = '0';
+        document.getElementsByTagName("h2")[0].style.opacity = '0'
         let stop = saveMaxHeight + saveMaxWidth
         let waitDuringCircleLoader = 10
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -108,33 +106,31 @@ export function utils(pointer, camera, renderer, controls) {
         gsap.to(camera.position, { duration: 1.5, z: 150, y: 0 })
     }, false)
 
-
-
     // PROJECTS
     document.getElementById("buttonProjects").addEventListener('click', function (event) {
         toggleProjects()
     }, false)
 
     // ABOUT ME
-    const buttons = document.querySelectorAll(".card-buttons button");
-    const sections = document.querySelectorAll(".card-section");
-    const card = document.querySelector(".card");
+    const buttons = document.querySelectorAll(".card-buttons button")
+    const sections = document.querySelectorAll(".card-section")
+    const card = document.querySelector(".card")
 
     const handleButtonClick = (e) => {
         const targetSection = e.target.getAttribute("data-section");
-        const section = document.querySelector(targetSection);
+        const section = document.querySelector(targetSection)
         targetSection !== "#about"
             ? card.classList.add("is-active")
-            : card.classList.remove("is-active");
-        card.setAttribute("data-state", targetSection);
-        sections.forEach((s) => s.classList.remove("is-active"));
-        buttons.forEach((b) => b.classList.remove("is-active"));
-        e.target.classList.add("is-active");
-        section.classList.add("is-active");
-    };
+            : card.classList.remove("is-active")
+        card.setAttribute("data-state", targetSection)
+        sections.forEach((s) => s.classList.remove("is-active"))
+        buttons.forEach((b) => b.classList.remove("is-active"))
+        e.target.classList.add("is-active")
+        section.classList.add("is-active")
+    }
 
     buttons.forEach((btn) => {
-        btn.addEventListener("click", handleButtonClick);
+        btn.addEventListener("click", handleButtonClick)
     })
 }
 
@@ -183,7 +179,6 @@ function removeLoader() {
         document.addEventListener('keydown', viewEvent)
     }, 1000 * 10)
 
-
     function viewEvent(evt) {
         inactivity = Math.floor((new Date()).getTime() / 1000) + 10
     }
@@ -194,82 +189,83 @@ function removeLoader() {
 }
 
 function fade(element) {
-    let op = 1;
+    let op = 1
     const timer = setInterval(function () {
         if (op <= 0.1) {
-            clearInterval(timer);
-            element.style.display = 'none';
+            clearInterval(timer)
+            element.style.display = 'none'
         }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op -= op * 0.1;
-    }, 50);
+        element.style.opacity = op
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")"
+        op -= op * 0.1
+    }, 50)
 }
 
 function unfade(element) {
     element.style.display = "block"
-    let op = 0.1;
-    element.style.display = 'block';
+    let op = 0.1
+    element.style.display = 'block'
     const timer = setInterval(function () {
         if (op >= 1) {
-            clearInterval(timer);
+            clearInterval(timer)
         }
-        element.style.opacity = op;
-        element.style.filter = 'alpha(opacity=' + op * 100 + ")";
-        op += op * 0.03;
-    }, 10);
+        element.style.opacity = op
+        element.style.filter = 'alpha(opacity=' + op * 100 + ")"
+        op += op * 0.03
+    }, 10)
 }
 
 /* DOWNLOAD CV BUTTON */
 document.addEventListener("DOMContentLoaded", function () {
     this.addEventListener("click", e => {
-        let tar = e.target;
+        let tar = e.target
         if (tar.hasAttribute("data-dl")) {
-            const element = document.createElement('a');
-            element.setAttribute('href', "/CV.png");
-            element.setAttribute('download', "CV - Bellotto Eric - FULLSTACK JS DEVELOPPER.png");
+            const element = document.createElement('a')
+            if (document.location.href.includes('/en'))
+                element.setAttribute('href', "/CV/EN.pdf")
+            else
+                element.setAttribute('href', "/CV/FR.pdf")
+            element.setAttribute('download', "CV - Bellotto Eric - FULLSTACK JS DEVELOPER.pdf")
 
-            element.style.display = 'none';
-            document.body.appendChild(element);
-
-            element.click();
-
-            document.body.removeChild(element);
-            let dlClass = "dl-working";
+            element.style.display = 'none'
+            document.body.appendChild(element)
+            element.click()
+            document.body.removeChild(element)
+            let dlClass = "dl-working"
             if (!tar.classList.contains(dlClass)) {
                 let lastSpan = tar.querySelector("span:last-child"),
                     lastSpanText = lastSpan.textContent,
-                    timeout = getMSFromProperty("--dur", ":root");
+                    timeout = getMSFromProperty("--dur", ":root")
 
-                tar.classList.add(dlClass);
-                lastSpan.textContent = "Downloading…";
-                tar.disabled = true;
-
-                setTimeout(() => {
-                    lastSpan.textContent = "Completed!";
-                }, timeout * 0.9);
+                tar.classList.add(dlClass)
+                lastSpan.textContent = "Downloading..."
+                tar.disabled = true
 
                 setTimeout(() => {
-                    tar.classList.remove(dlClass);
-                    lastSpan.textContent = lastSpanText;
-                    tar.disabled = false;
-                }, timeout + 1e3);
+                    lastSpan.textContent = "Completed!"
+                }, timeout * 0.9)
+
+                setTimeout(() => {
+                    tar.classList.remove(dlClass)
+                    lastSpan.textContent = lastSpanText
+                    tar.disabled = false
+                }, timeout + 1e3)
             }
         }
-    });
-});
+    })
+})
+
 function getMSFromProperty(property, selector) {
     let cs = window.getComputedStyle(document.querySelector(selector)),
         transDur = cs.getPropertyValue(property),
         msLabelPos = transDur.indexOf("ms"),
-        sLabelPos = transDur.indexOf("s");
+        sLabelPos = transDur.indexOf("s")
 
     if (msLabelPos > -1)
-        return transDur.substr(0, msLabelPos);
+        return transDur.substr(0, msLabelPos)
     else if (sLabelPos > -1)
-        return transDur.substr(0, sLabelPos) * 1e3;
+        return transDur.substr(0, sLabelPos) * 1e3
 }
-
 
 export function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min
