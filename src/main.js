@@ -21,6 +21,15 @@ var [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer
 
 const blackHoleClock = new THREE.Clock()
 
+
+
+
+function requestAnimFrame() {
+
+
+}
+
+
 start()
 
 async function start() {
@@ -41,8 +50,32 @@ setInterval(() => {
   }
 }, 1)
 
+let slow = 0
+let checkSlow = 0
+setTimeout(() => {
+  checkSlow = 1
+}, 1000 * 10)
+let lastCalledTime
+let fps
+
 window.animate = function () {
   requestAnimationFrame(animate)
+
+  if (!lastCalledTime) {
+    lastCalledTime = Date.now();
+    fps = 0;
+  } else {
+
+    let delta = (Date.now() - lastCalledTime) / 1000;
+    lastCalledTime = Date.now();
+    fps = 1 / delta;
+  }
+  if (fps < 10 && slow === 0 && slow === 1) {
+    alert('SLOW')
+    renderer.setSize(window.innerWidth / 2, window.innerHeight / 2)
+    slow = 1
+  }
+
 
   let time = performance.now() * 0.0005 + 22000
 
@@ -91,7 +124,6 @@ function clickDetection() {
       document.getElementsByTagName("html")[0].style.cursor = "none"
     else
       document.getElementsByTagName("html")[0].style.cursor = "move"
-
   }
   for (let i = 0; i < intersects.length; i++) {
     let name = intersects[i].object.name

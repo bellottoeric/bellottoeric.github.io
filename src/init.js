@@ -46,8 +46,8 @@ scene2.add((new THREE.AmbientLight(0xffffff, 0.3)))
 pointLight.position.set(0, 0, 100)
 scene2.add(pointLight)
 
-renderer.setSize(window.innerHeight, window.innerHeight)
 renderer.setPixelRatio(window.devicePixelRatio)
+renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.render(scene, camera)
 renderer.autoClear = false
 
@@ -328,7 +328,7 @@ async function createPlanet(name, orderTime, size, font) {
         })
         mesh = new THREE.Mesh(s_Geometry, neonMaterial)
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-            mesh.scale.multiplyScalar(0)
+            mesh.scale.multiplyScalar(2)
         else
             mesh.scale.multiplyScalar(20)
     }

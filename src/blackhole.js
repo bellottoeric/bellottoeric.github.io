@@ -23,6 +23,7 @@ const startBlackhole = async (textureLoader, scene, renderer) => {
     sphere.position.set(0, -1000, 0)
     sphere.rotation.set(105.25, 0, 0)
     sphere.scale.multiplyScalar(2.5)
+    sphere.name = "blackholeSphere"
     scene.add(sphere)
 
     let geometry = null

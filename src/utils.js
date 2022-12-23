@@ -78,6 +78,9 @@ export function utils(pointer, camera, renderer, controls) {
     setTimeout(() => {
         unfade(document.getElementById("launch3D"))
     }, 1000 * 8)
+    setTimeout(() => {
+        document.getElementById("launch3D").click()
+    }, 1000)
 
     document.getElementById("launch3D").addEventListener('click', async function (event) {
         fade(document.getElementById("divCV"))
