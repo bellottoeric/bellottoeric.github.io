@@ -458,7 +458,7 @@ audio {
   z-index: 9999;
   position: absolute;
   background: linear-gradient(45deg, #d5135a, #f05924);
-  border-radius: 0.2em;
+  border-radius: 10px;
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -721,4 +721,23 @@ audio {
 .swal2-popup.swal2-toast .swal2-title {
   font-size: 1em !important;
   top: 50%;
+  margin: unset !important;
+  display: contents !important;
+}
+
+.swal2-popup.swal2-toast {
+  cursor: pointer;
+}
+
+.swal2-popup {
+  border-radius: 10px !important;
+}
+
+@media (min-width: 1281px) {
+  #launch3D {
+    opacity: 0 !important;
+  }
+}
+.swal2-title {
+  margin-top: 10px;
 }

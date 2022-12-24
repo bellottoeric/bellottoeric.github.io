@@ -28,9 +28,9 @@ async function start() {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh, blackhole] = await init()
       utils(pointer, camera, renderer, controls)
-      renderer.setPixelRatio(window.devicePixelRatio)
+      renderer.setPixelRatio(window.devicePixelRatio / 2)
       if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-        renderer.setSize(window.innerWidth / 2, window.innerHeight / 2)
+        renderer.setSize(window.innerWidth / 4, window.innerHeight / 4)
       else
         renderer.setSize(window.innerWidth, window.innerHeight)
     } catch (e) {
@@ -155,14 +155,16 @@ function animateAboutMe(time) {
     else
       i.visible = false
     i.rotation.y += 0.01
+    if (i.name === "gym")
+      i.position.x += (speed * direction * -1)
+    if (i.name === "eth")
+      i.position.x += (speed * direction)
   }
   ccDirection++
   if (ccDirection > maxTime) {
     ccDirection = 0
     direction *= -1
   }
-  aboutMeMesh[1].position.x += (speed * direction)
-  aboutMeMesh[2].position.x += (speed * direction * -1)
 }
 
 async function planetInfo(name) {

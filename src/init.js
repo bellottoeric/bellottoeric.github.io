@@ -54,7 +54,6 @@ export async function init() {
         try {
             let blackhole = await generateBlackhole(textureLoader, scene, renderer)
 
-            createGalaxies()
             let index = 1
             let nbrObjects = 7
             let max = 42
@@ -101,6 +100,7 @@ export async function init() {
 
             fontLoader.load('/fonts/nazalisation.json', function (font) {
                 createConstellation(font)
+                createGalaxies(font)
                 if (document.location.href.includes('/en'))
                     createTextAroundMe(font, "Cinematic", max / nbrObjects * index)
                 else
@@ -108,7 +108,7 @@ export async function init() {
                 index++
                 createTextAroundMe(font, "Sound on/off", max / nbrObjects * index)
                 index++
-                if (document.location.href.includes('/en')) {
+                if (!document.location.href.includes('/en')) {
                     createTextAroundMe(font, "French Version", max / nbrObjects * index)
                     index++
                     createTextAroundMe(font, "À propos", max / nbrObjects * index)
@@ -209,7 +209,6 @@ function createConstellation(font) {
                 meshText.visible = true
                 meshText.name = "constellations"
                 scene.add(group, meshText)
-
             },
             function (xhr) { },
             function (error) { }
@@ -246,7 +245,7 @@ async function createAboutMe(name, size, position) {
     aboutMeMesh.push(mesh)
 }
 
-function createGalaxies() {
+function createGalaxies(font) {
     let allGalaxies = [
         { name: 'spiral', pos: [2450, -700, 0], rot: [0, -1.8, 0] },
         { name: 'irregular', pos: [-2450, -700, 0], rot: [0, 1.8, 0] },
@@ -254,6 +253,13 @@ function createGalaxies() {
         { name: 'activecor', pos: [0, -700, 2450], rot: [0, 60, 0] },
         { name: 'lenticular', pos: [0, -700, -2450], rot: [0, 0, 0] },
     ]
+    const matLite = new THREE.MeshBasicMaterial({
+        color: "#ffffff",
+        transparent: false,
+        opacity: 1,
+        side: THREE.DoubleSide
+    })
+
     for (let i of allGalaxies) {
         let geometry = new THREE.CircleGeometry(60 * 5, 320 * 5)
         let texture = new THREE.TextureLoader().load(loadURL + "galaxies/" + i.name + ".jpg",)
@@ -262,7 +268,23 @@ function createGalaxies() {
         mesh.position.set(i.pos[0], i.pos[1], i.pos[2])
         mesh.rotation.set(i.rot[0], i.rot[1], i.rot[2])
         mesh.name = "galaxy-" + i
-        scene.add(mesh)
+
+        let meshText
+        let shapes = font.generateShapes("Galaxy " + i.name, 75)
+        geometry = new THREE.ShapeGeometry(shapes)
+        geometry.computeBoundingBox()
+        let xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
+        geometry.translate(xMid, 0, 0)
+        meshText = new THREE.Mesh(geometry, matLite)
+        meshText.position.x = i.pos[0]
+        meshText.position.y = i.pos[1] + 350
+        meshText.position.z = i.pos[2]
+        meshText.lookAt(0, 0, 0,)
+        meshText.lookAtMe = 1
+        meshText.material.transparent = true
+        meshText.visible = true
+        meshText.name = "galaxy-" + i
+        scene.add(mesh, meshText)
     }
 }
 
@@ -566,12 +588,13 @@ async function createAsteroidsLine(name) {
 
     for (let i = 0; i < asteroidInstanced.count; i++) {
         const angle = Math.random() * Math.PI * 2
-        let randomSize = getRandomArbitrary(0.01, 0.05)
+        let randomSize = getRandomArbitrary(0.005, 0.02)
         asteroidMesh.scale.multiplyScalar(randomSize)
         asteroidMesh.rotation.y = getRandomArbitrary(1, 360)
         asteroidMesh.rotation.x = getRandomArbitrary(1, 360)
         asteroidMesh.position.z = Math.sin(angle) * getRandomArbitrary(800, 875)
         asteroidMesh.position.x = Math.cos(angle) * getRandomArbitrary(800, 875)
+        asteroidMesh.position.y = Math.cos(angle) * getRandomArbitrary(-100, -200)
         asteroidMesh.updateMatrix()
         asteroidInstanced.setMatrixAt(i, asteroidMesh.matrix)
         asteroidMesh.scale.multiplyScalar(1 / randomSize)
