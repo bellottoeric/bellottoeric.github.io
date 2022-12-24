@@ -28,11 +28,8 @@ async function start() {
     try {
       [scene, scene2, renderer, camera, meshAroundMe, controls, raycaster, pointer, listPlanetMesh, aboutMeMesh, blackhole] = await init()
       utils(pointer, camera, renderer, controls)
-      renderer.setPixelRatio(window.devicePixelRatio / 2)
-      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-        renderer.setSize(window.innerWidth / 4, window.innerHeight / 4)
-      else
-        renderer.setSize(window.innerWidth, window.innerHeight)
+      renderer.setPixelRatio(window.devicePixelRatio)
+      renderer.setSize(window.innerWidth, window.innerHeight)
     } catch (e) {
       console.log('Error in function', e)
     }
@@ -200,7 +197,7 @@ async function planetInfo(name) {
         yFix = 0
 
       if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-        vectorMutiplier += 0.1
+        vectorMutiplier += 0.2
       gsap.to(camera.position, { duration: 2, x: vec[0] * vectorMutiplier, y: i.position.y - yFix, z: vec[1] * vectorMutiplier })
       setTimeout(() => {
         movingCamera = 0

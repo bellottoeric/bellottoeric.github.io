@@ -23,10 +23,8 @@ export function utils(pointer, camera, renderer, controls) {
     }, false)
 
     window.addEventListener('resize', ev => {
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-            renderer.setSize(window.innerWidth / 4, window.innerHeight / 4)
-        else
-            renderer.setSize(window.innerWidth, window.innerHeight)
+        renderer.setPixelRatio(window.devicePixelRatio)
+        renderer.setSize(window.innerWidth, window.innerHeight)
         camera.updateProjectionMatrix()
     })
 
@@ -80,6 +78,9 @@ export function utils(pointer, camera, renderer, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     })
 
+    setTimeout(() => {
+        document.getElementById("launch3D").click()
+    }, 1000)
     let loaded = 0
     setTimeout(() => {
         unfade(document.getElementById("launch3D"))
@@ -88,6 +89,7 @@ export function utils(pointer, camera, renderer, controls) {
             position: 'top-end',
             showConfirmButton: false,
             timerProgressBar: true,
+            timer: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 5000 : 500000,
             didOpen: (toast) => {
                 toast.addEventListener('click', () => { document.getElementById("launch3D").click() })
             }
@@ -96,9 +98,6 @@ export function utils(pointer, camera, renderer, controls) {
             title: document.location.href.includes('/en') ? "3D Experience is ready !" : "L'expérience en 3D est prête !"
         })
     }, 1000 * 8)
-    setTimeout(() => {
-        document.getElementById("launch3D").click()
-    }, 1000)
 
     document.getElementById("launch3D").addEventListener('click', async function (event) {
         if (document.getElementsByClassName("swal2-top-end") && document.getElementsByClassName("swal2-top-end")[0])

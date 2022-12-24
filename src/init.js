@@ -109,11 +109,11 @@ export async function init() {
                 createTextAroundMe(font, "Sound on/off", max / nbrObjects * index)
                 index++
                 if (!document.location.href.includes('/en')) {
-                    createTextAroundMe(font, "French Version", max / nbrObjects * index)
+                    createTextAroundMe(font, "English version", max / nbrObjects * index)
                     index++
                     createTextAroundMe(font, "À propos", max / nbrObjects * index)
                 } else {
-                    createTextAroundMe(font, "English Version", max / nbrObjects * index)
+                    createTextAroundMe(font, "Version française", max / nbrObjects * index)
                     index++
                     createTextAroundMe(font, "About me", max / nbrObjects * index)
                 }
@@ -247,11 +247,11 @@ async function createAboutMe(name, size, position) {
 
 function createGalaxies(font) {
     let allGalaxies = [
-        { name: 'spiral', pos: [2450, -700, 0], rot: [0, -1.8, 0] },
-        { name: 'irregular', pos: [-2450, -700, 0], rot: [0, 1.8, 0] },
+        { name: 'spiral', pos: [2450, -1050, 0], rot: [0, -1.8, 0] },
+        { name: 'irregular', pos: [-2450, -1050, 0], rot: [0, 1.8, 0] },
         //{ name: 'ellyptique', pos: [0, 3500, 0], rot: [1.8, 0, 0] },
-        { name: 'activecor', pos: [0, -700, 2450], rot: [0, 60, 0] },
-        { name: 'lenticular', pos: [0, -700, -2450], rot: [0, 0, 0] },
+        { name: 'activecor', pos: [0, -1050, 2450], rot: [0, 60, 0] },
+        { name: 'lenticular', pos: [0, -1050, -2450], rot: [0, 0, 0] },
     ]
     const matLite = new THREE.MeshBasicMaterial({
         color: "#ffffff",
@@ -270,14 +270,14 @@ function createGalaxies(font) {
         mesh.name = "galaxy-" + i
 
         let meshText
-        let shapes = font.generateShapes("Galaxy " + i.name, 75)
+        let shapes = font.generateShapes(document.location.href.includes('/en') ? "Galaxy " : "Galaxie " + i.name, 50)
         geometry = new THREE.ShapeGeometry(shapes)
         geometry.computeBoundingBox()
         let xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
         geometry.translate(xMid, 0, 0)
         meshText = new THREE.Mesh(geometry, matLite)
         meshText.position.x = i.pos[0]
-        meshText.position.y = i.pos[1] + 350
+        meshText.position.y = i.pos[1] - 500
         meshText.position.z = i.pos[2]
         meshText.lookAt(0, 0, 0,)
         meshText.lookAtMe = 1
