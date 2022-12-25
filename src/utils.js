@@ -248,11 +248,13 @@ document.addEventListener("DOMContentLoaded", function () {
         let tar = e.target
         if (tar.hasAttribute("data-dl")) {
             const element = document.createElement('a')
-            if (document.location.href.includes('/en'))
-                element.setAttribute('href', "/CV/EN.pdf")
-            else
-                element.setAttribute('href', "/CV/FR.pdf")
-            element.setAttribute('download', "CV - Bellotto Eric - FULLSTACK JS DEVELOPER.pdf")
+            if (document.location.href.includes('/en')) {
+                element.setAttribute('href', "/CV/Bellotto Eric - CV - Developer Full Stack JS - CDD Mars 2023 - AOUT 2023.pdf")
+                element.setAttribute('download', "Bellotto Eric - CV - Developer Full Stack JS - CDD Mars 2023 - AOUT 2023.pdf")
+            } else {
+                element.setAttribute('href', "/CV/Bellotto Eric - CV - Développeur Full Stack JS - CDD Mars 2023 - AOUT 2023.pdf")
+                element.setAttribute('download', "Bellotto Eric - CV - Développeur Full Stack JS - CDD Mars 2023 - AOUT 2023.pdf")
+            }
 
             element.style.display = 'none'
             document.body.appendChild(element)

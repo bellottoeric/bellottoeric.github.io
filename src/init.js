@@ -594,7 +594,7 @@ async function createAsteroidsLine(name) {
         asteroidMesh.rotation.x = getRandomArbitrary(1, 360)
         asteroidMesh.position.z = Math.sin(angle) * getRandomArbitrary(800, 875)
         asteroidMesh.position.x = Math.cos(angle) * getRandomArbitrary(800, 875)
-        asteroidMesh.position.y = Math.cos(angle) * getRandomArbitrary(-100, -200)
+        asteroidMesh.position.y = (Math.cos(angle) * getRandomArbitrary(50, 150)) * 1.5
         asteroidMesh.updateMatrix()
         asteroidInstanced.setMatrixAt(i, asteroidMesh.matrix)
         asteroidMesh.scale.multiplyScalar(1 / randomSize)
