@@ -1,1 +1,19 @@
-User-agent: * Disallow: 
+User-agent: *
+Disallow: /
+
+User-agent: Bingbot
+Disallow:
+
+User-agent: Yahoo! Slurp
+Disallow:
+
+User-agent: Yandex
+Disallow:
+
+User-agent: Baiduspider
+Disallow: 
+
+User-agent: Googlebot
+Disallow:
+
+Sitemap: https://bellottoeric.fr/sitemap.xml

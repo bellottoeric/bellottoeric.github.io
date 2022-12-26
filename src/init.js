@@ -500,8 +500,6 @@ async function createMeshAroundMe(name, orderTime, size, type) {
         })
     }
 
-    if (name === "/assets/me2.png")
-        mesh.translateX(50)
     mesh.name = name
     mesh.orderTime = orderTime
     if (name === "/assets/me.png") {
