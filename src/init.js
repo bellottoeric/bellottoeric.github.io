@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader'
-import { descriptions } from '../lang/planet'
+import { frDescriptions, enDescriptions } from '../lang/planet'
 import { sunVertex, sunFragment } from './shaders/sunShaders'
 import { generateBlackhole } from './blackhole'
 import { getRandomArbitrary } from './utils'
@@ -270,7 +270,7 @@ function createGalaxies(font) {
         mesh.name = "galaxy-" + i
 
         let meshText
-        let shapes = font.generateShapes(document.location.href.includes('/en') ? "Galaxy " : "Galaxie " + i.name, 50)
+        let shapes = font.generateShapes(document.location.href.includes('/en') ? "Galaxy " + i.name : "Galaxie " + i.name, 50)
         geometry = new THREE.ShapeGeometry(shapes)
         geometry.computeBoundingBox()
         let xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
@@ -415,7 +415,9 @@ async function createPlanet(name, orderTime, size, font) {
     })
 
     let meshDescription
-    const shapes2 = font.generateShapes(descriptions[name], 17)
+    let shapes2 = font.generateShapes(frDescriptions[name], 17)
+    if (document.location.href.includes('/en'))
+        shapes2 = font.generateShapes(enDescriptions[name], 17)
     const geometry2 = new THREE.ShapeGeometry(shapes2)
     geometry2.computeBoundingBox()
     const xMid2 = - 0.5 * (geometry2.boundingBox.max.x - geometry2.boundingBox.min.x)
