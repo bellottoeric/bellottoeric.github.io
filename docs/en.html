@@ -5,28 +5,33 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Bellotto Eric - 3D space portfolio</title>
-    <meta name="description" content="Bellotto Eric - 3D space portfolio" />
-
-    <link rel="canonical" href="https://bellottoeric.fr" />
-
-    <meta property="og:site_name" content="Bellotto Eric - 3D space portfolio">
-    <meta property="og:title" content="Bellotto Eric - 3D space portfolio">
-    <meta itemprop="name" content="Bellotto Eric - 3D space portfolio">
-    <meta property="og:url" content="https://bellottoeric.fr">
+    <meta name="description" content="Discover who I am in a 3D space-themed experiment!" />
+    <meta itemprop="name" content="3D spatial portfolio">
     <meta itemprop="url" content="https://bellottoeric.fr">
-    <meta property="og:description" content="Bellotto Eric - 3D space portfolio">
-    <meta itemprop="description" content="Bellotto Eric - 3D space portfolio">
-    <link rel="image_src" href="/assets/me.png">
-    <meta property="og:image" content="/assets/me.png">
+    <meta itemprop="description" content="Discover who I am in a 3D space-themed experiment!">
     <meta itemprop="image" content="/assets/me.png">
     <meta itemprop="thumbnailUrl" content="/assets/me.png">
-
+    <meta property="og:site_name" content="3D spatial portfolio">
+    <meta property="og:title" content="Bellotto Eric - 3D spatial portfolio">
+    <meta property="og:url" content="https://bellottoeric.fr">
+    <meta property="og:description"
+        content="Discover who I am in a 3D space-themed experiment!">
+    <meta property="og:image" content="/assets/me.png">
+    <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bellotto Eric - 3D space portfolio">
+    <meta name="twitter:title" content="Bellotto Eric - 3D spatial portfolio">
     <meta name="twitter:image" content="/assets/me.png">
     <meta name="twitter:url" content="https://bellottoeric.fr">
-    <meta name="twitter:description" content="Bellotto Eric - 3D space portfolio">
+    <meta name="twitter:description"
+        content="Discover who I am in a 3D space-themed experiment!">
+    <meta name="robots" content="all" />
+
+    <title>Bellotto Eric - 3D spatial portfolio</title>
+
+    <link rel="preload" href="CV/FR.svg" as="image" />
+    <link rel="prefetch" href="/assets/overview.png" as="image">
+    <link rel="image_src" href="/assets/me.png">
+    <link rel="canonical" href="https://bellottoeric.fr" />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
     <link rel="icon" sizes="192x192" href="/favicon/favicon-192x192.png" />
@@ -35,35 +40,47 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
     <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico" />
 
-    <meta property="og:type" content="website">
-    <meta name="robots" content="all" />
+    
+    
+    
+    
+    
 
-
-    <script type="module" crossorigin src="/src/main.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/github.css">
-    <link rel="stylesheet" href="/css/me.css">
-    <link rel="stylesheet" href="/css/parcours.css">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
-
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" crossorigin src="/assets/main.02a5dd84.js"></script>
+  <link rel="stylesheet" href="/assets/main.8b3af822.css">
 </head>
 
 <body style="background-color: #232b2b !important;">
     <main>
+        <audio id="music" controls loop>
+            <source src="/audio/music.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="intro">
+            <source id="audioSource" type="audio/mpeg">
+        </audio>
+        <div id="lineLoader" class="lineLoader"></div>
+        <button id="launch3D" style="display:none; opacity: 0;" class="glow-on-hover floating" type="button">Start the 3D experience</button>
         <div id="player" class="hidden"></div>
         <div id="parentLoader">
-            <div id="loader" class="loader"></div>
-            <h2>Loading...</h2>
+            <div id="loader" class="loader">
+            </div>
+            <div id="divCV">
+                <img id="imgCV" src="CV/FR.svg" fetchpriority="high" alt="CV Bellotto Eric" style="height: 100%;">
+                <button id="downloadCV" type="button" data-dl>
+                    <span class="dl-icon"></span><span>Download the CV</span>
+                </button>
+            </div>
+            <div id="inLoader" style="background-image: url('/assets/overview.png'); background-position: center;"></div>
         </div>
         <canvas id="bg" class="hidden"></canvas>
         <div id="presentation" class="hidden">
             <div id="parcours" class="hidden socialCenter">
                 <div id="childLinkedin" class="badge-base LI-profile-badge" data-locale="fr_FR" data-size="large"
                     data-theme="light" data-type="HORIZONTAL" data-vanity="eric-bellotto" data-version="v1"></div>
-                <link
-                    href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic'
-                    rel='stylesheet' type='text/css'>
                 <ul class="timeline">
                     <li>
                         <div class="direction-r">
@@ -71,7 +88,7 @@
                                 <span class="flag">Epitech</span>
                                 <span class="time-wrapper"><span class="time">2023</span></span>
                             </div>
-                            <div class="desc">Ingenior</div>
+                            <div class="desc">Expert in Information Technology</div>
                         </div>
                     </li>
                     <li>
@@ -80,8 +97,8 @@
                                 <span class="flag">Ediref</span>
                                 <span class="time-wrapper"><span class="time">2022</span></span>
                             </div>
-                            <div class="desc">Développement d'outil personnalisé dans le marketing/SEO et le trading de
-                                cryptomonnaies.</div>
+                            <div class="desc">Development of custom tools in marketing/SEO and cryptocurrency trading.
+                            </div>
                         </div>
                     </li>
                     <li>
@@ -90,13 +107,13 @@
                                 <span class="flag">360&1</span>
                                 <span class="time-wrapper"><span class="time">2019-2020</span></span>
                             </div>
-                            <div class="desc">Développement Web et Mobile</div>
+                            <div class="desc">Web and Mobile Development</div>
                         </div>
                     </li>
                     <li>
                         <div class="direction-r">
                             <div class="flag-wrapper">
-                                <span class="flag">Epitech at Nice</span>
+                                <span class="flag">Epitech Nice</span>
                                 <span class="time-wrapper"><span class="time">2018</span></span>
                             </div>
                             <div class="desc">The school of IT expertise and innovation.</div>
@@ -104,19 +121,19 @@
                     </li>
                 </ul>
             </div>
-            <div id="github" class="hidden socialCenter">
+            <div id="projects" class="hidden socialCenter">
                 <div class="contact-area">
                     <div class="contact">
                         <main>
                             <section>
                                 <div class="content">
-                                    <img src="/assets/me.png" alt="Profile Image">
-                                    <aside>
-                                        <h3>Bellotto Eric</h3>
-                                        <p>- Freelance<br>- Full Stack JS Developer<br>- Blockchain enthusiast<br>- Bot
-                                            maker</p>
-                                    </aside>
-                                    <button id="buttonGithub">
+                                    <div class="profile-card__name">Projets</div>
+                                    <p>Freelance and personal project</p>
+                                    <div id="titleProjects" class="title">
+                                        <a class="middleButton" target="_blank"
+                                            href="https://github.com/bellottoeric">github.com/bellottoeric</a>
+                                    </div>
+                                    <button id="buttonProjects">
                                         <span>Explore</span>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
                                             viewBox="0 0 48 48">
@@ -126,26 +143,22 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <div id="titleGithub" class="title">
-                                    <a target="_blank"
-                                        href="https://github.com/bellottoeric">github.com/bellottoeric</a>
-                                </div>
                             </section>
                         </main>
-                        <nav id="navGithub">
-                            <div class="childGithub">
-                                <img width="360" src="/github/urls-monitor.png">
-                                <span>Get alerted on Discord and Mail<br>when the URLs you monitor go down</span>
-                                <a target="_blank" href="https://github.com/bellottoeric/urls-monitor">Repository</a>
+                        <nav id="navProjects">
+                            <div class="childProjects">
+                                <img width="360" src="/myProjects/pomatobot.png">
+                                <span>The perfect compromise between safe and efficient trading</span>
+                                <a target="_blank" href="https://pomatobot.com/">Découvrir</a>
                             </div>
-                            <div class="childGithub">
-                                <img width="360" src="/github/banner.png">
-                                <span>This portfolio project</span>
+                            <div class="childProjects">
+                                <img width="360" src="/myProjects/banner.png">
+                                <span>3D spatial portfolio</span>
                                 <a target="_blank"
                                     href="https://github.com/bellottoeric/bellottoeric.github.io">Repository</a>
                             </div>
-                            <div class="childGithub">
-                                <img width="360" src="/github/autopilot.png">
+                            <div class="childProjects">
+                                <img width="360" src="/myProjects/autopilot.png">
                                 <span>Stream Twitch Autopilot</span>
                                 <a target="_blank"
                                     href="https://github.com/bellottoeric/stream-twitch-autopilot">Repository</a>
@@ -162,10 +175,10 @@
                         </div>
                         <div class="profile-card__cnt js-profile-cnt">
                             <div class="profile-card__name">Bellotto Eric</div>
-                            <div class="profile-card__txt">Student at <strong>Epitech</strong> for the last year, I
-                                start my freelancing activity.<br>I'm work with <strong>Javascript</strong> ecosystem,
-                                in <br><strong>crypto trading</strong> and <strong>web
-                                    automatisation</strong>.</div>
+                            <div class="profile-card__txt">
+                                FullStack JS developer specialized in the Javascript ecosystem, in 5th year at Epitech, I am looking for a full-time
+                                contract in full remote with the Javascript ecosystem for the period from March 2023 to August 2023.
+                            </div>
                             <div class="profile-card-loc">
                                 <span class="profile-card-loc__icon">
                                     <svg class="icon">
@@ -178,8 +191,8 @@
                             </div>
                             <div class="profile-card-inf">
                                 <div class="profile-card-inf__item">
-                                    <div class="profile-card-inf__title">25</div>
-                                    <div class="profile-card-inf__txt">Years</div>
+                                    <div class="profile-card-inf__title">24</div>
+                                    <div class="profile-card-inf__txt">years old</div>
                                 </div>
                                 <div class="profile-card-inf__item">
                                     <div class="profile-card-inf__title">7+</div>
@@ -191,6 +204,12 @@
                                 </div>
                             </div>
                             <div class="profile-card-social">
+                                <a href="https://www.linkedin.com/in/eric-bellotto/"
+                                    class="profile-card-social__item linkedin" target="_blank">
+                                    <span class="icon-font">
+                                        <img class="meIcon" src="assets/linkedin2.png">
+                                    </span>
+                                </a>
                                 <a href="https://github.com/bellottoeric" class="profile-card-social__item github"
                                     target="_blank">
                                     <span class="icon-font">
@@ -199,13 +218,16 @@
                                         </svg>
                                     </span>
                                 </a>
-                                <a href="https://www.linkedin.com/in/eric-bellotto/"
-                                    class="profile-card-social__item linkedin" target="_blank">
+                                <a href="https://twitter.com/bellotto_eric" class="profile-card-social__item twitter"
+                                    target="_blank">
                                     <span class="icon-font">
-                                        <img class="meIcon" src="assets/linkedin.png">
+                                        <svg class="icon meIcon">
+                                            <use xlink:href="#icon-twitter"></use>
+                                        </svg>
                                     </span>
                                 </a>
                             </div>
+                            <div class="profile-subtitle">Contact me</div>
                             <div class="profile-card-ctr">
                                 <a href="mailto:bellottoeric@gmail.com"><button
                                         class="profile-card__button button--blue">Mail</button></a>
@@ -297,9 +319,113 @@
                     </defs>
                 </svg>
             </div>
+            <div id="aboutMe" class="hidden socialCenter aboutMe">
+                <div class="card" data-state="#about">
+                    <div class="card-header">
+                        <div class="card-cover">
+                        </div>
+                        <img class="card-avatar" src="assets/me.png" alt="avatar" />
+                        <h1 class="card-fullname">Bellotto Eric</h1>
+                        <h2 class="card-jobtitle">FullStack Javascript Developer</h2>
+                    </div>
+                    <div class="card-main">
+                        <div class="card-section is-active" id="about">
+                            <div class="card-content">
+                                <div class="card-subtitle">Bellotto Eric</div>
+                                <p class="card-desc">
+                                    1. Web developer specialized in the Javascript ecosystem, in 5th year at
+                                    Epitech,<br>
+                                    I am looking for a full time fixed term contract in full remote
+                                    <br>
+                                    with the Javascript ecosystem for the period from March 2023 to August 2023.<br><br><br>
+
+                                    2. Stack used daily :<br><br>
+
+                                    - Node JS<br>
+                                    - React JS / Native<br>
+                                    - HTML/CSS - Pure Javascript<br><br>
+
+                                    - VSCODE<br>
+                                    - Linux<br>
+                                    - Firebase<br>
+                                    - Mongo<br>
+                                    - EXPO<br><br>
+
+                                    - NGINX<br>
+                                    - ExpressJS<br>
+                                    - OVH<br><br><br>
+
+
+                                    3. Here is a non-exhaustive list of the different areas I have been able to approach with
+                                    a certain interest :<br><br>
+
+                                    - Automatisation<br>
+                                    - Scrapping<br>
+                                    - Spam<br>
+                                    - Anti Bots<br><br>
+
+                                    - Trading<br>
+                                    - Cryptocurrencies<br>
+                                    - Cryptocurrencies Minning<br>
+                                    - WEB3<br>
+                                    - NFT<br><br>
+
+                                    - SEO<br>
+                                    - Blackhat SEO<br>
+                                    - Domaining<br>
+                                    - E-commerce<br><br>
+
+                                    - Personal development<br>
+                                    - Learning to learn (Epitech)<br>
+                                    - Discipline<br>
+                                    - Sport<br><br><br>
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-section" id="experience">
+                            <div class="card-content">
+                                <div class="card-timeline">
+                                    <div class="card-item">
+                                        <div class="card-item-title">Programmation</div>
+                                        <div class="card-item-desc">Javascript Ecosystem</div>
+                                    </div>
+                                    <div class="card-item">
+                                        <div class="card-item-title">Cryptocurrencies</div>
+                                        <div class="card-item-desc">Trading & Blockchain/WEB3 enthusiast</div>
+                                    </div>
+                                    <div class="card-item">
+                                        <div class="card-item-title">Sport</div>
+                                        <div class="card-item-desc">Musculation</div>
+                                    </div>
+                                    <div class="card-item">
+                                        <div class="card-item-title">Astronomy</div>
+                                    </div>
+                                    <div class="card-item">
+                                        <div class="card-item-title">Chess Player</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-buttons">
+                        <button data-section="#about" class="is-active">About me</button>
+                        <button data-section="#experience">My passions</button>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <img id="goHome" class="hidden" src="/assets/moonBack.gif">
+        <img id="goHelp" class="hidden" src="/assets/astuces.png">
     </main>
+    <script type="text/javascript">
+        var sc_project = 12814117
+        var sc_invisible = 1
+        var sc_security = "5ea8643c"
+    </script>
+    <script type="text/javascript" src="https://www.statcounter.com/counter/counter.js" async></script>
+
 </body>
 
 </html>
