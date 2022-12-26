@@ -78,9 +78,9 @@ export function utils(pointer, camera, renderer, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     })
 
-    setTimeout(() => {
+    /*setTimeout(() => {
         document.getElementById("launch3D").click()
-    }, 1000)
+    }, 1000)*/
     let loaded = 0
     setTimeout(() => {
         unfade(document.getElementById("launch3D"))
