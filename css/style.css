@@ -715,7 +715,7 @@ audio {
   position: absolute;
   bottom: 2%;
   right: 2%;
-  width: 10%;
+  width: 18%;
 }
 
 .swal2-popup.swal2-toast .swal2-title {
@@ -727,6 +727,7 @@ audio {
 
 .swal2-popup.swal2-toast {
   cursor: pointer;
+  font-size: 15px !important;
 }
 
 .swal2-popup {

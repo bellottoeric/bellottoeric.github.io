@@ -191,13 +191,17 @@ async function planetInfo(name) {
       else if (i.position.distanceTo({ x: 0, y: 0, z: 0 }) < 1351)
         vectorMutiplier = 0.8
       if (vec[0] === 0) // sun
-        vec = [425, 425]
+        vec = [350, 350]
       let yFix = 400
       if (i.position.y > 100)
         yFix = 0
 
       if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
         vectorMutiplier += 0.2
+
+      if (distance(i.position.x, i.position.y, i.position.z, vec[0] * vectorMutiplier, i.position.y - yFix, vec[1] * vectorMutiplier) > 998)
+        vectorMutiplier -= 0.15
+
       gsap.to(camera.position, { duration: 2, x: vec[0] * vectorMutiplier, y: i.position.y - yFix, z: vec[1] * vectorMutiplier })
       setTimeout(() => {
         movingCamera = 0
@@ -205,6 +209,10 @@ async function planetInfo(name) {
       }, 1000 * 2)
     }
   }
+}
+
+function distance(x1, y1, z1, x2, y2, z2) {
+  return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2 + (z2 - z1) ** 2);
 }
 
 function animatePlanet(time) {
@@ -237,7 +245,7 @@ function animatePlanet(time) {
       distancePlanet['jupiter'] = 1000
       distancePlanet['saturn'] = 1300
       distancePlanet['uranus'] = 1600
-      distancePlanet['neptune'] = 1800
+      distancePlanet['neptune'] = 1700
       let speedPlanet = []
       speedPlanet['sun'] = 0
       speedPlanet['mercury'] = 0.08727

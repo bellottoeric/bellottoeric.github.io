@@ -415,9 +415,9 @@ async function createPlanet(name, orderTime, size, font) {
     })
 
     let meshDescription
-    let shapes2 = font.generateShapes(frDescriptions[name], 17)
+    let shapes2 = font.generateShapes(frDescriptions[name], /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 15 : 17)
     if (document.location.href.includes('/en'))
-        shapes2 = font.generateShapes(enDescriptions[name], 17)
+        shapes2 = font.generateShapes(enDescriptions[name], /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 15 : 17)
     const geometry2 = new THREE.ShapeGeometry(shapes2)
     geometry2.computeBoundingBox()
     const xMid2 = - 0.5 * (geometry2.boundingBox.max.x - geometry2.boundingBox.min.x)
