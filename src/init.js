@@ -348,7 +348,7 @@ async function createPlanet(name, orderTime, size, font) {
         })
         mesh = new THREE.Mesh(s_Geometry, neonMaterial)
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
-            mesh.scale.multiplyScalar(2)
+            mesh.scale.multiplyScalar(8)
         else
             mesh.scale.multiplyScalar(20)
     }

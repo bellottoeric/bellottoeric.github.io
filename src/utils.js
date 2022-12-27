@@ -78,9 +78,21 @@ export function utils(pointer, camera, renderer, controls) {
         pointer.y = - (event.clientY / window.innerHeight) * 2 + 1
     })
 
-    /*setTimeout(() => {
-        document.getElementById("launch3D").click()
-    }, 1000)*/
+    setTimeout(() => {
+        //document.getElementById("launch3D").click()
+    }, 1000)
+    Swal.mixin({
+        toast: true,
+        position: 'center',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 6000,
+    }).fire({
+        icon: 'success',
+        title: 'Cookies - RGPD',
+        text: document.location.href.includes('/en') ? "By continuing on bellottoeric.fr, you accept RGPD" : "En continuant sur bellottoeric.fr, vous acceptez les RGPD",
+        footer: '<a target="_blank" href="https://github.com/bellottoeric/bellottoeric.github.io/blob/main/rgpd">bellottoeric.fr/RGPD</a>'
+    })
     let loaded = 0
     setTimeout(() => {
         unfade(document.getElementById("launch3D"))
@@ -95,7 +107,8 @@ export function utils(pointer, camera, renderer, controls) {
             }
         }).fire({
             icon: 'success',
-            title: document.location.href.includes('/en') ? "3D Experience is ready !" : "L'expérience en 3D est prête !"
+            title: document.location.href.includes('/en') ? "3D Experience is ready" : "L'expérience en 3D est prête",
+            text: document.location.href.includes('/en') ? "Click to start !" : "Cliquez pour démarrer !",
         })
     }, 1000 * 8)
 
