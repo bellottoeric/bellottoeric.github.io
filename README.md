@@ -1,37 +1,41 @@
-<div style="background-color: #1e1e1e;">
-<h2 style="color: #f2f2f2;">  Hello everyone </h2>
- <p>
- 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?lines=Welcome;bellottoeric.fr;JS+Developper)](https://git.io/typing-svg)
- 
-</P>
+# 3D Spatial Portfolio
 
-Epitech student graduated in 2023.
-I have been coding for 8 years with the JS ecosystem.
-All my public project are available on https://bellottoeric.fr
+### [https://bellottoeric.fr](bellottoeric.fr)
 
-<h3 style="color: #f2f2f2;">  💻 &nbsp; More About Me </h3>
+[![forthebadge](http://forthebadge.com/images/badges/made-with-javascript.svg)](http://forthebadge.com)
+![Threejs](https://img.shields.io/badge/threejs-black?style=for-the-badge&logo=three.js&logoColor=white) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=yellow)
+[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 
-- &nbsp; Freelance developer
-- &nbsp; Blockchain enthusiast
-- &nbsp; Chess player
+### About me
 
-<h3 style="color: #f2f2f2;">✋ &nbsp;Connect with Me </h3>
+Web developer specialized in the Javascript ecosystem, in 5th year at Epitech,
+I am looking for a full time fixed term contract in full remote
+with the Javascript ecosystem for the period from March 2023 to August 2023.
 
-<p>
-<a href="mailto:bellottoeric@gmail.com"><img alt="Email" src="https://img.shields.io/badge/Email-bellottoeric@gmail.com-blue?style=flat-square&logo=gmail"></a>
-<a href="https://www.linkedin.com/in/eric-bellotto/"><img alt="LinkedIn" src="https://img.shields.io/badge/LinkedIn-eric%20bellotto-blue?style=flat-square&logo=linkedin"></a>
-<a href="https://www.twitter.com/bellotto_eric/"><img alt="Twitter" src="https://img.shields.io/badge/Twitter-bellotto_eric-blue?style=flat-square&logo=twitter"></a>
+### About the website
 
-</p>
+Assets came from internet, if you want to claim, remove or change anything to belong to your creation, contact me at bellottoeric@gmail.com.
 
-   <h3 style="color: #f2f2f2;"> ⚙️ &nbsp;GitHub Analytics</h3>
+  <br>
+  
+- Special thanks to Theodore Faraut Schwieg. He helped me with the UI/UX and testes.
+
+https://www.linkedin.com/in/theodore-faraut-schwieg/
 <br>
-<p align="center">
-  <img width="48%" src="https://github-readme-stats.vercel.app/api?username=bellottoeric&show_icons=true&theme=algolia" />
-<img height="48%" src="https://github-readme-stats.vercel.app/api/top-langs/?username=bellottoeric&layout=compact&langs_count=8&theme=algolia"/>
-  <img width="48%" src="https://github-readme-streak-stats.herokuapp.com/?user=bellottoeric&theme=algolia" />  
-</p>
-<br/>
 
-</div>
+- Special thanks to Obaid Nadeem. He helped to optimize some three js aspects in my code.
+
+https://obaidnadeem.com
+<br>
+
+# Contributing
+
+Your contributions are always welcome!
+[Just make a pull request !](https://github.com/bellottoeric/bellottoeric.github.io/pulls)
+[![CI](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields)](https://github.com/bellottoeric/bellottoeric.github.io/pulls)
+
+# License
+
+The MIT License (MIT) 2023
+
+[![CI](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
