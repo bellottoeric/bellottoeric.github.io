@@ -717,6 +717,11 @@ audio {
   right: 2%;
   width: 18%;
 }
+@media (min-width: 1281px) {
+  #goHelp {
+    width: 12%;
+  }
+}
 
 .swal2-popup.swal2-toast .swal2-title {
   font-size: 1em !important;
