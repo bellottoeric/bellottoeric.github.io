@@ -474,7 +474,7 @@ window.cinematic = async function () {
 
   const timeline = gsap.timeline()
   for (let i of copy) {
-    await timeline.to(camera.position, { duration: 1.5, x: (i.position.x * -1) / 10, y: (i.position.y * -1) / 10, z: (i.position.z * -1) / 10 })
+    await timeline.to(camera.position, { duration: 1, x: (i.position.x * -1) / 10, y: (i.position.y * -1) / 10, z: (i.position.z * -1) / 10 })
     for (let j of listPlanetMesh) {
       if (j.isText && j.name === i.name && !j.isDescription) {
         scene3.add(j)
@@ -492,7 +492,7 @@ window.cinematic = async function () {
       i.children[0].visible = true
       TweenMax.to(i.children[0].material, 2, { opacity: 1 })
     }
-    await timeline.to(camera.position, { duration: 1, x: (i.position.x * -1) / 10, y: (i.position.y * -1) / 10, z: (i.position.z * -1) / 10, ease: "none" })
+    await timeline.to(camera.position, { duration: 0.8, x: (i.position.x * -1) / 10, y: (i.position.y * -1) / 10, z: (i.position.z * -1) / 10, ease: "none" })
   }
   scene3 = null
   scene.visible = true
@@ -516,8 +516,8 @@ window.cinematic = async function () {
       }
     }
   }
-  await timeline.to(camera.position, { duration: 4.5, y: -1500, z: 0, x: 0, ease: "none" })
-  await timeline.to(camera.position, { duration: 4.5, y: 1000, z: 0, x: 0, ease: "none" })
+  //await timeline.to(camera.position, { duration: 4.5, y: -1500, z: 0, x: 0, ease: "none" })
+  //await timeline.to(camera.position, { duration: 4.5, y: 1000, z: 0, x: 0, ease: "none" })
   await timeline.to(camera.position, { duration: 3, y: 0, z: 150, x: 0, ease: "none" })
 
   controls.enabled = true

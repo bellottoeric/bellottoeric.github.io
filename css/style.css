@@ -258,11 +258,11 @@ audio {
 }
 
 .lineLoader:before {
-  animation: getWidthLine 100s ease-in infinite;
+  animation: getWidthLine 90s ease-in infinite;
 }
 
 .cinematicLineLoader:before {
-  animation: getWidth 62s ease-in infinite;
+  animation: getWidth 34s ease-in infinite;
   background-color: black !important;
   background-image: linear-gradient(45deg, #d5135a, #f05924) !important;
 }

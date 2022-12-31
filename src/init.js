@@ -100,19 +100,22 @@ export async function init() {
 
             fontLoader.load('/fonts/nazalisation.json', function (font) {
                 createConstellation(font)
-                createGalaxies(font)
+                //createGalaxies(font)
                 if (document.location.href.includes('/en'))
                     createTextAroundMe(font, "Cinematic", max / nbrObjects * index)
                 else
                     createTextAroundMe(font, "Cinématique", max / nbrObjects * index)
                 index++
-                createTextAroundMe(font, "Sound on/off", max / nbrObjects * index)
-                index++
+
                 if (!document.location.href.includes('/en')) {
+                    createTextAroundMe(font, "Volume audio", max / nbrObjects * index)
+                    index++
                     createTextAroundMe(font, "English version", max / nbrObjects * index)
                     index++
                     createTextAroundMe(font, "À propos", max / nbrObjects * index)
                 } else {
+                    createTextAroundMe(font, "Sound on/off", max / nbrObjects * index)
+                    index++
                     createTextAroundMe(font, "Version française", max / nbrObjects * index)
                     index++
                     createTextAroundMe(font, "About me", max / nbrObjects * index)
