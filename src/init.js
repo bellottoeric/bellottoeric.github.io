@@ -100,7 +100,7 @@ export async function init() {
 
             fontLoader.load('/fonts/nazalisation.json', function (font) {
                 createConstellation(font)
-                //createGalaxies(font)
+                createGalaxies(font)
                 if (document.location.href.includes('/en'))
                     createTextAroundMe(font, "Cinematic", max / nbrObjects * index)
                 else
