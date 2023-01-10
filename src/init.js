@@ -121,10 +121,15 @@ export async function init() {
                     createTextAroundMe(font, "About me", max / nbrObjects * index)
                 }
                 index++
-                createTextAroundMe(font, "parcours", max / nbrObjects * index)
+                createTextAroundMe(font, "Parcours", max / nbrObjects * index)
                 index++
-                createTextAroundMe(font, "Projects", max / nbrObjects * index)
-                index++
+                if (!!document.location.href.includes('/fr')) {
+                    createTextAroundMe(font, "Projets", max / nbrObjects * index)
+                    index++
+                } else {
+                    createTextAroundMe(font, "Projects", max / nbrObjects * index)
+                    index++
+                }
                 createTextAroundMe(font, "Contact", max / nbrObjects * index)
 
                 createPlanet("sun", 0, [0.75, 64, 32], font)

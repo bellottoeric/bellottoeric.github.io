@@ -255,8 +255,8 @@ function unfade(element) {
 
 /* DOWNLOAD CV BUTTON */
 document.addEventListener("DOMContentLoaded", function () {
-    document.getElementsByTagName("audio")[0].volume = 0.04
-    document.getElementsByTagName("audio")[1].volume = 0.04
+    document.getElementsByTagName("audio")[0].volume = 0.08
+    document.getElementsByTagName("audio")[1].volume = 0.08
     this.addEventListener("click", e => {
         let tar = e.target
         if (tar.hasAttribute("data-dl")) {
