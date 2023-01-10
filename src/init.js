@@ -61,7 +61,7 @@ export async function init() {
             index++
             createMeshAroundMe("music.fbx", max / nbrObjects * index)
             index++
-            if (document.location.href.includes('/en')) {
+            if (!document.location.href.includes('/fr')) {
                 createMeshAroundMe("pallete.fbx", max / nbrObjects * index)
             } else {
                 createMeshAroundMe("tea.fbx", max / nbrObjects * index)
@@ -101,13 +101,13 @@ export async function init() {
             fontLoader.load('/fonts/nazalisation.json', function (font) {
                 createConstellation(font)
                 createGalaxies(font)
-                if (document.location.href.includes('/en'))
+                if (!document.location.href.includes('/fr'))
                     createTextAroundMe(font, "Cinematic", max / nbrObjects * index)
                 else
                     createTextAroundMe(font, "Cinématique", max / nbrObjects * index)
                 index++
 
-                if (!document.location.href.includes('/en')) {
+                if (!!document.location.href.includes('/fr')) {
                     createTextAroundMe(font, "Volume audio", max / nbrObjects * index)
                     index++
                     createTextAroundMe(font, "English version", max / nbrObjects * index)
@@ -273,7 +273,7 @@ function createGalaxies(font) {
         mesh.name = "galaxy-" + i
 
         let meshText
-        let shapes = font.generateShapes(document.location.href.includes('/en') ? "Galaxy " + i.name : "Galaxie " + i.name, 50)
+        let shapes = font.generateShapes(!document.location.href.includes('/fr') ? "Galaxy " + i.name : "Galaxie " + i.name, 50)
         geometry = new THREE.ShapeGeometry(shapes)
         geometry.computeBoundingBox()
         let xMid = - 0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x)
@@ -419,7 +419,7 @@ async function createPlanet(name, orderTime, size, font) {
 
     let meshDescription
     let shapes2 = font.generateShapes(frDescriptions[name], /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 15 : 17)
-    if (document.location.href.includes('/en'))
+    if (!document.location.href.includes('/fr'))
         shapes2 = font.generateShapes(enDescriptions[name], /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ? 15 : 17)
     const geometry2 = new THREE.ShapeGeometry(shapes2)
     geometry2.computeBoundingBox()

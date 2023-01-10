@@ -123,9 +123,9 @@ function clickDetection() {
       } else if (name.includes('parcours') || name.includes('projects') || name.includes('contact') || name.includes('assets/me')) {
         openHTMLView(name)
       } else if (name.includes('tea')) {
-        window.open("https://bellottoeric.fr/en.html", "_self")
-      } else if (name.includes('pallete')) {
         window.open("https://bellottoeric.fr/", "_self")
+      } else if (name.includes('pallete')) {
+        window.open("https://bellottoeric.fr/fr.html", "_self")
       } else if (type === "planet") {
         planetInfo(name)
       } else if (name.includes("Object_")) {
@@ -443,7 +443,7 @@ function openHTMLView(name) {
 window.cinematic = async function () {
   document.getElementById("lineLoader").style.display = "block"
   document.getElementById("goHelp").classList.add("hidden")
-  if (document.location.href.includes('/en')) {
+  if (!document.location.href.includes('/fr')) {
     document.getElementById('audioSource').src = "/audio/introen.mp3"
   } else {
     document.getElementById('audioSource').src = "/audio/introfr.mp3"

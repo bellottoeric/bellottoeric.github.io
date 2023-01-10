@@ -3,8 +3,8 @@ import { setupVideoPlayer } from './videoPlayer'
 export function utils(pointer, camera, renderer, controls) {
     document.getElementById("goHelp").addEventListener('click', async function (event) {
         Swal.fire(
-            document.location.href.includes('/en') ? 'Tips' : 'Astuces',
-            document.location.href.includes('/en') ? 'Click on the moon to return to the menu.<br>All elements are clickable' : 'Cliquez sur la lune pour revenir au menu.<br>Tous les éléments sont cliquables.',
+            !document.location.href.includes('/fr') ? 'Tips' : 'Astuces',
+            !document.location.href.includes('/fr') ? 'Click on the moon to return to the menu.<br>All elements are clickable' : 'Cliquez sur la lune pour revenir au menu.<br>Tous les éléments sont cliquables.',
             'info'
         )
     }, false)
@@ -90,7 +90,7 @@ export function utils(pointer, camera, renderer, controls) {
     }).fire({
         icon: 'success',
         title: 'Cookies - RGPD',
-        text: document.location.href.includes('/en') ? "By continuing on bellottoeric.fr, you accept RGPD" : "En continuant sur bellottoeric.fr, vous acceptez les RGPD",
+        text: !document.location.href.includes('/fr') ? "By continuing on bellottoeric.fr, you accept RGPD" : "En continuant sur bellottoeric.fr, vous acceptez les RGPD",
         footer: '<a target="_blank" href="https://github.com/bellottoeric/bellottoeric.github.io/blob/main/rgpd">bellottoeric.fr/RGPD</a>'
     })
     let loaded = 0
@@ -107,8 +107,8 @@ export function utils(pointer, camera, renderer, controls) {
             }
         }).fire({
             icon: 'success',
-            title: document.location.href.includes('/en') ? "3D Experience is ready" : "L'expérience en 3D est prête",
-            text: document.location.href.includes('/en') ? "Click to start !" : "Cliquez pour démarrer !",
+            title: !document.location.href.includes('/fr') ? "3D Experience is ready" : "L'expérience en 3D est prête",
+            text: !document.location.href.includes('/fr') ? "Click to start !" : "Cliquez pour démarrer !",
         })
     }, 1000 * 8)
 
@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let tar = e.target
         if (tar.hasAttribute("data-dl")) {
             const element = document.createElement('a')
-            if (document.location.href.includes('/en')) {
+            if (!document.location.href.includes('/fr')) {
                 element.setAttribute('href', "/CV/Bellotto Eric - CV - Developer Full Stack JS - CDD Mars 2023 - AOUT 2023.pdf")
                 element.setAttribute('download', "Bellotto Eric - CV - Developer Full Stack JS - CDD Mars 2023 - AOUT 2023.pdf")
             } else {

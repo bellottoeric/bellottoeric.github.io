@@ -8,7 +8,7 @@ export default defineConfig({
         rollupOptions: {
             input: {
                 main: resolve(root, "index.html"),
-                en: resolve(root, "en.html"),
+                fr: resolve(root, "fr.html"),
             },
         }
     }
